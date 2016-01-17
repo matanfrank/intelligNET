@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
@@ -14,6 +14,35 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".TashchezMenu" >
+        </activity>
+        <activity android:name=".TashchezHigayonMenu" >
+        </activity>
+        <activity android:name=".MadregotMenu" >
+        </activity>
+        <activity android:name=".MeuznachMenu" >
+        </activity>
+        <activity android:name=".BeitHamishpatMenu" >
+        </activity>
+        <activity android:name=".SheledMisparimMenu" >
+        </activity>
+        <activity android:name=".KaveretMenu" >
+        </activity>
+        <activity android:name=".TguvatSharsheretMenu" >
+        </activity>
+        <activity android:name=".ChatMenu" >
+        </activity>
+        <activity android:name=".HagdarotMenu" >
+        </activity>
+        <activity android:name=".OdotMenu" >
+        </activity>
+        <activity android:name=".SudokuMenu" >
+        </activity>
+        <activity
+            android:name=".TashchezUI"
+            android:label="@string/title_activity_tashchez_pl"
+            android:theme="@style/AppTheme" >
         </activity>
     </application>
 
