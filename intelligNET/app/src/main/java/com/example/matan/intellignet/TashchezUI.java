@@ -1,10 +1,13 @@
 package com.example.matan.intellignet;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -35,6 +38,35 @@ public class TashchezUI extends AppCompatActivity
             menuGrid.setAdapter(adapter);
         }
 
+
+        startService(new Intent(this, ChatHeadService.class));
+
+        FloatingActionButton chatHead = (FloatingActionButton)findViewById(R.id.fab);
+        chatHead.setOnTouchListener(new View.OnTouchListener() {
+            private float initialX;
+            private float initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = v.getX();
+                        initialY = v.getY();
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        v.setX(initialX + (int) (event.getRawX() - initialTouchX));
+                        v.setY(initialY + (int) (event.getRawY() - initialTouchY));
+                        return true;
+                }
+                return false;
+            }
+        });
 
 
 

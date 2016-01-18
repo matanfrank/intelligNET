@@ -23,23 +23,19 @@
 
 
 
-    <android.support.design.widget.CoordinatorLayout
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="3"
-        >
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:tabIndicatorColor="#008000"
+        app:tabBackground="@color/colorPrimary"
+        app:tabTextColor="#008000"
+        />
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:tabIndicatorColor="#008000"
-                app:tabBackground="@color/colorPrimary"
-                app:tabTextColor="#008000"
-                />
 
-    </android.support.design.widget.CoordinatorLayout>
 
 
     <android.support.v4.view.ViewPager
