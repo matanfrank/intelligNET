@@ -1,24 +1,29 @@
 package com.example.matan.intellignet;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
-
-import java.util.ArrayList;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 public class TashchezUI extends AppCompatActivity
 {
     private final int NUM_COL=7;
     private final int NUM_ROW=7;
+    private  ImageView coverImage;
+    private InputMethodManager imm;
+    private EditText editText;
+    private  GridView tashchezGrid;
+    private  TypeTashchezGrid tashchez;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,15 +32,17 @@ public class TashchezUI extends AppCompatActivity
         setContentView(R.layout.activity_tashchez_ui);
 
         TashchezAdapter adapter;
-        GridView menuGrid = (GridView)findViewById(R.id.menuGrid);
-        TypeTashchezGrid tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, "data from DB");
-        menuGrid.setNumColumns(NUM_COL);
+        int i;
+        tashchezGrid = (GridView)findViewById(R.id.menuGrid);
+        tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, "data from DB");
+        tashchezGrid.setNumColumns(NUM_COL);
 
+        //editText = (EditText)findViewById(R.id.tashchez_text);
 
-        for(int i=0 ; i < tashchez.numColumns ; i++)
+        for(i=0 ; i < tashchez.numColumns ; i++)
         {
-            adapter = new TashchezAdapter(this, R.layout.cell_tashchez, tashchez.board);
-            menuGrid.setAdapter(adapter);
+            adapter = new TashchezAdapter(this, R.layout.cell_definition_tashchez ,R.layout.cell_solve_tashchez, tashchez.board);
+             tashchezGrid.setAdapter(adapter);
         }
 
 
@@ -69,7 +76,86 @@ public class TashchezUI extends AppCompatActivity
         });
 
 
+         tashchezGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+             @Override
+             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 Toast.makeText(getApplicationContext(),
+                         "Item Clicked: " + position, Toast.LENGTH_SHORT).show();
+
+                 coverImage = (ImageView)findViewById(R.id.symbolImage);
+                 coverImage.setVisibility(View.GONE);
+
+                 paintAnswer(position);
+
+             }
+         });
 
 
+
+
+    }
+
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            coverImage.setVisibility(View.VISIBLE);
+            //imm.showSoftInput(findViewById(R.id.tashchez_text), InputMethodManager.RESULT_HIDDEN);
+        }
+
+        return false;
+    }
+
+
+    private void paintAnswer(int position)
+    {
+        int firstToPaint = position;
+        EditText editText = (EditText)tashchezGrid.getChildAt(firstToPaint).findViewById(R.id.tashchez_edit_text);
+
+        if(tashchez.board.get(position).cellType.contains("definition"))
+        {
+            for(int i=0 ; i<tashchez.board.get(position).answerNumOfLetter ; i++)
+            {
+                if(tashchez.board.get(position).cellType.contains("Down") && tashchez.board.get(position).cellType.contains("Left") && tashchez.board.get(position).cellType.endsWith("Left"))
+                {
+                    if(i==0)
+                        firstToPaint += NUM_ROW;
+                    else
+                        firstToPaint += 1;
+                }
+                else if(tashchez.board.get(position).cellType.contains("Left") && tashchez.board.get(position).cellType.contains("Down") && tashchez.board.get(position).cellType.endsWith("Down"))
+                {
+                    if(i==0)
+                        firstToPaint += 1;
+                    else
+                        firstToPaint += NUM_ROW;
+                }
+                else if(tashchez.board.get(position).cellType.contains("Up") && tashchez.board.get(position).cellType.contains("Left")&& tashchez.board.get(position).cellType.endsWith("Left"))
+                {
+                    if(i==0)
+                       firstToPaint -= NUM_ROW;
+                    else
+                        firstToPaint += 1;
+                }
+                else if(tashchez.board.get(position).cellType.contains("Right") && tashchez.board.get(position).cellType.contains("Down")&& tashchez.board.get(position).cellType.endsWith("Down"))
+                {
+                    if(i==0)
+                        firstToPaint -= 1;
+                    else
+                        firstToPaint += NUM_ROW;
+                }
+                else if(tashchez.board.get(position).cellType.contains("Left"))
+                    firstToPaint += 1;
+                else if(tashchez.board.get(position).cellType.contains("Down"))
+                    firstToPaint += NUM_ROW;
+
+                ImageView img = (ImageView)tashchezGrid.getChildAt(firstToPaint).findViewById(R.id.tashchez_image_solve);
+                img.setImageResource(R.drawable.ic_solve_sign);
+            }
+        }
     }
 }

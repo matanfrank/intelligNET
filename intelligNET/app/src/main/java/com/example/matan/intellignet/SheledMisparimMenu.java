@@ -61,7 +61,7 @@ public class SheledMisparimMenu extends Activity {
 
         for(int i=1 ; i<37 ; i++)
         {
-            TypeMenuCell r = new TypeMenuCell(mainMenuName + " " + i, mainMenuPic);
+            TypeMenuCell r = new TypeMenuCell(mainMenuName + " " + i, mainMenuPic, 1);
             menuCellArr.add(r);
         }
     }

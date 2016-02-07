@@ -5,7 +5,7 @@ package com.example.matan.intellignet;
  */
 public class TypeTashchezCell extends TypeGameCell
 {
-    protected String cellType;
+    public String cellType;
     protected int answerNumOfLetter;
 
     public TypeTashchezCell(String cellType, int answerNumOfLetter, int background, int index, String content)
@@ -15,7 +15,7 @@ public class TypeTashchezCell extends TypeGameCell
         this.answerNumOfLetter = answerNumOfLetter;
     }
 
-    protected void paintAnswerCells(int xLocation, int yLocation)
+    protected void paintAnswerCells(int index)
     {
         //TODO
     }

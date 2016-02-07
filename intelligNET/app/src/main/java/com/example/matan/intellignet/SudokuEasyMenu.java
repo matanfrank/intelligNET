@@ -76,7 +76,7 @@ public class SudokuEasyMenu extends Fragment{
 
         for(int i=1 ; i<37 ; i++)
         {
-            TypeMenuCell r = new TypeMenuCell(menuName + " " + i, menuPic);
+            TypeMenuCell r = new TypeMenuCell(menuName + " " + i, menuPic, 1);
             menuCellArr.add(r);
         }
     }

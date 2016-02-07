@@ -6,25 +6,30 @@ package com.example.matan.intellignet;
 public abstract class TypeGameCell
 {
     protected int background;
-    protected int xLocation;
-    protected int yLocation;
     protected String content;
     protected int index;
 
     protected TypeGameCell(int background, int index, String content)
     {
         this.background = background;
-        this.xLocation = xLocation;
-        this.yLocation = yLocation;
         this.content = content;
         this.index = index;
     }
 
-    protected void answerCell(int xLocation, int yLocation)
+    protected void answerCell(int index)//TODO
     {
 
     }
 
-    protected abstract void paintAnswerCells(int xLocation, int yLocation);
+    protected void paintAnswerCells()//TODO
+    {
+
+    }
+
+    protected void openKeyboard()//TODO
+    {
+
+    }
+
 
 }

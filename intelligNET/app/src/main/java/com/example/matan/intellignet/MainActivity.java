@@ -74,7 +74,7 @@ public class MainActivity extends Activity
         for(int i=0 ; i<12 ; i++)
         {
 //            r.setAll(mainMenu[i], R.drawable.ic_mainmenu12);
-            TypeMenuCell r = new TypeMenuCell(mainMenuName[i], mainMenuPic[i]);
+            TypeMenuCell r = new TypeMenuCell(mainMenuName[i], mainMenuPic[i], 1);
             menuCellArr.add(r);
         }
     }

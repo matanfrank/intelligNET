@@ -13,7 +13,7 @@
     tools:context="com.example.matan.intellignet.MadregotMenu"
     android:orientation="vertical"
     android:id="@+id/linearLay"
-    >
+    android:animateLayoutChanges="true">
 
     <ImageView
         android:layout_width="match_parent"
@@ -23,6 +23,7 @@
         android:layout_marginBottom="30px"
         android:src="@drawable/ic_cover"
         android:background="#f4f4f4"
+
         android:id="@+id/symbolImage" />
 
     <GridView

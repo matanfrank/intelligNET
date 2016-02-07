@@ -11,11 +11,13 @@ import android.widget.TextView;
 public class TypeMenuCell {
     private int pic;
     private String txt;
+    private int id;
 
-    public TypeMenuCell(String txt, int pic)
+    public TypeMenuCell(String txt, int pic, int id)
     {
         this.pic = pic;
         this.txt = txt;
+        this.id = id;
     }
 
     public TypeMenuCell()
@@ -41,5 +43,13 @@ public class TypeMenuCell {
     public void setAll(String txt, int pic) {
         this.txt = txt;
         this.pic = pic;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

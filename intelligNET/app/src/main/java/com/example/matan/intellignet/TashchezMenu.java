@@ -18,7 +18,7 @@ public class TashchezMenu extends Activity {
         setContentView(R.layout.activity_tashchez_menu);
 
 
-        ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
+        final ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
         addMenuItems(menuCellArr);
 
         GridView menuGrid = (GridView)findViewById(R.id.menuGrid);
@@ -36,6 +36,7 @@ public class TashchezMenu extends Activity {
 
                 Intent intent= new Intent();
 
+            //    server.GetGameById(menuCellArr.Id)
                 switch(position)
                 {
                     case 0:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
@@ -66,7 +67,7 @@ public class TashchezMenu extends Activity {
         for(int i=1 ; i<37 ; i++)
         {
 
-            TypeMenuCell r = new TypeMenuCell(mainMenuName + " " + i, mainMenuPic);
+            TypeMenuCell r = new TypeMenuCell(mainMenuName + " " + i, mainMenuPic, 1);////////////////change 1 TODO
             menuCellArr.add(r);
         }
     }
