@@ -28,14 +28,18 @@ public class SudokuMenu extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        //set the default tab when open
+        TabLayout.Tab tab = tabLayout.getTabAt(1);
+        tab.select();
     }
 
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new SudokuEasyMenu(), "קל");
-        adapter.addFragment(new SudokuMedMenu(), "בינוני");
         adapter.addFragment(new SudokuHardMenu(), "קשה");
+        adapter.addFragment(new SudokuMedMenu(), "בינוני");
+        adapter.addFragment(new SudokuEasyMenu(), "קל");
 
 
         viewPager.setAdapter(adapter);

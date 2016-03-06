@@ -62,11 +62,11 @@ public class MainActivity extends Activity
     private void addMenuItems(ArrayList<TypeMenuCell> menuCellArr)
     {
         String[] mainMenuName = new String[]{"תשחץ", "תשחץ" + "\n" + "אי-גיון", "סודוקו", "מדרג-אות", "מאוזנך", "בית" + "\n" + "המשפט", "שלד מספרים",
-                "כוורת", "תגובת" + "\n" + "שרשרת", "צ'אט", "הגדרות", "אודות"};
+                "כוורת", "תגובת" + "\n" + "שרשרת", "ראש בקיר", "הגדרות", "אודות"};
 
         int[] mainMenuPic = new int[]{R.drawable.ic_tashchez, R.drawable.ic_tashchez_higayon, R.drawable.ic_sudoku1, R.drawable.ic_madregot,
                 R.drawable.ic_meuznach, R.drawable.ic_beit_hamishpat, R.drawable.ic_sheled_misparim, R.drawable.ic_kaveret, R.drawable.ic_tguvat_sharsheret,
-                R.drawable.ic_chat, R.drawable.ic_hagdarot, R.drawable.ic_odot,
+                R.drawable.ic_rosh_bakir, R.drawable.ic_hagdarot, R.drawable.ic_odot,
         };
 
 

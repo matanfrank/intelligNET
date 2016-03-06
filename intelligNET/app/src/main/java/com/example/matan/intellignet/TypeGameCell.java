@@ -5,16 +5,21 @@ package com.example.matan.intellignet;
  */
 public abstract class TypeGameCell
 {
+    protected static final int ERROR = -1;
     protected int background;
     protected String content;
     protected int index;
+    protected boolean onEdit;
 
-    protected TypeGameCell(int background, int index, String content)
+    protected TypeGameCell(int index, String content)
     {
-        this.background = background;
         this.content = content;
         this.index = index;
+        this.onEdit = false;
     }
+
+    //set the background of cell according to cell Type
+    protected abstract int backgroundByCellType(String cellType);
 
     protected void answerCell(int index)//TODO
     {

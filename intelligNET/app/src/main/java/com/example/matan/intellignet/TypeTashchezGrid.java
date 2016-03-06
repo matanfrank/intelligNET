@@ -35,172 +35,154 @@ public class TypeTashchezGrid extends TypeGameGrid<TypeTashchezCell>
             switch (i)
             {
                 case 0:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN_LEFT, 7, R.drawable.ic_square_definition, i, "פקודה צבאית (4,3)"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN_LEFT, 7, i, "פקודה צבאית (4,3)"));
                     break;
                 case 1:
-                    this.board.add(new TypeTashchezCell(SOLVE_RIGHT_DOWN, 0, R.drawable.ic_square_right_down, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_RIGHT_DOWN, 0, i, ""));
                     break;
                 case 2:
-                    this.board.add(new TypeTashchezCell(DEFINITION_RIGHT_DOWN, 7, R.drawable.ic_square_definition, i, "עיר בירה באירופה"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_RIGHT_DOWN, 7, i, "עיר בירה באירופה"));
                     break;
                 case 3:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 5, R.drawable.ic_square_definition, i, "בעל חיים קוצני"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 5, i, "בעל חיים קוצני"));
                     break;
                 case 4:
-                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT_DOWN, 3, R.drawable.ic_square_definition, i, "רפורט"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT_DOWN, 3, i, "רפורט"));
                     break;
                 case 5:
-                    this.board.add(new TypeTashchezCell(SOLVE_LEFT_DOWN, 0, R.drawable.ic_square_left_down, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_LEFT_DOWN, 0, i, ""));
                     break;
                 case 6:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 3, R.drawable.ic_square_definition, i, "משך חיים ממוצע"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 3, i, "משך חיים ממוצע"));
                     break;
                 case 7:
-                    this.board.add(new TypeTashchezCell(SOLVE_DOWN_LEFT, 0, R.drawable.ic_square_down_left, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN_LEFT, 0, i, ""));
                     break;
                 case 8:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 9:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 10:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_down, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, i, ""));
                     break;
                 case 11:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 12:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 13:
-                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, R.drawable.ic_square_down, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, i, ""));
                     break;
                 case 14:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN_LEFT, 5, R.drawable.ic_square_definition, i, "מפיצה ריח נעים"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN_LEFT, 5, i, "מפיצה ריח נעים"));
                     break;
                 case 15:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 16:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 2, R.drawable.ic_square_definition, i, "אנקול"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 2, i, "אנקול"));
                     break;
                 case 17:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 18:
-                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT, 2, R.drawable.ic_square_definition, i, "סיכה לקישוט"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT, 2, i, "סיכה לקישוט"));
                     break;
                 case 19:
-                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, 0, R.drawable.ic_square_left, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, 0, i, ""));
                     break;
                 case 20:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 21:
-                    this.board.add(new TypeTashchezCell(SOLVE_DOWN_LEFT, 0, R.drawable.ic_square_down_left, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN_LEFT, 0, i, ""));
                     break;
                 case 22:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 23:
-                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, R.drawable.ic_square_down, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, i, ""));
                     break;
                 case 24:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 25:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 26:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 3, R.drawable.ic_square_definition, i, "רדאר"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 3, i, "רדאר"));
                     break;
                 case 27:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 28:
-                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT, 3, R.drawable.ic_square_definition, i, "ההפך ממיעוט"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT, 3, i, "ההפך ממיעוט"));
                     break;
                 case 29:
-                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, 0, R.drawable.ic_square_left, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, 0, i, ""));
                     break;
                 case 30:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 31:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 32:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 2, R.drawable.ic_square_definition, i, "בשבילי"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 2, i, "בשבילי"));
                     break;
                 case 33:
-                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, R.drawable.ic_square_down, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, i, ""));
                     break;
                 case 34:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 2, R.drawable.ic_square_definition, i, "נוזל בגוף"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN, 2, i, "נוזל בגוף"));
                     break;
                 case 35:
-                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN_LEFT, 3, R.drawable.ic_square_definition, i, "מושב דתי ליד אור יהודה"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_DOWN_LEFT, 3, i, "מושב דתי ליד אור יהודה"));
                     break;
                 case 36:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 37:
-                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT, 4, R.drawable.ic_square_definition, i, "נתפס"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT, 4, i, "נתפס"));
                     break;
                 case 38:
-                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, 0, R.drawable.ic_square_left, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, 0, i, ""));
                     break;
                 case 39:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_down, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, i, ""));
                     break;
                 case 40:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 41:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_down, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, 0, i, ""));
                     break;
                 case 42:
-                    this.board.add(new TypeTashchezCell(SOLVE_DOWN_LEFT, 0, R.drawable.ic_square_down_left, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN_LEFT, 0, i, ""));
                     break;
                 case 43:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 44:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 45:
-                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT, 3, R.drawable.ic_square_definition, i, "יחידה מרכזית מיוחדת"));
+                    this.board.add(new TypeTashchezCell(DEFINITION_LEFT, 3, i, "יחידה מרכזית מיוחדת"));
                     break;
                 case 46:
-                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, 0, R.drawable.ic_square_left, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, 0, i, ""));
                     break;
                 case 47:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
                 case 48:
-                    this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE, 0, i, ""));
                     break;
             }
         }
-
-
-//            if(i==0 || i==2 || i==3 || i==4 || i==6 || i==14 || i==16 || i==18 || i==26 || i==28 || i==32 || i==34 || i==35|| i==37 || i==45)
-//                this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_definition, i, "פקודה צבאית (4,3)"));
-//            else if(i==10 || i==13 || i==23 || i==33 || i==39 || i==41)
-//                this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_down, i, ""));
-//            else if(i==19 || i==29 || i==46 || i==38)
-//                this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_left, i, ""));
-//            else if(i==7 || i==21 || i==42)
-//                this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_down_left, i, ""));
-//            else if(i==5 || i==100)
-//                this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_left_down, i, ""));
-//            else if(i==1 || i==100)
-//                this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_right_down, i, ""));
-//            else if(i==100 || i==100)
-//                this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_up_left, i, ""));
-//            else
-//                this.board.add(new TypeTashchezCell(SOLVE, 0, R.drawable.ic_square_solve, i, ""));
 
     }
 

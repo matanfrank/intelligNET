@@ -12,7 +12,7 @@
         android:id="@+id/tashchez_image_solve" />
 
 
-    <EditText
+    <com.example.matan.intellignet.newEditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
@@ -22,7 +22,9 @@
         android:gravity="center"
         android:backgroundTint="@android:color/white"
         android:textCursorDrawable="@null"
-        android:id="@+id/tashchez_edit_text" />
+
+        android:id="@+id/tashchez_edit_text"
+        />
 
 
 </RelativeLayout>
