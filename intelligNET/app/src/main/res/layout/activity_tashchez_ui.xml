@@ -44,8 +44,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:padding="0px"
             android:clickable="true"
-            android:src="@drawable/ic_chat"
+            android:src="@drawable/ic_rosh_bakir"
             android:background="#1E88E5"
             app:layout_anchor="@id/menuGrid"
             app:layout_anchorGravity="bottom|right|end"/>

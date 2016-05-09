@@ -3,11 +3,23 @@ package com.example.matan.intellignet;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity
@@ -29,27 +41,49 @@ public class MainActivity extends Activity
 
         menuGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(),
                         "Item Clicked: " + position, Toast.LENGTH_SHORT).show();
 
-                Intent intent= new Intent();
+                Intent intent = new Intent();
 
-                switch(position)
-                {
-                    case 0:    intent = new Intent(MainActivity.this, TashchezMenu.class); break;
-                    case 1:    intent = new Intent(MainActivity.this, TashchezHigayonMenu.class); break;
-                    case 2:    intent = new Intent(MainActivity.this, SudokuMenu.class); break;
-                    case 3:    intent = new Intent(MainActivity.this, MadregotMenu.class); break;
-                    case 4:    intent = new Intent(MainActivity.this, MeuznachMenu.class); break;
-                    case 5:    intent = new Intent(MainActivity.this, BeitHamishpatMenu.class); break;
-                    case 6:    intent = new Intent(MainActivity.this, SheledMisparimMenu.class); break;
-                    case 7:    intent = new Intent(MainActivity.this, KaveretMenu.class); break;
-                    case 8:    intent = new Intent(MainActivity.this, TguvatSharsheretMenu.class); break;
-                    case 9:    intent = new Intent(MainActivity.this, ChatMenu.class); break;
-                    case 10:   intent = new Intent(MainActivity.this, HagdarotMenu.class); break;
-                    case 11:   intent = new Intent(MainActivity.this, OdotMenu.class); break;
+                switch (position) {
+                    case 0:
+                        intent = new Intent(MainActivity.this, TashchezMenu.class);
+                        break;
+                    case 1:
+                        intent = new Intent(MainActivity.this, TashchezHigayonMenu.class);
+                        break;
+                    case 2:
+                        intent = new Intent(MainActivity.this, SudokuMenu.class);
+                        break;
+                    case 3:
+                        intent = new Intent(MainActivity.this, MadregotMenu.class);
+                        break;
+                    case 4:
+                        intent = new Intent(MainActivity.this, MeuznachMenu.class);
+                        break;
+                    case 5:
+                        intent = new Intent(MainActivity.this, BeitHamishpatMenu.class);
+                        break;
+                    case 6:
+                        intent = new Intent(MainActivity.this, SheledMisparimMenu.class);
+                        break;
+                    case 7:
+                        intent = new Intent(MainActivity.this, KaveretMenu.class);
+                        break;
+                    case 8:
+                        intent = new Intent(MainActivity.this, TguvatSharsheretMenu.class);
+                        break;
+                    case 9:
+                        intent = new Intent(MainActivity.this, ChatMenu.class);
+                        break;
+                    case 10:
+                        intent = new Intent(MainActivity.this, HagdarotMenu.class);
+                        break;
+                    case 11:
+                        intent = new Intent(MainActivity.this, OdotMenu.class);
+                        break;
 
                 }
 

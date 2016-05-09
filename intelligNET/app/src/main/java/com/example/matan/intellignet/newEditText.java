@@ -27,12 +27,12 @@ public class newEditText extends EditText
 
 
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-        Log.d("1111", "onKeyPreIme:  " + keyCode + " ||||| " + event.getAction() + "\n" + KeyEvent.KEYCODE_BACK + " ||||| " + KeyEvent.ACTION_UP + "\n");
         if (keyCode == KeyEvent.KEYCODE_BACK &&
                 event.getAction() == KeyEvent.ACTION_UP) {
 
             InputMethodManager m = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);//
             m.hideSoftInputFromWindow(getWindowToken(), 0);
+
             return false;
         }
         return false;

@@ -7,5 +7,5 @@ import android.widget.EditText;
  */
 public interface TashchezPassEditText
 {
-    void setEditText(EditText editText);
+    void setEditText(newEditText editText);
 }
