@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#b1b2b6</color>
-    <color name="colorPrimaryDark">#219c25</color>
+    <color name="colorPrimaryDark">#b1b2b6</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorPost">#EFEBE9</color>
+    <color name="colorEditTextPost">#FFFFFF</color>
+    <color name="tabBackgroundWall">#90A4AE</color>
+    <color name="post_devider">#FFFFFF</color>
 </resources>

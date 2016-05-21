@@ -37,4 +37,5 @@ public class newEditText extends EditText
         }
         return false;
     }
+
 }

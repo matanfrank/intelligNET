@@ -3,6 +3,7 @@ package com.example.matan.intellignet;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,11 @@ public class MadregotMenu extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_madregot_menu);
 
+        if (MainActivity.user != null)
+        {
+            TextView connectedName = (TextView) findViewById(R.id.connectedName);
+            connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
+        }
 
         ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
         addMenuItems(menuCellArr);

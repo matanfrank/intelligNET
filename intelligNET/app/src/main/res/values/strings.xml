@@ -11,18 +11,33 @@
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="username">שם משתמש: 5-15 תווים</string>
+    <string name="password">סיסמה: 5-15 תווים</string>
+    <string name="loginBtn">הכנס</string>
+    <string name="signUpPageBtn"> <![CDATA[אין לך חשבון?<b><font color=#0c9910> הרשם כאן</b>.]]></string>
+    <string name="errUsernamelimits">שם משתמש חייב להיות בין 5 ל15 תווים</string>
+    <string name="errPasswordlimits">סיסמה חייבת להיות בין 5 ל15 תויים</string>
 
 
+
+
+
+
+
+
+    <!-- Strings related to sign up -->
+    <string name="firstName">שם פרטי</string>
+    <string name="createAccountBtn">צור חשבון</string>
+    <string name="loginPageBtn"> <![CDATA[יש לך חשבון?<b><font color=#0c9910>  הכנס כאן</b>.]]></string>
+    <string name="lastName">שם משפחה</string>
+    <string name="birthday">תאריך לידה: yyyy-mm-dd</string>
+    <string name="gender">מין: זכר או נקבה</string>
+    <string name="errFirstNamelimits">שם פרטי חייב להיות בין 2 ל15 תווים</string>
+    <string name="errLastNamelimits">שם משפחה חייב להיות בין 2 ל15 תווים</string>
+    <string name="errBirthdayYear">הכנס שנה תקנית</string>
+    <string name="errBirthdayMonth">הכנס חודש תקני</string>
+    <string name="errBirthdayDay">הכנס יום תקני</string>
+    <string name="errBirthdayValid">הכנס חודש לפי התבנית הבאה YYYY-MM-DD</string>
+    <string name="errGenderValid">הכנס "זכר" או "נקבה"</string>
 
 </resources>

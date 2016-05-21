@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 public class TashchezDAL {
     private Context mContext;
-    private ProgressDialog mProgressDialog;
+//    private ProgressDialog mProgressDialog;
     private final String url = "http://intellignet.herokuapp.com/";
     public static JSONArray jsonArray = new JSONArray();
 
@@ -39,8 +39,9 @@ public class TashchezDAL {
 
 
         String page = url + specPage;
+        Log.d("123456789", page);
 
-        createProgressDialog("Just a minute...", "Getting data from server.");
+//        createProgressDialog("Just a minute...", "Getting data from server.");
 
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, page, new Response.Listener<JSONArray>() {
@@ -50,12 +51,19 @@ public class TashchezDAL {
                 try {
                     Log.d("123456789", "DAL: " + jsonArray.getString(0));
                 } catch (JSONException e) {
+                    Log.e("12345678", "####################################\n\n\n\n\n\n");
                     e.printStackTrace();
+                    Log.e("12345678", "####################################\n\n\n\n\n\n");
                 }
                 Toast.makeText(mContext, "gooooooooooooooood", Toast.LENGTH_SHORT).show();
-                mProgressDialog.dismiss();
+//                mProgressDialog.dismiss();
                 if(h != null && r != null)
+                {
+                    Log.d("123456789", "yes h");
                     h.post(r);
+                }
+                else
+                    Log.d("123456789", "no h");
 
             }
         }, new Response.ErrorListener() {
@@ -66,7 +74,7 @@ public class TashchezDAL {
                 Log.e("12345678", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n");
                 error.printStackTrace();
                 Log.e("12345678", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n");
-                mProgressDialog.dismiss();
+//                mProgressDialog.dismiss();
             }
         });
 
@@ -81,15 +89,15 @@ public class TashchezDAL {
 
 
 
-    public ProgressDialog getProgressDialog() {
-        return mProgressDialog;
-    }
-
-    //create a progress dialog while data is being received
-    private void createProgressDialog(String title, String msg) {
-        mProgressDialog = ProgressDialog.show(mContext, title,
-                msg, true);
-    }
+//    public ProgressDialog getProgressDialog() {
+//        return mProgressDialog;
+//    }
+//
+//    //create a progress dialog while data is being received
+//    private void createProgressDialog(String title, String msg) {
+//        mProgressDialog = ProgressDialog.show(mContext, title,
+//                msg, true);
+//    }
 
 }
 

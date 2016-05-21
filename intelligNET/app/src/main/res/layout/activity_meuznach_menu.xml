@@ -11,15 +11,27 @@
     android:id="@+id/linearLay"
     >
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="5"
         android:layout_marginTop="30px"
-        android:layout_marginBottom="30px"
-        android:src="@drawable/ic_cover"
-        android:background="#f4f4f4"
-        android:id="@+id/symbolImage" />
+        android:layout_marginBottom="30px">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_cover"
+            android:background="#f4f4f4"
+            android:id="@+id/symbolImage" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/connectedName"/>
+
+
+    </RelativeLayout>
 
     <GridView
         android:layout_width="match_parent"

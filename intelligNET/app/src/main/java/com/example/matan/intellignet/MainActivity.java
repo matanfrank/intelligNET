@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,12 +26,26 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity
 {
+    public static TypeUser user = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
+        Intent intent = getIntent();
+        if (intent != null && user != null)
+            user = (TypeUser) intent.getExtras().getSerializable("user");
+
+//        Log.d("123456789", user.getUsername() + " " + user.getPassword() + " " + user.getFirstName() + " " + user.getLastName() + " " + user.getBirthday()
+//                + " " + user.getGender() + " " + user.getCWP_finished() + " " + user.getHelpForDay());
+
+        if (user != null)
+        {
+            TextView connectedName = (TextView) findViewById(R.id.connectedName);
+            connectedName.setText(user.getFirstName() + " " + user.getLastName());
+        }
 
         ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
         addMenuItems(menuCellArr);
@@ -76,7 +92,7 @@ public class MainActivity extends Activity
                         intent = new Intent(MainActivity.this, TguvatSharsheretMenu.class);
                         break;
                     case 9:
-                        intent = new Intent(MainActivity.this, ChatMenu.class);
+                        intent = new Intent(MainActivity.this, WallActivity.class);
                         break;
                     case 10:
                         intent = new Intent(MainActivity.this, HagdarotMenu.class);

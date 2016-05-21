@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,6 +17,12 @@ public class TashchezMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tashchez_menu);
+
+        if (MainActivity.user != null)
+        {
+            TextView connectedName = (TextView) findViewById(R.id.connectedName);
+            connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
+        }
 
 
         final ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();

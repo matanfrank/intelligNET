@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -29,8 +31,8 @@ public class TashchezUI extends AppCompatActivity
     public static final int NUM_COL=7;
     public static final int NUM_ROW=7;
     private  ImageView coverImage;
+    private TextView connectedName;
     private static TashchezAdapter adapter;
-    private InputMethodManager imm;
     private static newEditText editText;
     private  GridView tashchezGrid;
     private  TypeTashchezGrid tashchez;
@@ -40,6 +42,8 @@ public class TashchezUI extends AppCompatActivity
     private Activity activity = this;
     public android.os.Handler h;
     public Runnable r1, r2;
+    public static RelativeLayout coverLayout;
+    private TextView definitionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,13 +51,17 @@ public class TashchezUI extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tashchez_ui);
 
+        if (MainActivity.user != null)
+        {
+            connectedName = (TextView) findViewById(R.id.connectedName);
+            connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
+        }
 
 
 
 
-
-
-
+        definitionTextView = (TextView)activity.findViewById(R.id.definitionTextView);
+        coverLayout = (RelativeLayout)findViewById(R.id.coverLayout);
         coverImage = (ImageView) findViewById(R.id.symbolImage);
         tashchezGrid = (GridView)findViewById(R.id.menuGrid);
         tashchezGrid.setNumColumns(NUM_COL);
@@ -157,13 +165,18 @@ public class TashchezUI extends AppCompatActivity
                     Runnable r = new Runnable() {
                         @Override
                         public void run() {
-                            coverImage.setVisibility(View.VISIBLE);
+//                            coverImage.setVisibility(View.VISIBLE);
+//                            connectedName.setVisibility(View.VISIBLE);
+
+
+                                    coverLayout.setVisibility(View.VISIBLE);
+
                               TashchezUI.editText.clearFocus();
                         }
                     };
                     h.postDelayed(r, 300);
 
-
+                    definitionTextView.setVisibility(View.GONE);
 
 
                     for (int i = 0; i < NUM_ROW * NUM_COL; i++)

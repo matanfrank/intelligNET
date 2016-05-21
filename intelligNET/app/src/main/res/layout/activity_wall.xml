@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.matan.intellignet.TguvatSharsheretMenu"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.matan.intellignet.WallActivity"
     android:orientation="vertical"
     android:id="@+id/linearLay"
+    android:layoutDirection="ltr"
     >
+
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,17 +35,32 @@
 
     </RelativeLayout>
 
-    <GridView
+
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="28"
-        android:paddingTop="50px"
-        android:paddingBottom="50px"
+        android:layout_weight="3"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:tabIndicatorColor="#1565C0"
+        app:tabBackground="@color/tabBackgroundWall"
+        app:tabTextColor="#ffffff"
+        app:tabSelectedTextColor="#1565C0"
+        />
 
-        android:background="#ffffff"
-        android:numColumns="3"
-        android:gravity="center_vertical"
-        android:id="@+id/menuGrid" />
+
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="25"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+
 
     <TextView
         android:layout_width="match_parent"
@@ -56,4 +73,3 @@
 
 
 </LinearLayout>
-

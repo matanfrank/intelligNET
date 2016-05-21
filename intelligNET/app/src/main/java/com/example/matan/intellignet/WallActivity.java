@@ -1,6 +1,5 @@
 package com.example.matan.intellignet;
 
-
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,20 +7,17 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout.LayoutParams;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SudokuMenu extends AppCompatActivity {
-
+public class WallActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sudoku_menu);
+        setContentView(R.layout.activity_wall);
 
         if (MainActivity.user != null)
         {
@@ -44,9 +40,8 @@ public class SudokuMenu extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new SudokuHardMenu(), "קשה");
-        adapter.addFragment(new SudokuMedMenu(), "בינוני");
-        adapter.addFragment(new SudokuEasyMenu(), "קל");
+        adapter.addFragment(new WallMyPostsFragment(), "פוסטים שלי");
+        adapter.addFragment(new WallNewsFragment(), "חדשות");
 
 
         viewPager.setAdapter(adapter);
@@ -87,4 +82,3 @@ public class SudokuMenu extends AppCompatActivity {
         }
     }
 }
-

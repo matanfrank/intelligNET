@@ -3,7 +3,9 @@ package com.example.matan.intellignet;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 
@@ -30,6 +33,10 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private newEditText editText;
     private TashchezPassEditText tashchezPassEditText;
     private ImageView coverImage;
+    private TextView connectedName;
+    private TextView definitionTextView;
+   // private RelativeLayout coverLayout;
+
     public static Activity context;
     private int[] lastPaint;
     private int lastPaintCounter = 0;
@@ -43,6 +50,9 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
         inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.tashchezPassEditText = tashchezPassEditText;
         coverImage = (ImageView) activity.findViewById(R.id.symbolImage);
+        connectedName = (TextView)activity.findViewById(R.id.connectedName);
+        definitionTextView = (TextView)activity.findViewById(R.id.definitionTextView);
+        //coverLayout = (RelativeLayout)activity.findViewById(R.id.coverLayout);
         lastPaint = new int[TashchezUI.NUM_COL];
         for (int i = 0; i < lastPaint.length; i++)
             lastPaint[i] = INIT;
@@ -94,10 +104,29 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
                 textView = (TextView) convertView.findViewById(R.id.tashchez_text_view);
                 textView.setText(tashchezCell.content);
+
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        coverImage.setVisibility(View.GONE);
+
+                        android.os.Handler h = new android.os.Handler();
+
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                definitionTextView.setVisibility(View.VISIBLE);
+                                definitionTextView.setText(tashchezCell.content);
+                            }
+                        };
+                        h.postDelayed(r, 300);
+
+                        TashchezUI.coverLayout.setVisibility(View.GONE);
+
+
+//                        connectedName.setVisibility(View.GONE);
+//                        coverImage.setVisibility(View.GONE);
+
+
                         paintAnswer(tashchezCell);
                         TashchezUI.solveMode = true;
                         setFocusDefClick = true;}
@@ -111,6 +140,8 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
             case SOLVE:
                 editText = (newEditText) convertView.findViewById(R.id.tashchez_edit_text);
+//                editText.setKeyListener(new DigitsKeyListener(true,true));
+//                editText.setInputType(InputType.TYPE_CLASS_TEXT);
                 tashchezCell.setEditText(editText);
 
                 tashchezPassEditText.setEditText(editText);
@@ -178,8 +209,12 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         if (hasFocus) {
+                           // TashchezUI.coverLayout.setVisibility(View.GONE);
+                           // definitionTextView.setVisibility(View.VISIBLE);
+//                            connectedName.setVisibility(View.GONE);
+//                            coverImage.setVisibility(View.GONE);
 
-                            coverImage.setVisibility(View.GONE);
+
                             TashchezUI.solveMode = true;
                         }
                     }
