@@ -1,7 +1,11 @@
 package com.example.matan.intellignet;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -19,6 +23,19 @@ public class TguvatSharsheretMenu extends Activity {
             TextView connectedName = (TextView) findViewById(R.id.connectedName);
             connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
         }
+
+        TextView disconnect = (TextView)findViewById(R.id.disconnect);
+        disconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+                sharedpreferences.edit().clear().commit();
+
+                Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(disconnectIntent);
+                finish();
+            }
+        });
 
         ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
         addMenuItems(menuCellArr);

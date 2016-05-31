@@ -1,6 +1,8 @@
 package com.example.matan.intellignet;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -27,12 +29,15 @@ public class LoginActivity extends AppCompatActivity {
     private Runnable r;
     private static String username;
     private static String password;
+    public static boolean guest;
+
     private TypeUser user;
 
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
+    @InjectView(R.id.link_guest) TextView _guestLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.inject(this);
         _usernameText.requestFocus();
         _signupLink.setText(Html.fromHtml(getString(R.string.signUpPageBtn)));//for color change in the text
-
+        _guestLink.setText(Html.fromHtml(getString(R.string.guestBtn)));
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -59,7 +64,21 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
+
+
+
+    _guestLink.setOnClickListener(new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            // Start the Signup activity
+            guest=true;
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
+    });
+}
+
 
     public void login() {
         Log.d(TAG, "Login");
@@ -137,6 +156,13 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
 
+        SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.commit();
+
+        guest = false;
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra("user", user);

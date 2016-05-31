@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by matan on 16/12/2015.
@@ -36,11 +39,16 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private TextView connectedName;
     private TextView definitionTextView;
    // private RelativeLayout coverLayout;
+    public static int j=0;
 
     public static Activity context;
     private int[] lastPaint;
-    private int lastPaintCounter = 0;
+
     private static boolean setFocusDefClick = false;
+    //public static Semaphore mutex = new Semaphore(100, true);
+    private static boolean EditTextListenerCall;
+    public static android.os.Handler hKeyboard = new android.os.Handler();
+    public static Runnable rKeyboard = null;
 
 
     public TashchezAdapter(Activity activity, int defLayout, int slvLayout, ArrayList data, TashchezPassEditText tashchezPassEditText) {
@@ -109,18 +117,25 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     @Override
                     public void onClick(View v) {
 
-                        android.os.Handler h = new android.os.Handler();
+                        android.os.Handler hDef = new android.os.Handler();
 
-                        Runnable r = new Runnable() {
+                        Runnable rDef = new Runnable() {
                             @Override
                             public void run() {
+
                                 definitionTextView.setVisibility(View.VISIBLE);
                                 definitionTextView.setText(tashchezCell.content);
+
+                                if(rKeyboard!=null)
+                                    hKeyboard.postDelayed(rKeyboard, 200);
                             }
                         };
-                        h.postDelayed(r, 300);
+
 
                         TashchezUI.coverLayout.setVisibility(View.GONE);
+
+
+                        hDef.postDelayed(rDef, 300);
 
 
 //                        connectedName.setVisibility(View.GONE);
@@ -139,6 +154,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
 
             case SOLVE:
+
                 editText = (newEditText) convertView.findViewById(R.id.tashchez_edit_text);
 //                editText.setKeyListener(new DigitsKeyListener(true,true));
 //                editText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -148,18 +164,56 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
                 //lastPaint[0] is the first cell in the answer word.
                 //this "if" is to put the cursor in the first cell of answer when the user click on definition
-                if (setFocusDefClick && lastPaint[0] != INIT && position == lastPaint[0] && TashchezUI.solveMode)
+                if (setFocusDefClick && lastPaint[0] != INIT && TashchezUI.solveMode)
                 {
-                    editText.setFocusable(true);
-                    editText.requestFocus();
+                        j=0;
+                        while(j<lastPaint.length && lastPaint[j] != INIT  && getItem(lastPaint[j]).editText.getText().length() != 0)//in case that the cell is fill already
+                        {
+                            j++;
+                        }
 
-                    imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);//
-                    imm.showSoftInput(editText, 0);
+
+
+
+                        rKeyboard = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (j < lastPaint.length && lastPaint[j] != INIT && getItem(lastPaint[j]).editText.getText().length() == 0) {
+                                    Log.d("333333", "last: " + lastPaint[j]);
+                                    getItem(lastPaint[j]).editText.setFocusable(true);
+                                    getItem(lastPaint[j]).editText.requestFocus();
+                                    imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);//
+                                    imm.showSoftInput(getItem(lastPaint[j]).editText, 0);
+                                }
+                            }
+                        };
+
+
+
                 }
+
+
+
+
 
                 //when user writing an answer the cursor has to jump automatically between cells
                 editText.addTextChangedListener(new TextWatcher() {
-                    private boolean EditTextListenerCall;
+
+                    private final Lock mutex = new ReentrantLock(true);
+                    private int lastPaintCounter = 0;
+
+
+
+//                    try {
+//                        mutex.acquire();
+//                        try {
+//                            // do something
+//                        } finally {
+//                            mutex.release();
+//                        }
+//                    } catch(InterruptedException ie) {
+//                        // ...
+//                    }
 
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -174,25 +228,38 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
                     @Override
                     public void afterTextChanged(Editable s) {
+                        mutex.lock();//in case of race condition because sometimes run 3 times
 
-                        if (EditTextListenerCall)
-                        {
+
+                        if (EditTextListenerCall) {
+                        for(int i=0 ; i < lastPaint.length ; i++)
+                            if(lastPaint[i] != INIT && getItem(lastPaint[i]).editText.hasFocus())
+                                lastPaintCounter = i;
+
+
                             Log.d("lastPaint", "afterTextChanged\n");
                             EditTextListenerCall = false;
 
-                            Log.d("lastPaint", lastPaintCounter + "\n");
+
                             if ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT) {
                                 lastPaintCounter += 1;
-                                Log.d("lastPaint", lastPaintCounter + "\n");
+                                Log.d("lastPaint", "2: " +  lastPaintCounter + "\n");
+                                while((lastPaintCounter+1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT &&
+                                        getItem(lastPaint[lastPaintCounter]).editText.getText().length() != 0)//in case that the cell is fill already
+                                {
+                                    Log.d("lastPaint", "h: " + getItem(lastPaint[lastPaintCounter]).editText.getText().toString());
+                                    lastPaintCounter += 1;
+                                }
+                                Log.d("lastPaint", "3: " +  lastPaintCounter + "\n");
                                 getItem(lastPaint[lastPaintCounter]).editText.requestFocus();
                             } else {
                                 lastPaintCounter = 0;
                             }
-                            Log.d("lastPaint", lastPaintCounter + "\n");
-
+                           //Log.d("lastPaint", lastPaintCounter + "\n");
 
 
                         }
+                        mutex.unlock();
                     }
                 });
 

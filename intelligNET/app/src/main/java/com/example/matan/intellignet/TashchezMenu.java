@@ -1,7 +1,9 @@
 package com.example.matan.intellignet;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,13 +19,30 @@ public class TashchezMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tashchez_menu);
+        TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
+        if(!LoginActivity.guest)
+        {
         if (MainActivity.user != null)
         {
             TextView connectedName = (TextView) findViewById(R.id.connectedName);
             connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
         }
+        }
+        else
+            disconnect.setVisibility(View.INVISIBLE);
 
+        disconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+                sharedpreferences.edit().clear().commit();
+
+                Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(disconnectIntent);
+                finish();
+            }
+        });
 
         final ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
         addMenuItems(menuCellArr);
@@ -33,31 +52,64 @@ public class TashchezMenu extends Activity {
 
         menuGrid.setAdapter(new AdapterMenu(this, R.layout.cell_menu, menuCellArr));
 
-        menuGrid.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        menuGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(),
                         "Item Clicked: " + position, Toast.LENGTH_SHORT).show();
 
-                Intent intent= new Intent();
+                Intent intent = new Intent();
 
-            //    server.GetGameById(menuCellArr.Id)
-                switch(position)
-                {
-                    case 0:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 1:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 2:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 3:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 4:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 5:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 6:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 7:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 8:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 9:    intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 10:   intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
-                    case 11:   intent = new Intent(TashchezMenu.this, TashchezUI.class); break;
+                //    server.GetGameById(menuCellArr.Id)
+                switch (position) {
+                    case 0:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 1:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 2:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 3:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 4:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 5:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 6:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 7:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 8:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 9:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 10:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
+                    case 11:
+                        intent = new Intent(TashchezMenu.this, TashchezUI.class);
+                        intent.putExtra("statusIndex", position + 1);
+                        break;
                 }
 
                 startActivity(intent);

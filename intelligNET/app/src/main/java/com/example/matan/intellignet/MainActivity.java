@@ -1,27 +1,16 @@
 package com.example.matan.intellignet;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONObject;
-
-import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity
@@ -32,20 +21,44 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TextView connectedName;
+        TextView disconnect = (TextView)findViewById(R.id.disconnect);
+
+        if(!LoginActivity.guest)
+        {
+             Intent intent = getIntent();
+             if(intent!=null)
+                user = (TypeUser) intent.getExtras().getSerializable("user");
+             if (user != null) {
+                connectedName = (TextView) findViewById(R.id.connectedName);
+                connectedName.setText(user.getFirstName() + " " + user.getLastName());
+               }
+        }
+        else
+        disconnect.setVisibility(View.INVISIBLE);
 
 
-        Intent intent = getIntent();
-        if (intent != null && user != null)
-            user = (TypeUser) intent.getExtras().getSerializable("user");
+
+
+        disconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+                sharedpreferences.edit().clear().commit();
+
+                Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(disconnectIntent);
+                finish();
+            }
+        });
 
 //        Log.d("123456789", user.getUsername() + " " + user.getPassword() + " " + user.getFirstName() + " " + user.getLastName() + " " + user.getBirthday()
 //                + " " + user.getGender() + " " + user.getCWP_finished() + " " + user.getHelpForDay());
 
-        if (user != null)
-        {
-            TextView connectedName = (TextView) findViewById(R.id.connectedName);
-            connectedName.setText(user.getFirstName() + " " + user.getLastName());
-        }
+//        if (user != null)
+//        {
+//
+//        }
 
         ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
         addMenuItems(menuCellArr);
@@ -92,7 +105,7 @@ public class MainActivity extends Activity
                         intent = new Intent(MainActivity.this, TguvatSharsheretMenu.class);
                         break;
                     case 9:
-                        intent = new Intent(MainActivity.this, WallActivity.class);
+                        intent = new Intent(MainActivity.this, WallUI.class);
                         break;
                     case 10:
                         intent = new Intent(MainActivity.this, HagdarotMenu.class);

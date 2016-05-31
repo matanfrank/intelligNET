@@ -16,6 +16,7 @@
     android:orientation="vertical"
     android:padding="30px"
     android:background="@color/tabBackgroundWall"
+    android:id="@+id/writeStatus"
   >
     <EditText
         android:layout_width="match_parent"

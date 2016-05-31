@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:nextFocusDown="@id/input_password"
                 android:inputType="textEmailAddress"
-                android:hint="@string/username" />
+                android:hint="@string/usernameSignup" />
         </android.support.design.widget.TextInputLayout>
 
 
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="@string/password"/>
+                android:hint="@string/passwordSignup"/>
         </android.support.design.widget.TextInputLayout>
 
         <!--  First name Label -->
@@ -128,16 +128,24 @@
             android:id="@+id/btn_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24px"
-            android:layout_marginBottom="24px"
+            android:layout_marginTop="15px"
+            android:layout_marginBottom="6px"
             android:padding="12px"
             android:text="@string/createAccountBtn"/>
 z
         <TextView android:id="@+id/link_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24px"
+            android:layout_marginBottom="6px"
             android:text="@string/loginPageBtn"
+            android:gravity="center"
+            android:textSize="16dip"/>
+
+        <TextView android:id="@+id/link_guest"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6px"
+            android:text="@string/guestBtn"
             android:gravity="center"
             android:textSize="16dip"/>
 

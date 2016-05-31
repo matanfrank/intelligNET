@@ -1,6 +1,9 @@
 package com.example.matan.intellignet;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout.LayoutParams;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,12 +26,31 @@ public class SudokuMenu extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku_menu);
+        TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
+        if(!LoginActivity.guest)
+        {
         if (MainActivity.user != null)
         {
             TextView connectedName = (TextView) findViewById(R.id.connectedName);
             connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
         }
+    }
+    else
+            disconnect.setVisibility(View.INVISIBLE);
+
+
+        disconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+                sharedpreferences.edit().clear().commit();
+
+                Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(disconnectIntent);
+                finish();
+            }
+        });
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);

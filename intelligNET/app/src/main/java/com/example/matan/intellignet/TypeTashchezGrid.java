@@ -26,38 +26,38 @@ public class TypeTashchezGrid extends TypeGameGrid<TypeTashchezCell>
     protected final static String DEFINITION_LEFT_DOWN  = "definitionLeftDown";
 
     protected boolean tashchezProperties;
+    public boolean regularTashchez;
 
-
-    protected  TypeTashchezGrid(int row, int col, boolean prop, TypeTashchezStruct data) {
+    protected  TypeTashchezGrid(int row, int col, boolean prop, TypeTashchezStruct data,  boolean regularTashchez) {
         super(col, row, prop);
 
         board = new ArrayList<TypeTashchezCell>();
-
+        this.regularTashchez = regularTashchez;
 
         for (int i = 0; i < data.cellType.size(); i++) {
             //add the def cell to the "board"
-            this.board.add(new TypeTashchezCell(data.cellType.get(i), data.numOfLetter.get(i), data.cellIndex.get(i), data.content.get(i)));
+            this.board.add(new TypeTashchezCell(data.cellType.get(i), data.numOfLetter.get(i), data.cellIndex.get(i), data.content.get(i), this.regularTashchez));
 
             //add the  first solve cell that match to last def cell added
             if (board.get(board.size() - 1).cellType.contains("definition")) {
 
                 if (board.get(board.size() - 1).cellType.contains("Down") && board.get(board.size() - 1).cellType.contains("Left") && board.get(board.size() - 1).cellType.endsWith("Left"))
-                    this.board.add(new TypeTashchezCell(SOLVE_DOWN_LEFT, data.numOfLetter.get(i), data.cellIndex.get(i) + TashchezUI.NUM_ROW, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN_LEFT, data.numOfLetter.get(i), data.cellIndex.get(i) + TashchezUI.NUM_ROW, "", this.regularTashchez));
 
                 else if (board.get(board.size() - 1).cellType.contains("Left") && board.get(board.size() - 1).cellType.contains("Down") && board.get(board.size() - 1).cellType.endsWith("Down"))
-                    this.board.add(new TypeTashchezCell(SOLVE_LEFT_DOWN, data.numOfLetter.get(i), data.cellIndex.get(i) + 1, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_LEFT_DOWN, data.numOfLetter.get(i), data.cellIndex.get(i) + 1, "", this.regularTashchez));
 
                 else if (board.get(board.size() - 1).cellType.contains("Up") && board.get(board.size() - 1).cellType.contains("Left") && board.get(board.size() - 1).cellType.endsWith("Left"))
-                    this.board.add(new TypeTashchezCell(SOLVE_UP_LEFT, data.numOfLetter.get(i), data.cellIndex.get(i) - TashchezUI.NUM_ROW, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_UP_LEFT, data.numOfLetter.get(i), data.cellIndex.get(i) - TashchezUI.NUM_ROW, "", this.regularTashchez));
 
                 else if (board.get(board.size() - 1).cellType.contains("Right") && board.get(board.size() - 1).cellType.contains("Down") && board.get(board.size() - 1).cellType.endsWith("Down"))
-                    this.board.add(new TypeTashchezCell(SOLVE_RIGHT_DOWN, data.numOfLetter.get(i), data.cellIndex.get(i) - 1, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_RIGHT_DOWN, data.numOfLetter.get(i), data.cellIndex.get(i) - 1, "", this.regularTashchez));
 
                 else if (board.get(board.size() - 1).cellType.contains("Left"))
-                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, data.numOfLetter.get(i), data.cellIndex.get(i) + 1, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_LEFT, data.numOfLetter.get(i), data.cellIndex.get(i) + 1, "", this.regularTashchez));
 
                 else if (board.get(board.size() - 1).cellType.contains("Down"))
-                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, data.numOfLetter.get(i), data.cellIndex.get(i) + TashchezUI.NUM_ROW, ""));
+                    this.board.add(new TypeTashchezCell(SOLVE_DOWN, data.numOfLetter.get(i), data.cellIndex.get(i) + TashchezUI.NUM_ROW, "", this.regularTashchez));
             }
         }
 
@@ -75,7 +75,7 @@ public class TypeTashchezGrid extends TypeGameGrid<TypeTashchezCell>
                 }
             }
             if(!exist)
-                this.board.add(new TypeTashchezCell(SOLVE, 0, j, ""));//what to do with numOfLetter
+                this.board.add(new TypeTashchezCell(SOLVE, 0, j, "", this.regularTashchez));//what to do with numOfLetter
             exist = false;
         }
 

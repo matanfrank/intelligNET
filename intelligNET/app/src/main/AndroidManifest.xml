@@ -20,15 +20,14 @@
             android:name=".LoginActivity"
             android:noHistory="true"
             android:windowSoftInputMode="stateVisible|adjustPan" >
-
-
-
-
-
         </activity>
-        <activity android:name=".TashchezMenu" >
+        <activity
+            android:name=".TashchezMenu"
+            android:noHistory="false" >
         </activity>
-        <activity android:name=".TashchezHigayonMenu" >
+        <activity
+            android:name=".TashchezHigayonMenu"
+            android:noHistory="true" >
         </activity>
         <activity android:name=".MadregotMenu" >
         </activity>
@@ -53,14 +52,12 @@
         <activity
             android:name=".TashchezUI"
             android:label="@string/title_activity_tashchez_pl"
-            android:theme="@style/AppTheme" >
+            android:noHistory="false"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
         <activity android:name=".MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".SignupActivity"
@@ -68,9 +65,21 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" >
         </activity>
-        <activity android:name=".WallActivity"
+        <activity
+            android:name=".WallUI"
             android:windowSoftInputMode="stateHidden|adjustPan" >
+        </activity>
+        <activity
+            android:name=".TashchezHigayonUI"
+            android:noHistory="true" >
+        </activity>
+        <activity android:name=".SplashActivity"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

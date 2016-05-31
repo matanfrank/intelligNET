@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -47,6 +48,12 @@ public class WallMyPostsFragment extends Fragment {
         // menuGrid.setVerticalScrollBarEnabled(false);
 
         list.setAdapter(new AdapterPosts(getActivity(), R.layout.row_post, typePostArr));
+
+        LinearLayout writeStatus = (LinearLayout)view.findViewById(R.id.writeStatus);
+        if(LoginActivity.guest)
+            writeStatus.setVisibility(View.GONE);
+
+
 
 
         return view;

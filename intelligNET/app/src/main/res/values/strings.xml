@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">NET-אינטליג</string>
     <string name="ad">פרסומת</string>
+    <string name="disconnect">התנתק</string>
+
+
+
+
+    <!-- Strings related to sudoku -->
     <string name="easyTab">קל</string>
     <string name="mediumTab">בינוני</string>
     <string name="hardTab">קשה</string>
@@ -11,10 +17,11 @@
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
-    <string name="username">שם משתמש: 5-15 תווים</string>
-    <string name="password">סיסמה: 5-15 תווים</string>
+    <string name="usernameLogin">שם משתמש</string>
+    <string name="passwordLogin">סיסמה</string>
     <string name="loginBtn">הכנס</string>
     <string name="signUpPageBtn"> <![CDATA[אין לך חשבון?<b><font color=#0c9910> הרשם כאן</b>.]]></string>
+    <string name="guestBtn"> <![CDATA[לכניסת אורח<b><font color=#b20000> לחץ כאן</b>.]]></string>
     <string name="errUsernamelimits">שם משתמש חייב להיות בין 5 ל15 תווים</string>
     <string name="errPasswordlimits">סיסמה חייבת להיות בין 5 ל15 תויים</string>
 
@@ -26,6 +33,8 @@
 
 
     <!-- Strings related to sign up -->
+    <string name="usernameSignup">שם משתמש: 5-15 תווים</string>
+    <string name="passwordSignup">סיסמה: 5-15 תווים</string>
     <string name="firstName">שם פרטי</string>
     <string name="createAccountBtn">צור חשבון</string>
     <string name="loginPageBtn"> <![CDATA[יש לך חשבון?<b><font color=#0c9910>  הכנס כאן</b>.]]></string>
