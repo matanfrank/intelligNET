@@ -98,17 +98,63 @@
         </android.support.design.widget.TextInputLayout>
 
         <!-- Birthday Label -->
-        <android.support.design.widget.TextInputLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/input_birthday">
+
+            <!-- year -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:layout_marginTop="8px"
             android:layout_marginBottom="8px">
-            <EditText android:id="@+id/input_birthday"
+            <EditText android:id="@+id/input_year"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ems="4"
                 android:inputType="date"
-                android:hint="@string/birthday"/>
+                android:hint="@string/year"/>
         </android.support.design.widget.TextInputLayout>
+
+
+            <!-- month -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginTop="8px"
+            android:layout_marginBottom="8px">
+            <EditText android:id="@+id/input_month"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="2"
+                android:nextFocusRight="@id/input_year"
+                android:inputType="date"
+                android:hint="@string/month"/>
+        </android.support.design.widget.TextInputLayout>
+
+            <!-- day -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginTop="8px"
+            android:layout_marginBottom="8px">
+            <EditText android:id="@+id/input_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="2"
+                android:nextFocusRight="@id/input_month"
+                android:inputType="date"
+                android:hint="@string/day"/>
+        </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+
 
         <!-- Gender Label -->
         <android.support.design.widget.TextInputLayout

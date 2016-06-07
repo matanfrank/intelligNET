@@ -39,14 +39,15 @@
     <string name="createAccountBtn">צור חשבון</string>
     <string name="loginPageBtn"> <![CDATA[יש לך חשבון?<b><font color=#0c9910>  הכנס כאן</b>.]]></string>
     <string name="lastName">שם משפחה</string>
-    <string name="birthday">תאריך לידה: yyyy-mm-dd</string>
+    <string name="year">שנה</string>
+    <string name="month">חודש</string>
+    <string name="day">יום</string>
     <string name="gender">מין: זכר או נקבה</string>
     <string name="errFirstNamelimits">שם פרטי חייב להיות בין 2 ל15 תווים</string>
     <string name="errLastNamelimits">שם משפחה חייב להיות בין 2 ל15 תווים</string>
-    <string name="errBirthdayYear">הכנס שנה תקנית</string>
-    <string name="errBirthdayMonth">הכנס חודש תקני</string>
-    <string name="errBirthdayDay">הכנס יום תקני</string>
-    <string name="errBirthdayValid">הכנס חודש לפי התבנית הבאה YYYY-MM-DD</string>
+    <string name="errBirthdayYear">הכנס שנה תקנית לפי התבנית הבאה YYYY</string>
+    <string name="errBirthdayMonth">הכנס חודש תקני לפי התבנית הבאה MM</string>
+    <string name="errBirthdayDay">הכנס יום תקני לפי התבנית הבאה DD</string>
     <string name="errGenderValid">הכנס "זכר" או "נקבה"</string>
 
 </resources>

@@ -29,6 +29,11 @@ public abstract class TypeGameCell
         this.editText = editText;
     }
 
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     protected void answerCell(int index)//TODO
     {
 

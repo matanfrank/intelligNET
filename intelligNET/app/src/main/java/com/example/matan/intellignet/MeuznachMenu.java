@@ -38,6 +38,7 @@ public class MeuznachMenu extends Activity {
                 sharedpreferences.edit().clear().commit();
 
                 Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                disconnectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(disconnectIntent);
                 finish();
             }

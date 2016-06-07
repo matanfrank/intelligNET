@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,8 +25,8 @@ public static final int NUM_COL=7;
 public static final int NUM_ROW=7;
 private ImageView coverImage;
 private TextView connectedName;
-private static TashchezAdapter adapter;
-private static newEditText editText;
+private static TashchezHigayonAdapter adapter;
+//private static newEditText editText;
 private GridView tashchezGrid;
 private  TypeTashchezGrid tashchez;
 public static boolean solveMode = false;
@@ -36,6 +37,9 @@ public android.os.Handler h;
 public Runnable r1, r2;
 public static RelativeLayout coverLayout;
 private TextView definitionTextView;
+    private FloatingActionButton chatHead;
+    private FloatingActionButton eraseHead;
+    private FloatingActionButton helpHead;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,7 @@ protected void onCreate(Bundle savedInstanceState) {
             sharedpreferences.edit().clear().commit();
 
             Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
+            disconnectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(disconnectIntent);
             finish();
         }
@@ -101,12 +106,12 @@ public void run() {
         tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, tashchezBL.getTashchezStruct(), false);
 
 
-        adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, tashchez.board, new TashchezPassEditText() {
-@Override
-public void setEditText(newEditText editText) {
-        TashchezHigayonUI.editText = editText;
-        }
-        });
+        adapter = new TashchezHigayonAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, tashchez.board);// new TashchezPassEditText() {
+//@Override
+//public void setEditText(newEditText editText) {
+//        TashchezHigayonUI.editText = editText;
+//        }
+//        });
 
 
 
@@ -128,7 +133,26 @@ public void setEditText(newEditText editText) {
 
         startService(new Intent(this, ChatHeadService.class));
 
-        FloatingActionButton chatHead = (FloatingActionButton) findViewById(R.id.fab);
+    chatHead = (FloatingActionButton) findViewById(R.id.wallFB);
+    eraseHead = (FloatingActionButton) findViewById(R.id.eraseFB);
+    helpHead = (FloatingActionButton) findViewById(R.id.helpFB);
+
+    chatHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+    eraseHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+    helpHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+
+    chatHead.setRippleColor((getResources().getColor(R.color.FB)));//change color when click
+    eraseHead.setRippleColor((getResources().getColor(R.color.FB)));
+    helpHead.setRippleColor((getResources().getColor(R.color.FB)));
+
+
+
+    eraseHead.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            h.post(r2);
+        }
+    });
 
         chatHead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +188,7 @@ public void setEditText(newEditText editText) {
                         v.setY(initialY + (int) (event.getRawY() - initialTouchY));
                 }
 
-                if (event.getRawX() - initialTouchX > 0.1 || event.getRawY() - initialTouchY > 0.1)
+                if (event.getRawX() - initialTouchX > 0.3 || event.getRawY() - initialTouchY > 0.3)
                     return true;
                 else
                     return false;
@@ -194,7 +218,7 @@ public void run() {
 
         coverLayout.setVisibility(View.VISIBLE);
 
-        TashchezHigayonUI.editText.clearFocus();
+        //TashchezHigayonUI.editText.clearFocus();
     solveMode = false;
         }
         };
@@ -210,11 +234,16 @@ public void run() {
         }
         else
         {
-        Intent intent = new Intent(this, TashchezHigayonMenu .class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+//        Intent intent = new Intent(this, TashchezHigayonMenu .class);
+////                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
+            finish();
         }
         }
-        return false;
+            return super.dispatchKeyEvent(event);
         }
+
+
         }
+
+

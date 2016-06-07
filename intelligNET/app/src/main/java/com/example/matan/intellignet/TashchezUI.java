@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -34,7 +37,7 @@ public class TashchezUI extends AppCompatActivity
     private  ImageView coverImage;
     private TextView connectedName;
     private static TashchezAdapter adapter;
-    private static newEditText editText;
+    //private static newEditText editText;
     private  GridView tashchezGrid;
     private  TypeTashchezGrid tashchez;
     public static boolean solveMode = false;
@@ -45,7 +48,9 @@ public class TashchezUI extends AppCompatActivity
     public Runnable r1, r2;
     public static RelativeLayout coverLayout;
     private TextView definitionTextView;
-
+    private FloatingActionButton chatHead;
+    private FloatingActionButton eraseHead;
+    private FloatingActionButton helpHead;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -71,6 +76,7 @@ public class TashchezUI extends AppCompatActivity
                 sharedpreferences.edit().clear().commit();
 
                 Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                disconnectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(disconnectIntent);
                 finish();
             }
@@ -113,12 +119,12 @@ public class TashchezUI extends AppCompatActivity
                 tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, tashchezBL.getTashchezStruct(), true);
 
 
-                adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, tashchez.board, new TashchezPassEditText() {
-                    @Override
-                    public void setEditText(newEditText editText) {
-                        TashchezUI.editText = editText;
-                    }
-                });
+                adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, tashchez.board);//, new TashchezPassEditText() {
+//                    @Override
+//                    public void setEditText(newEditText editText) {
+//                        TashchezUI.editText = editText;
+//                    }
+//                });
 
 
 
@@ -140,7 +146,26 @@ public class TashchezUI extends AppCompatActivity
 
         startService(new Intent(this, ChatHeadService.class));
 
-        FloatingActionButton chatHead = (FloatingActionButton) findViewById(R.id.wallFB);
+        chatHead = (FloatingActionButton) findViewById(R.id.wallFB);
+        eraseHead = (FloatingActionButton) findViewById(R.id.eraseFB);
+        helpHead = (FloatingActionButton) findViewById(R.id.helpFB);
+
+        chatHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+        eraseHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+        helpHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+
+        chatHead.setRippleColor((getResources().getColor(R.color.FB)));//change color when click
+        eraseHead.setRippleColor((getResources().getColor(R.color.FB)));
+        helpHead.setRippleColor((getResources().getColor(R.color.FB)));
+
+
+eraseHead.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        h.post(r2);
+    }
+});
+
 
         chatHead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,12 +193,14 @@ public class TashchezUI extends AppCompatActivity
                         initialY = v.getY();
                         initialTouchX = event.getRawX();
                         initialTouchY = event.getRawY();
+
                     case MotionEvent.ACTION_MOVE:
                         v.setX(initialX + (int) (event.getRawX() - initialTouchX));
                         v.setY(initialY + (int) (event.getRawY() - initialTouchY));
+
                 }
 
-                if(event.getRawX() - initialTouchX > 0.3 || event.getRawY() - initialTouchY > 0.3)
+                if (event.getRawX() - initialTouchX > 0.3 || event.getRawY() - initialTouchY > 0.3)
                     return true;
                 else
                     return false;
@@ -187,6 +214,8 @@ public class TashchezUI extends AppCompatActivity
     @Override
     public boolean dispatchKeyEvent(KeyEvent event)
     {
+
+
             if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
                 Log.d("solveMode", "solveMode: " + solveMode);
                 if (solveMode) {
@@ -204,7 +233,7 @@ public class TashchezUI extends AppCompatActivity
 
                                     coverLayout.setVisibility(View.VISIBLE);
 
-                              TashchezUI.editText.clearFocus();
+                            //  TashchezUI.editText.clearFocus();
                             solveMode = false;
                         }
                     };
@@ -226,7 +255,7 @@ public class TashchezUI extends AppCompatActivity
                     finish();
                 }
             }
-            return false;
+        return super.dispatchKeyEvent(event);
     }
 }
 

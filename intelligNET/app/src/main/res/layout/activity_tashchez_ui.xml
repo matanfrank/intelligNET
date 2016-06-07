@@ -75,8 +75,6 @@
         android:id="@+id/menuGrid" />
 
 
-
-
 </LinearLayout>
 
 
@@ -90,8 +88,10 @@
             android:padding="0px"
             android:clickable="true"
             android:src="@drawable/ic_rosh_bakir"
+            android:scaleType="centerCrop"
             app:layout_anchor="@id/menuGrid"
-            app:layout_anchorGravity="bottom|center"/>
+            app:layout_anchorGravity="bottom|center"
+                 />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/eraseFB"
@@ -100,7 +100,8 @@
             android:layout_margin="16dp"
             android:padding="0px"
             android:clickable="true"
-            android:src="@drawable/ic_rosh_bakir"
+            android:src="@drawable/ic_erase"
+            android:scaleType="centerCrop"
             app:layout_anchor="@id/menuGrid"
             app:layout_anchorGravity="bottom|center|end"/>
 
@@ -111,7 +112,8 @@
             android:layout_margin="16dp"
             android:padding="0px"
             android:clickable="true"
-            android:src="@drawable/ic_rosh_bakir"
+            android:src="@drawable/ic_cell_help"
+            android:scaleType="centerCrop"
             app:layout_anchor="@id/menuGrid"
             app:layout_anchorGravity="bottom|center|start"/>
 

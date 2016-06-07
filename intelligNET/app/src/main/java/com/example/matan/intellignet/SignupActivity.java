@@ -31,6 +31,9 @@ public class SignupActivity extends AppCompatActivity {
     private static String firstName;
     private static String lastName;
     private static String birthday;
+    private static String year;
+    private static String month;
+    private static String day;
     private static String gender;
     private TypeUser user;
 
@@ -38,7 +41,9 @@ public class SignupActivity extends AppCompatActivity {
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.input_first_name) EditText _firstNameText;
     @InjectView(R.id.input_last_name) EditText _lastNameText;
-    @InjectView(R.id.input_birthday) EditText _birthdayText;
+    @InjectView(R.id.input_year) EditText _yearText;
+    @InjectView(R.id.input_month) EditText _monthText;
+    @InjectView(R.id.input_day) EditText _dayText;
     @InjectView(R.id.input_gender) EditText _genderText;
     @InjectView(R.id.btn_signup) Button _signupButton;
     @InjectView(R.id.link_login) TextView _loginLink;
@@ -103,13 +108,15 @@ public class SignupActivity extends AppCompatActivity {
             password = URLEncoder.encode(_passwordText.getText().toString(), "UTF-8");
             firstName = URLEncoder.encode(_firstNameText.getText().toString(), "UTF-8");
             lastName = URLEncoder.encode(_lastNameText.getText().toString(), "UTF-8");
-            birthday = URLEncoder.encode(_birthdayText.getText().toString(), "UTF-8");
+            year = URLEncoder.encode(_yearText.getText().toString(), "UTF-8");
+            month = URLEncoder.encode(_monthText.getText().toString(), "UTF-8");
+            day = URLEncoder.encode(_dayText.getText().toString(), "UTF-8");
             gender = URLEncoder.encode(_genderText.getText().toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        // TODO: Implement your own signup logic here.
+        birthday = year + "-" + month + "-" + day;
 
         h = new android.os.Handler();
         r = new Runnable() {
@@ -187,7 +194,9 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String firstName = _firstNameText.getText().toString();
         String lastName = _lastNameText.getText().toString();
-        String birthday = _birthdayText.getText().toString();
+        String year = _yearText.getText().toString();
+        String month = _monthText.getText().toString();
+        String day = _dayText.getText().toString();
         String gender = _genderText.getText().toString();
 
 
@@ -229,56 +238,67 @@ public class SignupActivity extends AppCompatActivity {
         }
 
 
-
-        if(birthday.length() == 10) {
+        //year
+        if(year.length() == 4) {
             Log.d("123456789", "5");
-            if (!((birthday.charAt(0) == '1' || birthday.charAt(0) == '2') &&
-                    (birthday.charAt(1) == '9' || birthday.charAt(1) == '0') &&
-                    (birthday.charAt(2) == '0' || birthday.charAt(2) == '1' || birthday.charAt(2) == '2' || birthday.charAt(2) == '3' || birthday.charAt(2) == '4' || birthday.charAt(2) == '5' || birthday.charAt(2) == '6' || birthday.charAt(2) == '7' || birthday.charAt(2) == '8' || birthday.charAt(2) == '9') &&
-                    (birthday.charAt(3) == '0' || birthday.charAt(3) == '1' || birthday.charAt(3) == '2' || birthday.charAt(3) == '3' || birthday.charAt(3) == '4' || birthday.charAt(3) == '5' || birthday.charAt(3) == '6' || birthday.charAt(3) == '7' || birthday.charAt(3) == '8' || birthday.charAt(3) == '9'))) {
+            if (!((year.charAt(0) == '1' || year.charAt(0) == '2') &&
+                    (year.charAt(1) == '9' || year.charAt(1) == '0') &&
+                    (year.charAt(2) == '0' || year.charAt(2) == '1' || year.charAt(2) == '2' || year.charAt(2) == '3' || year.charAt(2) == '4' || year.charAt(2) == '5' || year.charAt(2) == '6' || year.charAt(2) == '7' || year.charAt(2) == '8' || year.charAt(2) == '9') &&
+                    (year.charAt(3) == '0' || year.charAt(3) == '1' || year.charAt(3) == '2' || year.charAt(3) == '3' || year.charAt(3) == '4' || year.charAt(3) == '5' || year.charAt(3) == '6' || year.charAt(3) == '7' || year.charAt(3) == '8' || year.charAt(3) == '9'))) {
                 Log.d("123456789", "6");
-                _birthdayText.setError(getResources().getString(R.string.errBirthdayYear));
+                _yearText.setError(getResources().getString(R.string.errBirthdayYear));
                 valid = false;
             } else {
-                _birthdayText.setError(null);
-            }
-
-            if (birthday.charAt(4) != '-' || birthday.charAt(7) != '-') {
-                Log.d("123456789", "7");
-                _birthdayText.setError(getResources().getString(R.string.errBirthdayValid));
-                valid = false;
-            } else {
-                _birthdayText.setError(null);
-            }
-
-
-            if (!((birthday.charAt(5) == '0' || birthday.charAt(5) == '1') &&
-                    (birthday.charAt(6) == '0' || birthday.charAt(6) == '1' || birthday.charAt(6) == '2' || birthday.charAt(6) == '3' || birthday.charAt(6) == '4' || birthday.charAt(6) == '5' || birthday.charAt(6) == '6' || birthday.charAt(6) == '7' || birthday.charAt(6) == '8' || birthday.charAt(6) == '9'))) {
-                Log.d("123456789", "8");
-
-                _birthdayText.setError(getResources().getString(R.string.errBirthdayMonth));
-                valid = false;
-            } else {
-                _birthdayText.setError(null);
-            }
-
-
-            if (!((birthday.charAt(8) == '0' || birthday.charAt(1) == '1' || birthday.charAt(2) == '1' || birthday.charAt(8) == '3') &&
-                    (birthday.charAt(9) == '0' || birthday.charAt(9) == '1' || birthday.charAt(9) == '2' || birthday.charAt(9) == '3' || birthday.charAt(9) == '4' || birthday.charAt(9) == '5' || birthday.charAt(9) == '6' || birthday.charAt(9) == '7' || birthday.charAt(9) == '8' || birthday.charAt(9) == '9')) &&
-                    (birthday.charAt(8) == '3' && (birthday.charAt(9) == '2' || birthday.charAt(9) == '3' || birthday.charAt(9) == '4' || birthday.charAt(9) == '5' || birthday.charAt(9) == '6' || birthday.charAt(9) == '7' || birthday.charAt(9) == '8' || birthday.charAt(9) == '9'))) {
-                Log.d("123456789", "9");
-                _birthdayText.setError(getResources().getString(R.string.errBirthdayDay));
-                valid = false;
-            } else {
-                _birthdayText.setError(null);
+                _yearText.setError(null);
             }
         }
         else
         {
             Log.d("123456789", "10");
-            _birthdayText.setError(getResources().getString(R.string.errBirthdayValid));
+            _yearText.setError(getResources().getString(R.string.errBirthdayYear));
             valid = false;
         }
+
+
+        //month
+        if(month.length() == 2) {
+            if (!((month.charAt(0) == '0' || month.charAt(0) == '1') &&
+                    (month.charAt(1) == '0' || month.charAt(1) == '1' || month.charAt(1) == '2' || month.charAt(1) == '3' || month.charAt(1) == '4' || month.charAt(1) == '5' || month.charAt(1) == '6' || month.charAt(1) == '7' || month.charAt(1) == '8' || month.charAt(1) == '9'))) {
+                Log.d("123456789", "8");
+                _monthText.setError(getResources().getString(R.string.errBirthdayMonth));
+                valid = false;
+            } else {
+                _monthText.setError(null);
+            }
+        }
+            else
+            {
+                Log.d("123456789", "10");
+                _monthText.setError(getResources().getString(R.string.errBirthdayMonth));
+                valid = false;
+            }
+
+
+            //day
+            if(day.length() == 2) {
+                if (!((day.charAt(0) == '0' || day.charAt(0) == '1' || day.charAt(0) == '1' || day.charAt(0) == '3') &&
+                        (day.charAt(1) == '0' || day.charAt(1) == '1' || day.charAt(1) == '2' || day.charAt(1) == '3' || day.charAt(1) == '4' || day.charAt(1) == '5' || day.charAt(1) == '6' || day.charAt(1) == '7' || day.charAt(1) == '8' || day.charAt(1) == '9')) &&
+                        (day.charAt(0) == '3' && (day.charAt(1) == '2' || day.charAt(1) == '3' || day.charAt(1) == '4' || day.charAt(1) == '5' || day.charAt(1) == '6' || day.charAt(1) == '7' || day.charAt(1) == '8' || day.charAt(1) == '9'))) {
+                    Log.d("123456789", "9");
+                    _dayText.setError(getResources().getString(R.string.errBirthdayDay));
+                    valid = false;
+                } else {
+                    _dayText.setError(null);
+                }
+            }
+            else
+            {
+                Log.d("123456789", "10");
+                _dayText.setError(getResources().getString(R.string.errBirthdayDay));
+                valid = false;
+            }
+
+
 
 
         if (!gender.equals("זכר") && !gender.equals("נקבה")) {
@@ -289,7 +309,7 @@ public class SignupActivity extends AppCompatActivity {
             _genderText.setError(null);
         }
 
-        Log.d("1234567890", ""+ valid);
+             Log.d("1234567890", "" + valid);
 
         return valid;
     }
