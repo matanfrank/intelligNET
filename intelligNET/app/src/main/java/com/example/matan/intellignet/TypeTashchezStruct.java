@@ -11,12 +11,14 @@ public class TypeTashchezStruct
     public ArrayList<Integer> cellIndex = new ArrayList<Integer>();
     public ArrayList<String> content = new  ArrayList<String>();
     public ArrayList<Integer> numOfLetter = new  ArrayList<Integer>();
+    public ArrayList<String> solution = new  ArrayList<String>();
 
-    public TypeTashchezStruct(ArrayList<String> cellType, ArrayList<Integer> cellIndex, ArrayList<String> content, ArrayList<Integer> numOfLetter) {
+    public TypeTashchezStruct(ArrayList<String> cellType, ArrayList<Integer> cellIndex, ArrayList<String> content, ArrayList<Integer> numOfLetter, ArrayList<String> solution) {
         this.cellType = cellType;
         this.cellIndex = cellIndex;
         this.content = content;
         this.numOfLetter = numOfLetter;
+        this.solution = solution;
     }
 
 

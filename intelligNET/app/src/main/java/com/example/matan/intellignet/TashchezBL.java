@@ -17,6 +17,7 @@ public class TashchezBL {
     private ArrayList<Integer> cellIndex = new ArrayList<Integer>();
     private ArrayList<String> content = new  ArrayList<String>();
     private ArrayList<Integer> numOfLetter = new  ArrayList<Integer>();
+    private ArrayList<String> solution = new  ArrayList<String>();
     private Context context;
     private android.os.Handler ha;
     private Runnable ru;
@@ -88,7 +89,7 @@ public class TashchezBL {
 
 
 
-        //Now i have all the data devided to arrays so i go to th sever to fet the content of each def in "defIndex" array
+        //Now i have all the data devided to arrays so i go to the server to get the content of each def in "defIndex" array
 
 
         TashchezDAL tashchezDAL = new TashchezDAL(context);
@@ -117,12 +118,18 @@ public class TashchezBL {
                     }
 
                     try {
+                        solution.add(TashchezDAL.jsonArray.getJSONObject(i).getString("solution"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
                         numOfLetter.add(Integer.parseInt(TashchezDAL.jsonArray.getJSONObject(i).getString("solutionlength")));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                    tashchezStruct = new TypeTashchezStruct(cellType, cellIndex, content, numOfLetter);
+                    tashchezStruct = new TypeTashchezStruct(cellType, cellIndex, content, numOfLetter, solution);
 
                 }
 

@@ -51,6 +51,7 @@ public class TashchezUI extends AppCompatActivity
     private FloatingActionButton chatHead;
     private FloatingActionButton eraseHead;
     private FloatingActionButton helpHead;
+    public static boolean clickOnErase = false;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -130,7 +131,7 @@ public class TashchezUI extends AppCompatActivity
 
                 tashchezGrid.setAdapter(adapter);
 
-
+        clickOnErase = false;
             }
         };
 
@@ -162,7 +163,9 @@ public class TashchezUI extends AppCompatActivity
 eraseHead.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
+        clickOnErase = true;
         h.post(r2);
+
     }
 });
 

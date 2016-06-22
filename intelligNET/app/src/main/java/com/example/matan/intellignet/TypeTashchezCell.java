@@ -8,16 +8,18 @@ import android.util.Log;
 public class TypeTashchezCell extends TypeGameCell
 {
     public String cellType;
+    public String solution;
     protected int answerNumOfLetter;
     public boolean regularTashchez;
 
-    public TypeTashchezCell(String cellType, int answerNumOfLetter, int index, String content,  boolean regularTashchez)
+    public TypeTashchezCell(String cellType, int answerNumOfLetter, int index, String content, String solution,  boolean regularTashchez)
     {
         super(index, content);
         this.cellType = cellType;
         this.answerNumOfLetter = answerNumOfLetter;
         this.regularTashchez = regularTashchez;
         this.background = backgroundByCellType(cellType);
+        this.solution = solution;
 
     }
 
@@ -50,5 +52,10 @@ public class TypeTashchezCell extends TypeGameCell
         }
 
         return TypeGameCell.ERROR;
+    }
+
+
+    public String getCellType() {
+        return cellType;
     }
 }
