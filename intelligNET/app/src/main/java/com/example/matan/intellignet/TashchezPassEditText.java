@@ -1,5 +1,6 @@
 package com.example.matan.intellignet;
 
+import android.app.AlertDialog;
 import android.widget.EditText;
 
 /**

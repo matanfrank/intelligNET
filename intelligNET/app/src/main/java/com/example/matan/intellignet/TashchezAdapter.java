@@ -1,9 +1,7 @@
 package com.example.matan.intellignet;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -63,6 +61,10 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private boolean clearFlag = false;
     public final EditText txtUrl = new EditText(getContext());
 
+    private ShowAlertDialogInterface showAlertDialogInterface;
+    private Timer T;
+    private TimerTask TT;
+    int touchCounter = 0;
 
     public TashchezAdapter(Activity activity, int defLayout, int slvLayout, ArrayList data) {//, TashchezPassEditText tashchezPassEditText) {
         super(activity, slvLayout, data);
@@ -78,6 +80,9 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
         lastPaint = new int[TashchezUI.NUM_COL];
         for (int i = 0; i < lastPaint.length; i++)
             lastPaint[i] = INIT;
+
+
+
     }
 
     @Override
@@ -166,7 +171,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         Log.d("solveClick", "focus" + whatClickSolve);
-                        if(setFocusDefClick && !TashchezUI.clickOnErase)//every time call "requestFocus" and click on "erase all" dont get in
+                        if (setFocusDefClick && !TashchezUI.clickOnErase)//every time call "requestFocus" and click on "erase all" dont get in
                         {
                             whatClickSolve = FIRST_CLICK_SOLVE;
                             solveModeOn(tashchezCell, SOLVE_CLICK, whatClickSolve);
@@ -239,18 +244,16 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     @Override
                     public void onClick(View v) {
                         Log.d("solveClick", "click" + whatClickSolve);
-                        if(whatClickSolve == FIRST_CLICK_SOLVE)
-                        {
+                        if (whatClickSolve == FIRST_CLICK_SOLVE) {
                             solveModeOn(tashchezCell, SOLVE_CLICK, whatClickSolve);
                             whatClickSolve = SECOND_CLICK_SOLVE;
-                        }
-                        else if(whatClickSolve == SECOND_CLICK_SOLVE)
-                        {
+                        } else if (whatClickSolve == SECOND_CLICK_SOLVE) {
                             solveModeOn(tashchezCell, SOLVE_CLICK, whatClickSolve);
                             whatClickSolve = FIRST_CLICK_SOLVE;
                         }
                     }
                 });
+
 
                 //when user writing an answer the cursor has to jump automatically between cells
                 editText.addTextChangedListener(new TextWatcher() {
@@ -334,141 +337,45 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                 editText.setOnTouchListener(new View.OnTouchListener() {
                     public android.os.Handler hLongTouch = new android.os.Handler();
                     public Runnable rLongTouch = null;
-                    int counter = 0;
+
 
                     @Override
                     public boolean onTouch(View v, MotionEvent event)//for long touch for help
-                     {
-                        if(event.getAction() == MotionEvent.ACTION_DOWN)
-                        {
-                            Timer T=new Timer();
-                            T.scheduleAtFixedRate(new TimerTask() {
+                    {
+
+
+
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            T = new Timer();
+                            TT = new TimerTask() {
+
                                 @Override
                                 public void run() {
-                                    counter++;
-                                    if(counter > 2)
+                                    touchCounter++;
+                                    Log.d("counter1", touchCounter + "");
+                                    if (touchCounter == 2) {
+                                        if (showAlertDialogInterface != null) {
+                                            showAlertDialogInterface.showAlertDialog(tashchezCell);
+//                                        T.cancel();
+                                        }
+                                    }
+                                    else
                                     {
-
-
-
-                                        activity.runOnUiThread(new Runnable() {
-                                            public void run() {
-// Set the default text to a link of the Queen
-                                                txtUrl.setHint("http://www.librarising.com/astrology/celebs/images2/QR/queenelizabethii.jpg");
-                                                new AlertDialog.Builder(getContext())
-                                                        .setTitle("Moustachify Link")
-                                                        .setMessage("Paste in the link of an image to moustachify!")
-                                                        .setView(txtUrl)
-                                                        .setPositiveButton("Moustachify", new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                                String url = txtUrl.getText().toString();
-                                                                //moustachify(null, url);
-                                                            }
-                                                        })
-                                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                            }
-                                                        })
-                                                        .show();
-                                            }
-                                        });
                                     }
                                 }
-                            }, 1000, 1000);
+                            };
+
+
+                            T.scheduleAtFixedRate(TT, 0, 1000);
                         }
-                        if(event.getAction() == MotionEvent.ACTION_UP)
-                            if(counter > 2)
-                            {
-                                int defIndex = tashchezCell.index;
-                                int letterCounter = 0; // for THIRD_CLICK_SOLVE to know which letter of the answer to put
 
-                                if (getItem(defIndex + 1).getCellType().contains("definition")) {
-                                    while (getItem(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
-                                    {
-                                        defIndex -= TashchezUI.NUM_ROW;
-                                        letterCounter++;
-                                    }
+                        if (event.getAction() == MotionEvent.ACTION_UP) {
+                            Log.d("counter2", touchCounter + "");
+                            touchCounter = 0;
+                            T.cancel();
+                            TT.cancel();
 
-                                    //if we reached the first cell in the column and it is still "solve cell", the "def cell" can be: one left or one right
-                                    if (getItem(defIndex).getCellType().contains("solve") && defIndex < TashchezUI.NUM_COL) {
-                                        if (getItem(defIndex).getCellType().contains("solveRightDown"))
-                                            defIndex++;
-                                        else if (getItem(defIndex).getCellType().contains("solveLeftDown"))
-                                            defIndex--;
-                                    }
-
-                                    //if we are in "def cell", the "def cell" can be:
-                                    //a - the cell we just reached
-                                    //b - one cell forward and one right
-                                    //c - one cell forward and one left
-                                    else if (getItem(defIndex).getCellType().contains("definition")) {
-                                        {
-                                            letterCounter--;
-                                            //a - the cell we just reached
-                                            if (getItem(defIndex).getCellType().contains("definitionDown"))
-                                                defIndex = defIndex; //do nothing
-
-                                                //b - one cell forward and one up
-                                                //c - one cell forward and one down
-                                            else {
-                                                defIndex += TashchezUI.NUM_COL;
-
-                                                if (getItem(defIndex).getCellType().contains("solveRightDown"))
-                                                    defIndex++;
-                                                else if (getItem(defIndex).getCellType().contains("solveLeftDown"))
-                                                    defIndex--;
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    while (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW != 0)//go to the right till def cell or till the first cell in the line
-                                    {
-                                        defIndex--;
-                                        letterCounter++;
-                                    }
-
-                                    Log.d("letterCounter", letterCounter +"");
-
-                                    //if we reached the first cell in the line and it is still "solve cell", the "def cell" can be: one up or one down
-                                    if (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW == 0) {
-                                        {
-                                            if (getItem(defIndex).getCellType().contains("solveDownLeft"))
-                                                defIndex = defIndex - TashchezUI.NUM_COL;
-                                            else if (getItem(defIndex).getCellType().contains("solveUpLeft"))
-                                                defIndex = defIndex + TashchezUI.NUM_COL;
-                                        }
-                                    }
-
-                                    //if we "def cell", the "def cell" can be:
-                                    //a - the cell we just reached
-                                    //b - one cell forward and one up
-                                    //c - one cell forward and one down
-                                    else if (getItem(defIndex).getCellType().contains("definition")) {
-                                        {
-                                            letterCounter--;
-                                            //a - the cell we just reached
-                                            if (getItem(defIndex).getCellType().contains("definitionLeft"))
-                                                defIndex = defIndex; //do nothing
-
-                                                //b - one cell forward and one up
-                                                //c - one cell forward and one down
-                                            else {
-                                                defIndex++;
-
-                                                if (getItem(defIndex).getCellType().contains("solveDownLeft"))
-                                                    defIndex = defIndex - TashchezUI.NUM_COL;
-                                                else if (getItem(defIndex).getCellType().contains("solveUpLeft"))
-                                                    defIndex = defIndex + TashchezUI.NUM_COL;
-                                            }
-                                        }
-                                    }
-                                }
-                                String solutionLetter = getItem(defIndex).solution.charAt(letterCounter) + "";
-                                getItem(tashchezCell.getIndex()).editText.setText(solutionLetter);
-                                return true;
-                            }
-
-
+                        }
 
 
                         //return super.onTouchEvent(event, mapView);
@@ -725,6 +632,11 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
             }
 
         return defIndex;
+    }
+
+
+    public void setShowAlertInterface(ShowAlertDialogInterface pass) {
+        showAlertDialogInterface = pass;
     }
 
 
