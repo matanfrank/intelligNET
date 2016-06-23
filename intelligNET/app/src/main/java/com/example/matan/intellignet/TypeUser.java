@@ -72,6 +72,11 @@ public class TypeUser implements Serializable
         return helpForDay;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

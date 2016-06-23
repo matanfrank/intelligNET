@@ -43,6 +43,7 @@ public class TashchezUI extends AppCompatActivity
     private FloatingActionButton eraseHead;
     private FloatingActionButton helpHead;
     public static boolean clickOnErase = false;
+    int helpForDay = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -56,6 +57,10 @@ public class TashchezUI extends AppCompatActivity
             {
                 connectedName = (TextView) findViewById(R.id.connectedName);
                 connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
+            }
+            else
+            {
+                MainActivity.user = new TypeUser("משתמש","יקר", "","","","", 0, 0);
             }
         }
         else
@@ -124,22 +129,23 @@ public class TashchezUI extends AppCompatActivity
 
                             private void showDialog() {
                                 new AlertDialog.Builder(TashchezUI.this)
-                                        .setTitle("Delete entry")
-                                        .setMessage("Are you sure you want to delete this entry?")
+                                        .setTitle("עוזר אינטליג-NET-י")
+                                        .setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + ", נשארו לך עוד "+ helpForDay +" עזרות להיום.\nהאם אתה בטוח שברצונך לחשוף את הפתרון עבור משבצת זו?")
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
 
-s
+
                                                 int defIndex = tashchezCell.index;
                                                 int letterCounter = 0; // for THIRD_CLICK_SOLVE to know which letter of the answer to put
 
-                                                if (tashchez.board.get(defIndex + 1).getCellType().contains("definition")) {
+                                                if ((defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && tashchez.board.get(defIndex + 1).getCellType().contains("definition")) {
                                                     while (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
                                                     {
+                                                        Log.d("lettecounter1", ""+letterCounter);
                                                         defIndex -= TashchezUI.NUM_ROW;
                                                         letterCounter++;
                                                     }
-
+                                                    Log.d("lettecounter2", ""+letterCounter);
                                                     //if we reached the first cell in the column and it is still "solve cell", the "def cell" can be: one left or one right
                                                     if (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex < TashchezUI.NUM_COL) {
                                                         if (tashchez.board.get(defIndex).getCellType().contains("solveRightDown"))
@@ -214,7 +220,9 @@ s
                                                         }
                                                     }
                                                 }
-                                                String solutionLetter = tashchez.board.get(defIndex).solution.charAt(letterCounter) + "";
+                                                String solutionLetter= "";
+                                                if(letterCounter < tashchez.board.get(defIndex).solution.length())
+                                                    solutionLetter = tashchez.board.get(defIndex).solution.charAt(letterCounter) + "";
                                                 tashchez.board.get(tashchezCell.getIndex()).editText.setText(solutionLetter);
 
 

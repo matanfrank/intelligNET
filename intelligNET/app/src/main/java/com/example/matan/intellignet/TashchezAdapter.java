@@ -41,11 +41,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private LayoutInflater inflater;
     private InputMethodManager imm;
     private newEditText editText;
-    //private TashchezPassEditText tashchezPassEditText;
-    private ImageView coverImage;
-    private TextView connectedName;
     private TextView definitionTextView;
-    // private RelativeLayout coverLayout;
     public static int j = 0;
 
     public static Activity activity;
@@ -72,17 +68,10 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
         this.defLayout = defLayout;
         this.activity = activity;
         inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //this.tashchezPassEditText = tashchezPassEditText;
-        coverImage = (ImageView) activity.findViewById(R.id.symbolImage);
-        connectedName = (TextView) activity.findViewById(R.id.connectedName);
         definitionTextView = (TextView) activity.findViewById(R.id.definitionTextView);
-        //coverLayout = (RelativeLayout)activity.findViewById(R.id.coverLayout);
         lastPaint = new int[TashchezUI.NUM_COL];
         for (int i = 0; i < lastPaint.length; i++)
             lastPaint[i] = INIT;
-
-
-
     }
 
     @Override
@@ -131,14 +120,14 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                 textView = (TextView) convertView.findViewById(R.id.tashchez_text_view);
                 textView.setText(tashchezCell.content);
                 textView.setOnClickListener(new View.OnClickListener() {
-                           int x;
-                           @Override
-                           public void onClick(View v) {
-                               Log.d("gone", "11111111");
-                               //if(!TashchezUI.clickOnErase)
-                               solveModeOn(tashchezCell, DEF_CLICK, ERROR);
-                           }
-                       }
+                                                int x;
+                                                @Override
+                                                public void onClick(View v) {
+                                                    Log.d("gone", "11111111");
+                                                    //if(!TashchezUI.clickOnErase)
+                                                    solveModeOn(tashchezCell, DEF_CLICK, ERROR);
+                                                }
+                                            }
                 );
 
                 imageView = (ImageView) convertView.findViewById(R.id.tashchez_image_def);
@@ -150,11 +139,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
                 editText = (newEditText) convertView.findViewById(R.id.tashchez_edit_text);
 
-//                editText.setKeyListener(new DigitsKeyListener(true,true));
-//                editText.setInputType(InputType.TYPE_CLASS_TEXT);
                 tashchezCell.setEditText(editText);
-
-                //tashchezPassEditText.setEditText(editText);
 
 
                 imageView = (ImageView) convertView.findViewById(R.id.tashchez_image_solve);
@@ -194,37 +179,23 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                                 Log.d("erase", "erase");
                                 if (lastPaintCounter - 1 >= 0) {
                                     lastPaintCounter -= 1;
-                                    Log.d("iiiiiiii111", "" + lastPaintCounter);
                                     setFocusDefClick = false;
                                     getItem(lastPaint[lastPaintCounter]).editText.requestFocus();
                                     setFocusDefClick = true;
                                     clearFlag = true;
-                                    Log.d("iiiiiiii111", "" + lastPaintCounter);
                                     getItem(lastPaint[lastPaintCounter]).editText.getText().clear();
                                     clearFlag = false;
                                 }
 
-//                                if (lastPaintCounter - 1 >= 0) {
-//                                    lastPaintCounter -= 1;
-//                                    Log.d("iiiiiiii222", "" + lastPaintCounter);
-//                                    getItem(lastPaint[lastPaintCounter]).editText.requestFocus();
-//                                    Log.d("iiiiiiii222", "" + lastPaintCounter);
-//                                }
 
                                 if (lastPaintCounter == LAST_PAINT_COUNTER_INIT) {//last cell to erase (the different is jumping back)
                                     int i;
-                                    for (i = 0; i < lastPaint.length && lastPaint[i] != INIT; i++)
-                                        ;
+                                    for (i = 0; i < lastPaint.length && lastPaint[i] != INIT; i++);//get to the last cell of the answer
                                     i--;
-                                    Log.d("iiiiiiii1", i + " " + lastPaintCounter);
                                     clearFlag = true;
                                     getItem(lastPaint[i]).editText.getText().clear();
                                     clearFlag = false;
-//                                    i -= 1;
-                                    Log.d("iiiiiiii2", i + " " + lastPaintCounter);
-//                                    getItem(lastPaint[i]).editText.requestFocus();
                                     lastPaintCounter = i;
-                                    Log.d("iiiiiiii3", i + " " + lastPaintCounter);
 
                                 }
                                 mutex2.unlock();
@@ -262,14 +233,11 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        Log.d("lastPaint", "beforeTextChanged\n");
+
                         if (!clearFlag) {
                             EditTextListenerCall = true;
-                            Log.d("iiiiiiii4", lastPaintCounter + "");
                             if (lastPaintCounter == LAST_PAINT_COUNTER_INIT)
                                 lastPaintCounter = 0;
-
-                            Log.d("iiiiiiii5", lastPaintCounter + "");
                         }
 
 
@@ -277,8 +245,6 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                        Log.d("lastPaint", "onTextChanged\n");
-//                        Log.d("iiiiiiii6", lastPaintCounter + "");
                     }
 
                     @Override
@@ -286,45 +252,34 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                         if (!clearFlag) {
                             final StringBuilder sb = new StringBuilder(s.length());
                             sb.append(s);
-                            Log.d("charsss", sb.toString());
 
                             mutex1.lock();//in case of race condition because sometimes run 3 times
 
-                            Log.d("iiiiiiii7", lastPaintCounter + "");
                             if (EditTextListenerCall) {
 
                                 for (int i = 0; i < lastPaint.length; i++)//to know where the cursor right now
                                     if (lastPaint[i] != INIT && getItem(lastPaint[i]).editText.hasFocus())
                                         lastPaintCounter = i;
-                                Log.d("iiiiiiii8", lastPaintCounter + "");
 
-                                Log.d("lastPaint", "afterTextChanged\n");
                                 EditTextListenerCall = false;
 
 
                                 if ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT) {
-                                    Log.d("iiiiiiii9", lastPaintCounter + "");
                                     lastPaintCounter += 1;
-                                    Log.d("lastPaint", "2: " + lastPaintCounter + "\n");
                                     while ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT &&
                                             getItem(lastPaint[lastPaintCounter]).editText.getText().length() != 0)//in case that the cell is fill already
                                     {
-                                        Log.d("lastPaint", "h: " + getItem(lastPaint[lastPaintCounter]).editText.getText().toString());
                                         lastPaintCounter += 1;
                                     }
-                                    Log.d("iiiiiiii10", lastPaintCounter + "");
                                     setFocusDefClick = false;
                                     getItem(lastPaint[lastPaintCounter]).editText.requestFocus();
                                     setFocusDefClick = true;
                                     imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);//
                                     imm.showSoftInput(getItem(lastPaint[j]).editText, 0);
                                     imm.restartInput(getItem(lastPaint[lastPaintCounter]).editText);
-                                    Log.d("iiiiiiii11", lastPaintCounter + "");
                                 } else {
                                     lastPaintCounter = LAST_PAINT_COUNTER_INIT;
-                                    Log.d("iiiiiiii12", lastPaintCounter + "");
                                 }
-                                //Log.d("lastPaint", lastPaintCounter + "\n");
 
 
                             }
@@ -335,16 +290,10 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
 
                 editText.setOnTouchListener(new View.OnTouchListener() {
-                    public android.os.Handler hLongTouch = new android.os.Handler();
-                    public Runnable rLongTouch = null;
-
-
+int x;
                     @Override
                     public boolean onTouch(View v, MotionEvent event)//for long touch for help
                     {
-
-
-
                         if (event.getAction() == MotionEvent.ACTION_DOWN) {
                             T = new Timer();
                             TT = new TimerTask() {
@@ -356,11 +305,9 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                                     if (touchCounter == 2) {
                                         if (showAlertDialogInterface != null) {
                                             showAlertDialogInterface.showAlertDialog(tashchezCell);
-//                                        T.cancel();
+                                            touchCounter = 0;
+                                            T.cancel();
                                         }
-                                    }
-                                    else
-                                    {
                                     }
                                 }
                             };
@@ -373,12 +320,8 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                             Log.d("counter2", touchCounter + "");
                             touchCounter = 0;
                             T.cancel();
-                            TT.cancel();
 
                         }
-
-
-                        //return super.onTouchEvent(event, mapView);
                         return false;
                     }
                 });
@@ -400,12 +343,14 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
         final TypeTashchezCell cell;
 
-        if(solveOrDef == SOLVE_CLICK) {
+        if(solveOrDef == SOLVE_CLICK) //if this is solve click need to find the "def cell"
+        {
             int defCell = findDef(tashchezCell, solveClickNum);
             cell = getItem(defCell);
         }
         else
             cell = tashchezCell;
+
         //make the definition show on the top of the board
         android.os.Handler hDef = new android.os.Handler();
         Runnable rDef = new Runnable() {
@@ -445,15 +390,11 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     @Override
                     public void run() {
                         if (j < lastPaint.length && lastPaint[j] != INIT && getItem(lastPaint[j]).editText.getText().length() == 0) {
-                            Log.d("llllllllllllllll1",lastPaint[j] +" " + j);
                             getItem(lastPaint[j]).editText.setFocusable(true);
-                            Log.d("llllllllllllllll2", lastPaint[j] + " " + j);
                             setFocusDefClick = false;
                             getItem(lastPaint[j]).editText.requestFocus();
                             setFocusDefClick = true;
-                            Log.d("llllllllllllllll3", lastPaint[j] + " " + j);
                             imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            Log.d("llllllllllllllll4",lastPaint[j] +" " + j);
                             imm.showSoftInput(getItem(lastPaint[j]).editText, 0);
                         }
                     }
@@ -540,14 +481,13 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private int findDef(final TypeTashchezCell tashchezCell, int solveClickNum)
     {
         int defIndex =  tashchezCell.getIndex();
-        int letterCounter = 0; // for THIRD_CLICK_SOLVE to know which letter of the answer to put
 
         if(tashchezCell.getCellType().contains("definition"))
         {
             return tashchezCell.getIndex();
         }
         else {
-            if (solveClickNum == FIRST_CLICK_SOLVE && !(getItem(defIndex + 1).getCellType().contains("definition"))) {
+            if (solveClickNum == FIRST_CLICK_SOLVE && (defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && !(getItem(defIndex + 1).getCellType().contains("definition"))) {
 
 
                 while (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW != 0)//go to the right till def cell or till te first cell in the line
@@ -583,19 +523,8 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                 }
 
             }
-            else if (solveClickNum == SECOND_CLICK_SOLVE || (getItem(defIndex + 1).getCellType().contains("definition")))//second click on answer cell paint the vertical or every time it has to be vertical such as "def cell" at the left
+            else if (solveClickNum == SECOND_CLICK_SOLVE || ((defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && (getItem(defIndex + 1).getCellType().contains("definition"))))//second click on answer cell paint the vertical or every time it has to be vertical such as "def cell" at the left
             {
-                Log.d("solveClick", "second" + whatClickSolve);
-
-//                int k = 0;
-//                while(getItem(defIndex).editText.length() != 0)//if the cell is already fill
-//                {
-//                    k++;
-//                    setFocusDefClick = false;
-//                    getItem(defIndex+(TashchezUI.NUM_COL*k)).editText.requestFocus();
-//                    setFocusDefClick = true;
-//                }
-
                 while (getItem(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
                     defIndex -= TashchezUI.NUM_ROW;
 
@@ -629,7 +558,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                 }
 
             }
-            }
+        }
 
         return defIndex;
     }
