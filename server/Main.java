@@ -12,6 +12,7 @@ import spark.ModelAndView;
 import static spark.Spark.get;
 
 
+
 import com.google.gson.Gson;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
@@ -39,7 +40,6 @@ public class Main
 
    
 
-	get("/hello", (req, res) -> "Hello World GET");
 
 	post("/hello", (req,res) -> "hello World POST");
 
