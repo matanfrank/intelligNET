@@ -346,6 +346,7 @@ int x;
         if(solveOrDef == SOLVE_CLICK) //if this is solve click need to find the "def cell"
         {
             int defCell = findDef(tashchezCell, solveClickNum);
+            Log.d("04.07", "defCell: "+defCell);
             cell = getItem(defCell);
         }
         else
@@ -487,7 +488,12 @@ int x;
             return tashchezCell.getIndex();
         }
         else {
-            if (solveClickNum == FIRST_CLICK_SOLVE && (defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && !(getItem(defIndex + 1).getCellType().contains("definition"))) {
+            if ((solveClickNum == FIRST_CLICK_SOLVE && (defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && !(getItem(defIndex + 1).getCellType().contains("definition"))) ||
+                    (solveClickNum == FIRST_CLICK_SOLVE && defIndex == ((TashchezUI.NUM_COL * TashchezUI.NUM_ROW) - 1) && !(getItem(defIndex - 1).getCellType().contains("definition"))) ||
+                    ((defIndex + TashchezUI.NUM_COL) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && (defIndex - TashchezUI.NUM_COL) >= 0 && getItem(defIndex + TashchezUI.NUM_COL).getCellType().contains("definition")&& getItem(defIndex - TashchezUI.NUM_COL).getCellType().contains("definition")) ||
+                    (defIndex >= 0 && defIndex < TashchezUI.NUM_COL && (defIndex + TashchezUI.NUM_COL) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && getItem(defIndex + TashchezUI.NUM_COL).getCellType().contains("definition")) ||
+                    (defIndex >= TashchezUI.NUM_COL*(TashchezUI.NUM_ROW - 1) && defIndex < TashchezUI.NUM_COL*TashchezUI.NUM_ROW && (defIndex - TashchezUI.NUM_COL) >= 0 && getItem(defIndex - TashchezUI.NUM_COL).getCellType().contains("definition")))
+            {
 
 
                 while (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW != 0)//go to the right till def cell or till te first cell in the line

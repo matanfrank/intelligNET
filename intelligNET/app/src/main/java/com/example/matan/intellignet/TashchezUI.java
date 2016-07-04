@@ -136,9 +136,10 @@ public class TashchezUI extends AppCompatActivity
 
 
                                                 int defIndex = tashchezCell.index;
-                                                int letterCounter = 0; // for THIRD_CLICK_SOLVE to know which letter of the answer to put
+                                                int letterCounter = 0; // to know which letter of the answer to put
 
-                                                if ((defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && tashchez.board.get(defIndex + 1).getCellType().contains("definition")) {
+                                                if ((defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && tashchez.board.get(defIndex + 1).getCellType().contains("definition") &&
+                                                        (defIndex - 1) >= 0 && tashchez.board.get(defIndex - 1).getCellType().contains("definition")) {
                                                     while (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
                                                     {
                                                         Log.d("lettecounter1", ""+letterCounter);
@@ -223,6 +224,7 @@ public class TashchezUI extends AppCompatActivity
                                                 String solutionLetter= "";
                                                 if(letterCounter < tashchez.board.get(defIndex).solution.length())
                                                     solutionLetter = tashchez.board.get(defIndex).solution.charAt(letterCounter) + "";
+                                                Log.d("04.07", "solutionLetter: " + solutionLetter + "  letterCounter: " + letterCounter);
                                                 tashchez.board.get(tashchezCell.getIndex()).editText.setText(solutionLetter);
 
 
