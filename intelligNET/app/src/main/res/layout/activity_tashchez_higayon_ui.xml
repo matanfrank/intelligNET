@@ -105,7 +105,7 @@
         app:layout_anchorGravity="bottom|center|end"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/helpFB"
+        android:id="@+id/saveFB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

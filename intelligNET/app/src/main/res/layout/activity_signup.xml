@@ -71,6 +71,19 @@
                 android:hint="@string/passwordSignup"/>
         </android.support.design.widget.TextInputLayout>
 
+        <!-- Password confirm Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8px"
+            android:layout_marginBottom="8px">
+            <EditText android:id="@+id/input_password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="@string/passwordConfirmSignup"/>
+        </android.support.design.widget.TextInputLayout>
+
         <!--  First name Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

@@ -72,6 +72,16 @@
                 android:hint="@string/passwordLogin"/>
         </android.support.design.widget.TextInputLayout>
 
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone">
+        </ProgressBar>
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
@@ -80,6 +90,7 @@
             android:layout_marginBottom="24px"
             android:padding="12px"
             android:text="@string/loginBtn"/>
+
 
         <TextView android:id="@+id/link_signup"
             android:layout_width="fill_parent"

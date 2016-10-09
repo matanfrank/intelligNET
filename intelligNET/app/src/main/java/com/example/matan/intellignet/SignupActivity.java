@@ -39,6 +39,7 @@ public class SignupActivity extends AppCompatActivity {
 
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
+    @InjectView(R.id.input_password_confirm) EditText _passwordConfirmText;
     @InjectView(R.id.input_first_name) EditText _firstNameText;
     @InjectView(R.id.input_last_name) EditText _lastNameText;
     @InjectView(R.id.input_year) EditText _yearText;
@@ -192,6 +193,7 @@ public class SignupActivity extends AppCompatActivity {
 
         String username = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
+        String passwordConfirm = _passwordConfirmText.getText().toString();
         String firstName = _firstNameText.getText().toString();
         String lastName = _lastNameText.getText().toString();
         String year = _yearText.getText().toString();
@@ -212,6 +214,14 @@ public class SignupActivity extends AppCompatActivity {
         if (password.isEmpty() || password.length() < 5 || password.length() > 15) {
             Log.d("123456789", "2");
             _passwordText.setError(getResources().getString(R.string.errPasswordlimits));
+            valid = false;
+        } else {
+            _passwordText.setError(null);
+        }
+
+        if (passwordConfirm.compareTo(password) != 0) {
+            Log.d("123456789", "2");
+            _passwordConfirmText.setError(getResources().getString(R.string.errPasswordConfirmLimits));
             valid = false;
         } else {
             _passwordText.setError(null);

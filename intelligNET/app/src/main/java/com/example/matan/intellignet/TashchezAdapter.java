@@ -28,9 +28,9 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private static final int DEFINITION = 0;
     private static final int SOLVE = 1;
     private static final int ERROR = -1;
-    private static final int INIT = -2;
+    private static final int INIT_LAST_PAINT = -2;//init to know the word border
 
-    private final int LAST_PAINT_COUNTER_INIT = -3;//needed because when right the last letter need to init but if init to zero problem for erase
+    private final int INIT_LAST_PAINT_COUNTER = -3;//init to know the word last letter. needed because when write the last letter need to init but if init to INIT_LAST_PAINT problem for erase
     private static final int DEF_CLICK = 4;
     private static final int SOLVE_CLICK = 5;
     private static final int FIRST_CLICK_SOLVE = 6;
@@ -42,6 +42,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private InputMethodManager imm;
     private newEditText editText;
     private TextView definitionTextView;
+
     public static int j = 0;
 
     public static Activity activity;
@@ -50,7 +51,8 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
     public static boolean setFocusDefClick = true;
     //public static Semaphore mutex = new Semaphore(100, true);
-    private static boolean EditTextListenerCall;
+    private static boolean EditTextListenerCallAfter;
+    private static boolean EditTextListenerCallOn;
     private static boolean onKeyListenerCall = true;
     public static android.os.Handler hKeyboard = new android.os.Handler();
     public static Runnable rKeyboard = null;
@@ -60,18 +62,20 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private ShowAlertDialogInterface showAlertDialogInterface;
     private Timer T;
     private TimerTask TT;
+    private String savedSolution;
     int touchCounter = 0;
 
-    public TashchezAdapter(Activity activity, int defLayout, int slvLayout, ArrayList data) {//, TashchezPassEditText tashchezPassEditText) {
+    public TashchezAdapter(Activity activity, int defLayout, int slvLayout,String savedSolution, ArrayList data) {//, TashchezPassEditText tashchezPassEditText) {
         super(activity, slvLayout, data);
         this.slvLayout = slvLayout;
         this.defLayout = defLayout;
+        this.savedSolution = savedSolution;
         this.activity = activity;
         inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         definitionTextView = (TextView) activity.findViewById(R.id.definitionTextView);
         lastPaint = new int[TashchezUI.NUM_COL];
         for (int i = 0; i < lastPaint.length; i++)
-            lastPaint[i] = INIT;
+            lastPaint[i] = INIT_LAST_PAINT;
     }
 
     @Override
@@ -93,7 +97,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
         int type = getItemViewType(position);
-
+        boolean firstTime = true;
 
         if (convertView == null) {
             switch (type) {
@@ -106,6 +110,8 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     break;
             }
         }
+        else
+            firstTime = false;
 
 
         final TypeTashchezCell tashchezCell = getItem(position);
@@ -139,6 +145,18 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
 
                 editText = (newEditText) convertView.findViewById(R.id.tashchez_edit_text);
 
+
+            //in case that the user saved a solution from previous time
+            if(firstTime && savedSolution.length() > 0 && savedSolution.charAt(tashchezCell.index) != '*')
+            {
+                editText.setText(String.valueOf(savedSolution.charAt(tashchezCell.index)));
+                //to change the letter to '*' because i dont want the software to remember the letter
+//                String tempSavedSolution = savedSolution;
+//                savedSolution = tempSavedSolution.substring(0,tashchezCell.index) + '*' + tempSavedSolution.substring(tashchezCell.index+1);
+
+            }
+
+
                 tashchezCell.setEditText(editText);
 
 
@@ -147,6 +165,9 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     imageView.setImageResource(tashchezCell.background);
                 else
                     imageView.setImageResource(R.drawable.ic_solve_sign);
+
+
+
 
 
                 //when getting into solveMode the coverImage need to disappear when click on solve cell
@@ -166,44 +187,37 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                 });
 
 
-                editText.setOnKeyListener(new View.OnKeyListener() {
-                    private final Lock mutex2 = new ReentrantLock(true);
 
+
+                editText.setOnKeyListener(new View.OnKeyListener() {
+                    int x;
                     @Override
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        int x;
+                        if (keyCode == KeyEvent.KEYCODE_DEL) {
 
-                        mutex2.lock();
-                        if (onKeyListenerCall) {
-                            onKeyListenerCall = false;
-                            if (keyCode == KeyEvent.KEYCODE_DEL) {
-                                Log.d("erase", "erase");
-                                if (lastPaintCounter - 1 >= 0) {
-                                    lastPaintCounter -= 1;
-                                    setFocusDefClick = false;
-                                    getItem(lastPaint[lastPaintCounter]).editText.requestFocus();
-                                    setFocusDefClick = true;
-                                    clearFlag = true;
-                                    getItem(lastPaint[lastPaintCounter]).editText.getText().clear();
-                                    clearFlag = false;
-                                }
+                            if (event.getAction() != KeyEvent.ACTION_UP)//keeping from several time that this happend automatically - not matter for app!
+                                return true;
 
+                            lastPaintCounter = findCursor();
 
-                                if (lastPaintCounter == LAST_PAINT_COUNTER_INIT) {//last cell to erase (the different is jumping back)
-                                    int i;
-                                    for (i = 0; i < lastPaint.length && lastPaint[i] != INIT; i++);//get to the last cell of the answer
-                                    i--;
-                                    clearFlag = true;
-                                    getItem(lastPaint[i]).editText.getText().clear();
-                                    clearFlag = false;
-                                    lastPaintCounter = i;
+                            if (lastPaintCounter - 1 >= 0 && getItem(lastPaint[lastPaintCounter]).editText.getText().length() == 0)//know that the word didnt arrive to last letter yet  and cell empty so take the cursor one back
+                            {
+                                lastPaintCounter -= 1;
 
-                                }
-                                mutex2.unlock();
+                                setFocusDefClick = false;
+                                getItem(lastPaint[lastPaintCounter]).editText.requestFocus();
+                                setFocusDefClick = true;
                             }
-                        } else {
-                            onKeyListenerCall = true;
-                        }
 
+
+
+                            clearFlag = true;
+                            getItem(lastPaint[lastPaintCounter]).editText.getText().clear();
+                            clearFlag = false;
+
+
+                        }
                         return false;
                     }
                 });
@@ -229,44 +243,51 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                 //when user writing an answer the cursor has to jump automatically between cells
                 editText.addTextChangedListener(new TextWatcher() {
 
-                    private final Lock mutex1 = new ReentrantLock(true);
-
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                         if (!clearFlag) {
-                            EditTextListenerCall = true;
-                            if (lastPaintCounter == LAST_PAINT_COUNTER_INIT)
-                                lastPaintCounter = 0;
+                            EditTextListenerCallAfter = true;
+                            EditTextListenerCallOn = true;
                         }
-
-
                     }
 
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    public void onTextChanged(CharSequence s, int start, int before, int count)//response on last letter correction
+                     {
+                        if (EditTextListenerCallOn)//in case of race condition because sometimes run 3 times
+                        {
+                            findCursor();
+
+                            if (s.length() > 0 && (s.charAt(0)) == 'ם')
+                                getItem(lastPaint[lastPaintCounter]).editText.setText(String.valueOf('מ'));
+                            if (s.length() > 0 && (s.charAt(0)) == 'ן')
+                                getItem(lastPaint[lastPaintCounter]).editText.setText(String.valueOf('נ'));
+                            if (s.length() > 0 && (s.charAt(0)) == 'ץ')
+                                getItem(lastPaint[lastPaintCounter]).editText.setText(String.valueOf('צ'));
+                            if (s.length() > 0 && (s.charAt(0)) == 'ף')
+                                getItem(lastPaint[lastPaintCounter]).editText.setText(String.valueOf('פ'));
+
+                            EditTextListenerCallOn = false;
+                        }
                     }
 
                     @Override
-                    public void afterTextChanged(Editable s) {
+                    public void afterTextChanged(Editable s)//response on the cursor advance when writing
+                    {
                         if (!clearFlag) {
-                            final StringBuilder sb = new StringBuilder(s.length());
-                            sb.append(s);
+//                            final StringBuilder sb = new StringBuilder(s.length());
+//                            sb.append(s);
 
-                            mutex1.lock();//in case of race condition because sometimes run 3 times
+                            if (EditTextListenerCallAfter)//in case of race condition because sometimes run 3 times
+                            {
+                                EditTextListenerCallAfter = false;
 
-                            if (EditTextListenerCall) {
+                                lastPaintCounter = findCursor();
 
-                                for (int i = 0; i < lastPaint.length; i++)//to know where the cursor right now
-                                    if (lastPaint[i] != INIT && getItem(lastPaint[i]).editText.hasFocus())
-                                        lastPaintCounter = i;
-
-                                EditTextListenerCall = false;
-
-
-                                if ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT) {
+                                if ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT_LAST_PAINT)//if "lastPaintCounter + 1" in the tashchez limits
+                                     {
                                     lastPaintCounter += 1;
-                                    while ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT &&
+                                    while ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT_LAST_PAINT &&
                                             getItem(lastPaint[lastPaintCounter]).editText.getText().length() != 0)//in case that the cell is fill already
                                     {
                                         lastPaintCounter += 1;
@@ -274,16 +295,8 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                                     setFocusDefClick = false;
                                     getItem(lastPaint[lastPaintCounter]).editText.requestFocus();
                                     setFocusDefClick = true;
-                                    imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);//
-                                    imm.showSoftInput(getItem(lastPaint[j]).editText, 0);
-                                    imm.restartInput(getItem(lastPaint[lastPaintCounter]).editText);
-                                } else {
-                                    lastPaintCounter = LAST_PAINT_COUNTER_INIT;
                                 }
-
-
                             }
-                            mutex1.unlock();
                         }
                     }
                 });
@@ -380,17 +393,17 @@ int x;
 
         //set the cursor in the first cell of answer to that particular definition that just clicked
         //note: lastPaint[0] is the first cell in the answer word.
-        if(lastPaint[0] != INIT) {
+        if(lastPaint[0] != INIT_LAST_PAINT) {
             if (solveOrDef == DEF_CLICK) {
                 j = 0;
                 //in case that the cell is fill already
-                while (j < lastPaint.length && lastPaint[j] != INIT && getItem(lastPaint[j]).editText.getText().length() != 0)
+                while (j < lastPaint.length && lastPaint[j] != INIT_LAST_PAINT && getItem(lastPaint[j]).editText.getText().length() != 0)
                     j++;
 
                 rKeyboard = new Runnable() {
                     @Override
                     public void run() {
-                        if (j < lastPaint.length && lastPaint[j] != INIT && getItem(lastPaint[j]).editText.getText().length() == 0) {
+                        if (j < lastPaint.length && lastPaint[j] != INIT_LAST_PAINT && getItem(lastPaint[j]).editText.getText().length() == 0) {
                             getItem(lastPaint[j]).editText.setFocusable(true);
                             setFocusDefClick = false;
                             getItem(lastPaint[j]).editText.requestFocus();
@@ -406,7 +419,7 @@ int x;
             {
                 j = 0;
                 //in case that the cell is fill already
-                while (j < lastPaint.length && lastPaint[j] != INIT && getItem(lastPaint[j]).editText.getText().length() != 0)
+                while (j < lastPaint.length && lastPaint[j] != INIT_LAST_PAINT && getItem(lastPaint[j]).editText.getText().length() != 0)
                     j++;
 
                 rKeyboard = new Runnable() {
@@ -432,7 +445,7 @@ int x;
         int j = 0, i = 0;
         int toPaint = typeTashchezCell.index;
 
-        while (i < lastPaint.length && lastPaint[i] != INIT)//make the lastPaint cells back to white before painting the next answer cells
+        while (i < lastPaint.length && lastPaint[i] != INIT_LAST_PAINT)//make the lastPaint cells back to white before painting the next answer cells
         {
             getItem(lastPaint[i]).onEdit = false;
             i++;
@@ -473,7 +486,7 @@ int x;
         this.notifyDataSetChanged();
 
         for (; j < lastPaint.length; j++)//init the cells in lastPaint[] that not in use in a case of an answer with less that NUM_COL letters
-            lastPaint[j] = INIT;
+            lastPaint[j] = INIT_LAST_PAINT;
 
     }
 
@@ -574,5 +587,49 @@ int x;
         showAlertDialogInterface = pass;
     }
 
+
+    public String createContentToSave()
+    {
+        String content = "";
+        for(int i=0 ; i < TashchezUI.NUM_COL*TashchezUI.NUM_ROW ; i++)
+        {
+            if(getItem(i).getCellType().contains("definition") || getItem(i).editText.getText().toString().equals(""))
+                content += "*";
+            else
+                content += getItem(i).editText.getText().toString();
+        }
+
+        Log.d("1212121212", content);
+        return content;
+    }
+
+//    public void getContentToSaved() {
+//        //in case that the user saved a solution from previous time
+//        for(int i=0 ; i<TashchezUI.NUM_COL*TashchezUI.NUM_ROW ; i++) {
+//            if (savedSolution.length() > 0 && savedSolution.charAt(i) != '*') {
+//                getItem(i).editText.setText(String.valueOf(savedSolution.charAt(i)));
+////                getItem(lastPaint[lastPaintCounter]).editText.setText(String.valueOf('מ'));
+//                //to change the letter to '*' because i dont want the software to remember the letter
+//                String tempSavedSolution = savedSolution;
+//                savedSolution = tempSavedSolution.substring(0, i) + '*' + tempSavedSolution.substring(i+1);
+//                Log.d("inside","inside " + getItem(i).editText.getText());
+//            }
+//        }
+//        this.notifyDataSetChanged();
+//        synchronized(this){
+//            this.notifyAll();
+//        }
+//        this.setNotifyOnChange(true);
+//
+//    }
+
+
+
+    private int findCursor() {
+        for (int i = 0; i < lastPaint.length; i++)//to know where the cursor right now
+            if (lastPaint[i] != INIT_LAST_PAINT && getItem(lastPaint[i]).editText.hasFocus())
+                return i;
+        return ERROR;
+    }
 
 }

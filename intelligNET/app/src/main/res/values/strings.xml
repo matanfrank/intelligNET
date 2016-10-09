@@ -24,6 +24,10 @@
     <string name="guestBtn"> <![CDATA[לכניסת אורח<b><font color=#b20000> לחץ כאן</b>.]]></string>
     <string name="errUsernamelimits">שם משתמש חייב להיות בין 5 ל15 תווים</string>
     <string name="errPasswordlimits">סיסמה חייבת להיות בין 5 ל15 תויים</string>
+    <string name="errPasswordConfirmLimits">הסיסמאות אינן זהות</string>
+    <string name="errUsernameEmpty">אנא מלא שם משתמש</string>
+    <string name="errPasswordEmpty">אנא מלא סיסמה</string>
+    <string name="errWrongPassOrUser">שם משתמש או סיסמה לא נכונים</string>
 
 
 
@@ -35,6 +39,7 @@
     <!-- Strings related to sign up -->
     <string name="usernameSignup">שם משתמש: 5-15 תווים</string>
     <string name="passwordSignup">סיסמה: 5-15 תווים</string>
+    <string name="passwordConfirmSignup">חזור על הסיסמה</string>
     <string name="firstName">שם פרטי</string>
     <string name="createAccountBtn">צור חשבון</string>
     <string name="loginPageBtn"> <![CDATA[יש לך חשבון?<b><font color=#0c9910>  הכנס כאן</b>.]]></string>

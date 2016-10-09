@@ -27,24 +27,28 @@ public class WallUI extends AppCompatActivity {
         setContentView(R.layout.activity_wall_ui);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
-        if(!LoginActivity.guest)
-        {
-        if(getIntent().getExtras() != null) {
-            index = getIntent().getExtras().getInt("statusIndex");
-            type = getIntent().getExtras().getString("statusType");
-        }
+        if(!LoginActivity.guest) {
+            if (MainActivity.user != null) {
+                TextView connectedName = (TextView) findViewById(R.id.connectedName);
+                connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
+            } else {
+                MainActivity.user = new TypeUser("משתמש", "יקר", "", "", "", "", 0, 0);
+            }
+
+            if(getIntent().getExtras() != null) {
+                index = getIntent().getExtras().getInt("statusIndex");
+                type = getIntent().getExtras().getString("statusType");
+            }
         }
         else
-        disconnect.setVisibility(View.INVISIBLE);
+        {
+            disconnect.setVisibility(View.INVISIBLE);
+        }
+
 
         Log.d("122333", "wallUI " + index + ", " + type);
 
 
-        if (MainActivity.user != null)
-        {
-            TextView connectedName = (TextView) findViewById(R.id.connectedName);
-            connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
-        }
 
 
         disconnect.setOnClickListener(new View.OnClickListener() {

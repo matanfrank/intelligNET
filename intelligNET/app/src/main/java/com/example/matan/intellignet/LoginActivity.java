@@ -9,9 +9,11 @@ import android.text.Html;
 import android.util.Log;
 
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
     @InjectView(R.id.link_guest) TextView _guestLink;
+    @InjectView(R.id.progress_bar)ProgressBar _progressBar;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,65 +87,58 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         Log.d(TAG, "Login");
 
-        if (!validate()) {
-            onLoginFailed();
-            return;
-        }
+        if (validate()) {
 
 
-
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
-        username = _usernameText.getText().toString();
-        password = _passwordText.getText().toString();
-
+//            final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+//                    R.style.AppTheme);
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setMessage("Authenticating...");
+//            progressDialog.show();
+            _progressBar.setVisibility(View.VISIBLE);
+            username = _usernameText.getText().toString();
+            password = _passwordText.getText().toString();
 
 
-
-        h = new android.os.Handler();
-        r = new Runnable() {
-            @Override
-            public void run() {
-                _loginButton.setEnabled(false);
-                try {
-                    if(TashchezDAL.jsonArray.getJSONObject(0).getString("username").contains(username) &&
-                            TashchezDAL.jsonArray.getJSONObject(0).getString("password").contains(password))
-                    {
-
-                        user = new TypeUser(username, password,
-                                TashchezDAL.jsonArray.getJSONObject(0).getString("firstname"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getString("lastname"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getString("birthday"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getString("gender"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getInt("cwp_finished"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getInt("helpforday"));
-
-                        progressDialog.dismiss();
-
-                        onLoginSuccess();
-                    }
-                } catch (JSONException e) {
+            h = new android.os.Handler();
+            r = new Runnable() {
+                @Override
+                public void run() {
+                    _loginButton.setEnabled(false);
                     try {
-                        if(TashchezDAL.jsonArray.getString(0).contains("ERR1"))
-                        {
-                            Log.d("123456789", "no details");
-                            progressDialog.dismiss();
-                            onLoginFailed();
+                        if (TashchezDAL.jsonArray.getJSONObject(0).getString("username").contains(username) &&
+                                TashchezDAL.jsonArray.getJSONObject(0).getString("password").contains(password)) {
+
+                            user = new TypeUser(username, password,
+                                    TashchezDAL.jsonArray.getJSONObject(0).getString("firstname"),
+                                    TashchezDAL.jsonArray.getJSONObject(0).getString("lastname"),
+                                    TashchezDAL.jsonArray.getJSONObject(0).getString("birthday"),
+                                    TashchezDAL.jsonArray.getJSONObject(0).getString("gender"),
+                                    TashchezDAL.jsonArray.getJSONObject(0).getInt("cwp_finished"),
+                                    TashchezDAL.jsonArray.getJSONObject(0).getInt("helpforday"));
+
+//                            progressDialog.dismiss();
+                            _progressBar.setVisibility(View.GONE);
+                            onLoginSuccess();
                         }
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
+                    } catch (JSONException e) {
+                        try {
+                            if (TashchezDAL.jsonArray.getString(0).contains("ERR1")) {
+                                Log.d("123456789", "no details");
+//                                progressDialog.dismiss();
+                                _progressBar.setVisibility(View.GONE);
+                                onLoginFailed();
+                            }
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        TashchezDAL tashchezDAL = new TashchezDAL(this);
-        tashchezDAL.getDataFrom("userGet?username=" + username + "&password=" + password, h, r);
-
+            TashchezDAL tashchezDAL = new TashchezDAL(this);
+            tashchezDAL.getDataFrom("userGet?username=" + username + "&password=" + password, h, r);
+        }
     }
 
 
@@ -173,7 +170,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast toast= Toast.makeText(getApplicationContext(), getString(R.string.errWrongPassOrUser), Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER| Gravity.CENTER, 0, 0);
+        toast.show();
 
         _loginButton.setEnabled(true);
     }
@@ -184,15 +183,15 @@ public class LoginActivity extends AppCompatActivity {
         username = _usernameText.getText().toString();
         password = _passwordText.getText().toString();
 
-        if (username.isEmpty() || username.length() < 5 || username.length() > 15){// || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            _usernameText.setError(getResources().getString(R.string.errUsernamelimits));
+        if (username.isEmpty()){// || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+            _usernameText.setError(getResources().getString(R.string.errUsernameEmpty));
             valid = false;
         } else {
             _usernameText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 5 || password.length() > 15) {
-            _passwordText.setError(getResources().getString(R.string.errPasswordlimits));
+        if (password.isEmpty()) {
+            _passwordText.setError(getResources().getString(R.string.errPasswordEmpty));
             valid = false;
         } else {
             _passwordText.setError(null);

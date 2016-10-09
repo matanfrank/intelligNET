@@ -18,6 +18,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -41,8 +42,11 @@ public class TashchezUI extends AppCompatActivity
     private TextView definitionTextView;
     private FloatingActionButton chatHead;
     private FloatingActionButton eraseHead;
-    private FloatingActionButton helpHead;
+    private FloatingActionButton saveHead;
     public static boolean clickOnErase = false;
+    public static TashchezSaveDB db;
+    public static String savedSolution = "";
+
     int helpForDay = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,6 +55,7 @@ public class TashchezUI extends AppCompatActivity
         setContentView(R.layout.activity_tashchez_ui);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
+        //if there's is user logged in
         if(!LoginActivity.guest)
         {
             if (MainActivity.user != null)
@@ -79,6 +84,14 @@ public class TashchezUI extends AppCompatActivity
             }
         });
 
+
+        //check if there's is "save" for this user
+
+        db = new TashchezSaveDB(getApplicationContext());
+        if(MainActivity.user != null && getIntent() != null && getIntent().getExtras() != null)
+            savedSolution = db.getTashchez(MainActivity.user.getUsername(), TashchezSaveDB.TYPE, getIntent().getExtras().getInt("statusIndex"));
+
+//        Log.d("12312121212", savedSolution);
 
 
 
@@ -113,10 +126,11 @@ public class TashchezUI extends AppCompatActivity
 
                 for(int i=0 ; i<tashchezBL.getTashchezStruct().cellIndex.size() ; i++)
                     Log.d("123456789", ""+tashchezBL.getTashchezStruct().cellType.get(i) + " " + tashchezBL.getTashchezStruct().cellIndex.get(i) + " " + tashchezBL.getTashchezStruct().content.get(i) + " " + tashchezBL.getTashchezStruct().numOfLetter.get(i));
-                tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, tashchezBL.getTashchezStruct(), true);
+                tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, tashchezBL.getTashchezStruct(), true, getApplicationContext());
 
 
-                adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, tashchez.board);//, new TashchezPassEditText() {
+                adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, savedSolution, tashchez.board);//, new TashchezPassEditText() {
+                //adapter.createContentToSave(savedSolution);
                 adapter.setShowAlertInterface(new ShowAlertDialogInterface() {
                     @Override
                     public void showAlertDialog(final TypeTashchezCell tashchezCell) {
@@ -243,6 +257,8 @@ public class TashchezUI extends AppCompatActivity
                 });
 
 
+
+
 //                    @Override
 //                    public void setEditText(newEditText editText) {
 //                        TashchezUI.editText = editText;
@@ -262,114 +278,114 @@ public class TashchezUI extends AppCompatActivity
 
 
 
-       /* ShowAlertDialogInterface AlertDialog = new ShowAlertDialogInterface() {
-            @Override
-            public void setAlertDialog( dialog) {
-                AlertDialog.Builder(getContext())
-                                                    .setTitle("Moustachify Link")
-                                                    .setMessage("Paste in the link of an image to moustachify!")
-                                                    .setView(txtUrl)
-                                                    .setPositiveButton("Moustachify", new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int whichButton) {
-//                                                            {
-                int defIndex = tashchezCell.index;
-                int letterCounter = 0; // for THIRD_CLICK_SOLVE to know which letter of the answer to put
-
-                if (getItem(defIndex + 1).getCellType().contains("definition")) {
-                    while (getItem(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
-                    {
-                        defIndex -= TashchezUI.NUM_ROW;
-                        letterCounter++;
-                    }
-
-                    //if we reached the first cell in the column and it is still "solve cell", the "def cell" can be: one left or one right
-                    if (getItem(defIndex).getCellType().contains("solve") && defIndex < TashchezUI.NUM_COL) {
-                        if (getItem(defIndex).getCellType().contains("solveRightDown"))
-                            defIndex++;
-                        else if (getItem(defIndex).getCellType().contains("solveLeftDown"))
-                            defIndex--;
-                    }
-
-                    //if we are in "def cell", the "def cell" can be:
-                    //a - the cell we just reached
-                    //b - one cell forward and one right
-                    //c - one cell forward and one left
-                    else if (getItem(defIndex).getCellType().contains("definition")) {
-                        {
-                            letterCounter--;
-                            //a - the cell we just reached
-                            if (getItem(defIndex).getCellType().contains("definitionDown"))
-                                defIndex = defIndex; //do nothing
-
-                                //b - one cell forward and one up
-                                //c - one cell forward and one down
-                            else {
-                                defIndex += TashchezUI.NUM_COL;
-
-                                if (getItem(defIndex).getCellType().contains("solveRightDown"))
-                                    defIndex++;
-                                else if (getItem(defIndex).getCellType().contains("solveLeftDown"))
-                                    defIndex--;
-                            }
-                        }
-                    }
-                } else {
-                    while (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW != 0)//go to the right till def cell or till the first cell in the line
-                    {
-                        defIndex--;
-                        letterCounter++;
-                    }
-
-                    Log.d("letterCounter", letterCounter + "");
-
-                    //if we reached the first cell in the line and it is still "solve cell", the "def cell" can be: one up or one down
-                    if (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW == 0) {
-                        {
-                            if (getItem(defIndex).getCellType().contains("solveDownLeft"))
-                                defIndex = defIndex - TashchezUI.NUM_COL;
-                            else if (getItem(defIndex).getCellType().contains("solveUpLeft"))
-                                defIndex = defIndex + TashchezUI.NUM_COL;
-                        }
-                    }
-
-                    //if we "def cell", the "def cell" can be:
-                    //a - the cell we just reached
-                    //b - one cell forward and one up
-                    //c - one cell forward and one down
-                    else if (getItem(defIndex).getCellType().contains("definition")) {
-                        {
-                            letterCounter--;
-                            //a - the cell we just reached
-                            if (getItem(defIndex).getCellType().contains("definitionLeft"))
-                                defIndex = defIndex; //do nothing
-
-                                //b - one cell forward and one up
-                                //c - one cell forward and one down
-                            else {
-                                defIndex++;
-
-                                if (getItem(defIndex).getCellType().contains("solveDownLeft"))
-                                    defIndex = defIndex - TashchezUI.NUM_COL;
-                                else if (getItem(defIndex).getCellType().contains("solveUpLeft"))
-                                    defIndex = defIndex + TashchezUI.NUM_COL;
-                            }
-                        }
-                    }
-                }
-                String solutionLetter = getItem(defIndex).solution.charAt(letterCounter) + "";
-                getItem(tashchezCell.getIndex()).editText.setText(solutionLetter);
-//                                                            }
-//                                                        }
-//                                                    })
-//                                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//        ShowAlertDialogInterface AlertDialog = new ShowAlertDialogInterface() {
+//            @Override
+//            public void setAlertDialog( dialog) {
+//                AlertDialog.Builder(getContext())
+//                                                    .setTitle("Moustachify Link")
+//                                                    .setMessage("Paste in the link of an image to moustachify!")
+//                                                    .setView(txtUrl)
+//                                                    .setPositiveButton("Moustachify", new DialogInterface.OnClickListener() {
 //                                                        public void onClick(DialogInterface dialog, int whichButton) {
-//                                                        }
-//                                                    })
-//                                                    .show();
-//                                        }
-//                                    });
-            }
-        }*/
+////                                                            {
+//                int defIndex = tashchezCell.index;
+//                int letterCounter = 0; // for THIRD_CLICK_SOLVE to know which letter of the answer to put
+//
+//                if (getItem(defIndex + 1).getCellType().contains("definition")) {
+//                    while (getItem(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
+//                    {
+//                        defIndex -= TashchezUI.NUM_ROW;
+//                        letterCounter++;
+//                    }
+//
+//                    //if we reached the first cell in the column and it is still "solve cell", the "def cell" can be: one left or one right
+//                    if (getItem(defIndex).getCellType().contains("solve") && defIndex < TashchezUI.NUM_COL) {
+//                        if (getItem(defIndex).getCellType().contains("solveRightDown"))
+//                            defIndex++;
+//                        else if (getItem(defIndex).getCellType().contains("solveLeftDown"))
+//                            defIndex--;
+//                    }
+//
+//                    //if we are in "def cell", the "def cell" can be:
+//                    //a - the cell we just reached
+//                    //b - one cell forward and one right
+//                    //c - one cell forward and one left
+//                    else if (getItem(defIndex).getCellType().contains("definition")) {
+//                        {
+//                            letterCounter--;
+//                            //a - the cell we just reached
+//                            if (getItem(defIndex).getCellType().contains("definitionDown"))
+//                                defIndex = defIndex; //do nothing
+//
+//                                //b - one cell forward and one up
+//                                //c - one cell forward and one down
+//                            else {
+//                                defIndex += TashchezUI.NUM_COL;
+//
+//                                if (getItem(defIndex).getCellType().contains("solveRightDown"))
+//                                    defIndex++;
+//                                else if (getItem(defIndex).getCellType().contains("solveLeftDown"))
+//                                    defIndex--;
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    while (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW != 0)//go to the right till def cell or till the first cell in the line
+//                    {
+//                        defIndex--;
+//                        letterCounter++;
+//                    }
+//
+//                    Log.d("letterCounter", letterCounter + "");
+//
+//                    //if we reached the first cell in the line and it is still "solve cell", the "def cell" can be: one up or one down
+//                    if (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW == 0) {
+//                        {
+//                            if (getItem(defIndex).getCellType().contains("solveDownLeft"))
+//                                defIndex = defIndex - TashchezUI.NUM_COL;
+//                            else if (getItem(defIndex).getCellType().contains("solveUpLeft"))
+//                                defIndex = defIndex + TashchezUI.NUM_COL;
+//                        }
+//                    }
+//
+//                    //if we "def cell", the "def cell" can be:
+//                    //a - the cell we just reached
+//                    //b - one cell forward and one up
+//                    //c - one cell forward and one down
+//                    else if (getItem(defIndex).getCellType().contains("definition")) {
+//                        {
+//                            letterCounter--;
+//                            //a - the cell we just reached
+//                            if (getItem(defIndex).getCellType().contains("definitionLeft"))
+//                                defIndex = defIndex; //do nothing
+//
+//                                //b - one cell forward and one up
+//                                //c - one cell forward and one down
+//                            else {
+//                                defIndex++;
+//
+//                                if (getItem(defIndex).getCellType().contains("solveDownLeft"))
+//                                    defIndex = defIndex - TashchezUI.NUM_COL;
+//                                else if (getItem(defIndex).getCellType().contains("solveUpLeft"))
+//                                    defIndex = defIndex + TashchezUI.NUM_COL;
+//                            }
+//                        }
+//                    }
+//                }
+//                String solutionLetter = getItem(defIndex).solution.charAt(letterCounter) + "";
+//                getItem(tashchezCell.getIndex()).editText.setText(solutionLetter);
+////                                                            }
+////                                                        }
+////                                                    })
+////                                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+////                                                        public void onClick(DialogInterface dialog, int whichButton) {
+////                                                        }
+////                                                    })
+////                                                    .show();
+////                                        }
+////                                    });
+//            }
+//        }
 
 
 
@@ -378,15 +394,26 @@ public class TashchezUI extends AppCompatActivity
 
         chatHead = (FloatingActionButton) findViewById(R.id.wallFB);
         eraseHead = (FloatingActionButton) findViewById(R.id.eraseFB);
-        helpHead = (FloatingActionButton) findViewById(R.id.helpFB);
+        saveHead = (FloatingActionButton) findViewById(R.id.saveFB);
 
         chatHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
         eraseHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
-        helpHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+        saveHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
 
         chatHead.setRippleColor((getResources().getColor(R.color.FB)));//change color when click
         eraseHead.setRippleColor((getResources().getColor(R.color.FB)));
-        helpHead.setRippleColor((getResources().getColor(R.color.FB)));
+        saveHead.setRippleColor((getResources().getColor(R.color.FB)));
+
+        saveHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (MainActivity.user != null) {
+                    db.add(MainActivity.user.getUsername(), TashchezSaveDB.TYPE, getIntent().getExtras().getInt("statusIndex"), adapter.createContentToSave());
+                    Toast.makeText(getApplicationContext(), "תשחץ נשמר", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         eraseHead.setOnClickListener(new View.OnClickListener() {
@@ -489,6 +516,8 @@ public class TashchezUI extends AppCompatActivity
         }
         return super.dispatchKeyEvent(event);
     }
+
+
 }
 
 

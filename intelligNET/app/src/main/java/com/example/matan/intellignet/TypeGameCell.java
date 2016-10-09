@@ -1,5 +1,6 @@
 package com.example.matan.intellignet;
 
+import android.content.Context;
 import android.widget.EditText;
 
 /**
@@ -14,11 +15,12 @@ public abstract class TypeGameCell
     protected boolean onEdit;
     protected newEditText editText; //added for automatic cursor move when write answer
 
-    protected TypeGameCell(int index, String content)
+    protected TypeGameCell(int index, String content, Context c)
     {
         this.content = content;
         this.index = index;
         this.onEdit = false;
+        editText = new newEditText(c);
     }
 
     //set the background of cell according to cell Type
@@ -28,7 +30,6 @@ public abstract class TypeGameCell
     {
         this.editText = editText;
     }
-
 
     public void setContent(String content) {
         this.content = content;

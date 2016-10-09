@@ -103,7 +103,7 @@ public void run() {
 
         for(int i=0 ; i<tashchezBL.getTashchezStruct().cellIndex.size() ; i++)
         Log.d("123456789", "" + tashchezBL.getTashchezStruct().cellType.get(i) + " " + tashchezBL.getTashchezStruct().cellIndex.get(i) + " " + tashchezBL.getTashchezStruct().content.get(i) + " " + tashchezBL.getTashchezStruct().numOfLetter.get(i));
-        tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, tashchezBL.getTashchezStruct(), false);
+        tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, tashchezBL.getTashchezStruct(), false, getApplicationContext());
 
 
         adapter = new TashchezHigayonAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, tashchez.board);// new TashchezPassEditText() {
@@ -135,7 +135,7 @@ public void run() {
 
     chatHead = (FloatingActionButton) findViewById(R.id.wallFB);
     eraseHead = (FloatingActionButton) findViewById(R.id.eraseFB);
-    helpHead = (FloatingActionButton) findViewById(R.id.helpFB);
+    helpHead = (FloatingActionButton) findViewById(R.id.saveFB);
 
     chatHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
     eraseHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));

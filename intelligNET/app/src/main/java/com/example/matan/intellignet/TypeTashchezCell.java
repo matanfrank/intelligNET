@@ -1,5 +1,6 @@
 package com.example.matan.intellignet;
 
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -12,9 +13,9 @@ public class TypeTashchezCell extends TypeGameCell
     protected int answerNumOfLetter;
     public boolean regularTashchez;
 
-    public TypeTashchezCell(String cellType, int answerNumOfLetter, int index, String content, String solution,  boolean regularTashchez)
+    public TypeTashchezCell(String cellType, int answerNumOfLetter, int index, String content, String solution,  boolean regularTashchez, Context c)
     {
-        super(index, content);
+        super(index, content, c);
         this.cellType = cellType;
         this.answerNumOfLetter = answerNumOfLetter;
         this.regularTashchez = regularTashchez;
