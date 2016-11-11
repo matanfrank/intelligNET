@@ -100,6 +100,7 @@ public class TashchezUI extends AppCompatActivity
         coverImage = (ImageView) findViewById(R.id.symbolImage);
         tashchezGrid = (GridView)findViewById(R.id.menuGrid);
         tashchezGrid.setNumColumns(NUM_COL);
+        tashchezGrid.setVerticalScrollBarEnabled(true);
 
 
         h = new android.os.Handler();
@@ -129,132 +130,132 @@ public class TashchezUI extends AppCompatActivity
                 tashchez = new TypeTashchezGrid(NUM_ROW, NUM_COL, true, tashchezBL.getTashchezStruct(), true, getApplicationContext());
 
 
-                adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, savedSolution, tashchez.board);//, new TashchezPassEditText() {
+                adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, savedSolution, tashchez.board, tashchezGrid);//, new TashchezPassEditText() {
                 //adapter.createContentToSave(savedSolution);
-                adapter.setShowAlertInterface(new ShowAlertDialogInterface() {
-                    @Override
-                    public void showAlertDialog(final TypeTashchezCell tashchezCell) {
-
-                        TashchezUI.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showDialog();
-                            }
-
-                            private void showDialog() {
-                                new AlertDialog.Builder(TashchezUI.this)
-                                        .setTitle("עוזר אינטליג-NET-י")
-                                        .setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + ", נשארו לך עוד "+ helpForDay +" עזרות להיום.\nהאם אתה בטוח שברצונך לחשוף את הפתרון עבור משבצת זו?")
-                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-
-
-                                                int defIndex = tashchezCell.index;
-                                                int letterCounter = 0; // to know which letter of the answer to put
-
-                                                if ((defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && tashchez.board.get(defIndex + 1).getCellType().contains("definition") &&
-                                                        (defIndex - 1) >= 0 && tashchez.board.get(defIndex - 1).getCellType().contains("definition")) {
-                                                    while (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
-                                                    {
-                                                        Log.d("lettecounter1", ""+letterCounter);
-                                                        defIndex -= TashchezUI.NUM_ROW;
-                                                        letterCounter++;
-                                                    }
-                                                    Log.d("lettecounter2", ""+letterCounter);
-                                                    //if we reached the first cell in the column and it is still "solve cell", the "def cell" can be: one left or one right
-                                                    if (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex < TashchezUI.NUM_COL) {
-                                                        if (tashchez.board.get(defIndex).getCellType().contains("solveRightDown"))
-                                                            defIndex++;
-                                                        else if (tashchez.board.get(defIndex).getCellType().contains("solveLeftDown"))
-                                                            defIndex--;
-                                                    }
-
-                                                    //if we are in "def cell", the "def cell" can be:
-                                                    //a - the cell we just reached
-                                                    //b - one cell forward and one right
-                                                    //c - one cell forward and one left
-                                                    else if (tashchez.board.get(defIndex).getCellType().contains("definition")) {
-                                                        {
-                                                            letterCounter--;
-                                                            //a - the cell we just reached
-                                                            if (tashchez.board.get(defIndex).getCellType().contains("definitionDown"))
-                                                                defIndex = defIndex; //do nothing
-
-                                                                //b - one cell forward and one up
-                                                                //c - one cell forward and one down
-                                                            else {
-                                                                defIndex += TashchezUI.NUM_COL;
-
-                                                                if (tashchez.board.get(defIndex).getCellType().contains("solveRightDown"))
-                                                                    defIndex++;
-                                                                else if (tashchez.board.get(defIndex).getCellType().contains("solveLeftDown"))
-                                                                    defIndex--;
-                                                            }
-                                                        }
-                                                    }
-                                                } else {
-                                                    while (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW != 0)//go to the right till def cell or till the first cell in the line
-                                                    {
-                                                        defIndex--;
-                                                        letterCounter++;
-                                                    }
-
-                                                    Log.d("letterCounter", letterCounter + "");
-
-                                                    //if we reached the first cell in the line and it is still "solve cell", the "def cell" can be: one up or one down
-                                                    if (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW == 0) {
-                                                        {
-                                                            if (tashchez.board.get(defIndex).getCellType().contains("solveDownLeft"))
-                                                                defIndex = defIndex - TashchezUI.NUM_COL;
-                                                            else if (tashchez.board.get(defIndex).getCellType().contains("solveUpLeft"))
-                                                                defIndex = defIndex + TashchezUI.NUM_COL;
-                                                        }
-                                                    }
-
-                                                    //if we "def cell", the "def cell" can be:
-                                                    //a - the cell we just reached
-                                                    //b - one cell forward and one up
-                                                    //c - one cell forward and one down
-                                                    else if (tashchez.board.get(defIndex).getCellType().contains("definition")) {
-                                                        {
-                                                            letterCounter--;
-                                                            //a - the cell we just reached
-                                                            if (tashchez.board.get(defIndex).getCellType().contains("definitionLeft"))
-                                                                defIndex = defIndex; //do nothing
-
-                                                                //b - one cell forward and one up
-                                                                //c - one cell forward and one down
-                                                            else {
-                                                                defIndex++;
-
-                                                                if (tashchez.board.get(defIndex).getCellType().contains("solveDownLeft"))
-                                                                    defIndex = defIndex - TashchezUI.NUM_COL;
-                                                                else if (tashchez.board.get(defIndex).getCellType().contains("solveUpLeft"))
-                                                                    defIndex = defIndex + TashchezUI.NUM_COL;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                String solutionLetter= "";
-                                                if(letterCounter < tashchez.board.get(defIndex).solution.length())
-                                                    solutionLetter = tashchez.board.get(defIndex).solution.charAt(letterCounter) + "";
-                                                Log.d("04.07", "solutionLetter: " + solutionLetter + "  letterCounter: " + letterCounter);
-                                                tashchez.board.get(tashchezCell.getIndex()).editText.setText(solutionLetter);
-
-
-                                            }
-                                        })
-                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                // do nothing
-                                            }
-                                        })
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .show();
-                            }
-                        });
-                    }
-                });
+//                adapter.setShowAlertInterface(new ShowAlertDialogInterface() {
+//                    @Override
+//                    public void showAlertDialog(final TypeTashchezCell tashchezCell) {
+//
+//                        TashchezUI.this.runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                showDialog();
+//                            }
+//
+//                            private void showDialog() {
+//                                new AlertDialog.Builder(TashchezUI.this)
+//                                        .setTitle("עוזר אינטליג-NET-י")
+//                                        .setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + ", נשארו לך עוד "+ helpForDay +" עזרות להיום.\nהאם אתה בטוח שברצונך לחשוף את הפתרון עבור משבצת זו?")
+//                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int which) {
+//
+//
+//                                                int defIndex = tashchezCell.getIndex();
+//                                                int letterCounter = 0; // to know which letter of the answer to put
+//
+//                                                if ((defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && tashchez.board.get(defIndex + 1).getCellType().contains("definition") &&
+//                                                        (defIndex - 1) >= 0 && tashchez.board.get(defIndex - 1).getCellType().contains("definition")) {
+//                                                    while (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
+//                                                    {
+//                                                        Log.d("lettecounter1", ""+letterCounter);
+//                                                        defIndex -= TashchezUI.NUM_ROW;
+//                                                        letterCounter++;
+//                                                    }
+//                                                    Log.d("lettecounter2", ""+letterCounter);
+//                                                    //if we reached the first cell in the column and it is still "solve cell", the "def cell" can be: one left or one right
+//                                                    if (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex < TashchezUI.NUM_COL) {
+//                                                        if (tashchez.board.get(defIndex).getCellType().contains("solveRightDown"))
+//                                                            defIndex++;
+//                                                        else if (tashchez.board.get(defIndex).getCellType().contains("solveLeftDown"))
+//                                                            defIndex--;
+//                                                    }
+//
+//                                                    //if we are in "def cell", the "def cell" can be:
+//                                                    //a - the cell we just reached
+//                                                    //b - one cell forward and one right
+//                                                    //c - one cell forward and one left
+//                                                    else if (tashchez.board.get(defIndex).getCellType().contains("definition")) {
+//                                                        {
+//                                                            letterCounter--;
+//                                                            //a - the cell we just reached
+//                                                            if (tashchez.board.get(defIndex).getCellType().contains("definitionDown"))
+//                                                                defIndex = defIndex; //do nothing
+//
+//                                                                //b - one cell forward and one up
+//                                                                //c - one cell forward and one down
+//                                                            else {
+//                                                                defIndex += TashchezUI.NUM_COL;
+//
+//                                                                if (tashchez.board.get(defIndex).getCellType().contains("solveRightDown"))
+//                                                                    defIndex++;
+//                                                                else if (tashchez.board.get(defIndex).getCellType().contains("solveLeftDown"))
+//                                                                    defIndex--;
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                } else {
+//                                                    while (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW != 0)//go to the right till def cell or till the first cell in the line
+//                                                    {
+//                                                        defIndex--;
+//                                                        letterCounter++;
+//                                                    }
+//
+//                                                    Log.d("letterCounter", letterCounter + "");
+//
+//                                                    //if we reached the first cell in the line and it is still "solve cell", the "def cell" can be: one up or one down
+//                                                    if (tashchez.board.get(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW == 0) {
+//                                                        {
+//                                                            if (tashchez.board.get(defIndex).getCellType().contains("solveDownLeft"))
+//                                                                defIndex = defIndex - TashchezUI.NUM_COL;
+//                                                            else if (tashchez.board.get(defIndex).getCellType().contains("solveUpLeft"))
+//                                                                defIndex = defIndex + TashchezUI.NUM_COL;
+//                                                        }
+//                                                    }
+//
+//                                                    //if we "def cell", the "def cell" can be:
+//                                                    //a - the cell we just reached
+//                                                    //b - one cell forward and one up
+//                                                    //c - one cell forward and one down
+//                                                    else if (tashchez.board.get(defIndex).getCellType().contains("definition")) {
+//                                                        {
+//                                                            letterCounter--;
+//                                                            //a - the cell we just reached
+//                                                            if (tashchez.board.get(defIndex).getCellType().contains("definitionLeft"))
+//                                                                defIndex = defIndex; //do nothing
+//
+//                                                                //b - one cell forward and one up
+//                                                                //c - one cell forward and one down
+//                                                            else {
+//                                                                defIndex++;
+//
+//                                                                if (tashchez.board.get(defIndex).getCellType().contains("solveDownLeft"))
+//                                                                    defIndex = defIndex - TashchezUI.NUM_COL;
+//                                                                else if (tashchez.board.get(defIndex).getCellType().contains("solveUpLeft"))
+//                                                                    defIndex = defIndex + TashchezUI.NUM_COL;
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                }
+//                                                String solutionLetter= "";
+//                                                if(letterCounter < tashchez.board.get(defIndex).solution.length())
+//                                                    solutionLetter = tashchez.board.get(defIndex).solution.charAt(letterCounter) + "";
+//                                                Log.d("04.07", "solutionLetter: " + solutionLetter + "  letterCounter: " + letterCounter);
+//                                                tashchez.board.get(tashchezCell.getIndex()).editText.setText(solutionLetter);
+//
+//
+//                                            }
+//                                        })
+//                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                // do nothing
+//                                            }
+//                                        })
+//                                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                                        .show();
+//                            }
+//                        });
+//                    }
+//                });
 
 
 
