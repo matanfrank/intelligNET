@@ -182,6 +182,15 @@
                 android:hint="@string/gender"/>
         </android.support.design.widget.TextInputLayout>
 
+
+        <ProgressBar
+            android:id="@+id/progress_bar_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone">
+        </ProgressBar>
+
         <!-- Signup Button -->
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_signup"

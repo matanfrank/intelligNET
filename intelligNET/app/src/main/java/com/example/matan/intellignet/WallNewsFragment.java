@@ -14,13 +14,7 @@ import android.widget.ListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
 
 
 public class WallNewsFragment extends Fragment {
@@ -87,7 +81,7 @@ public class WallNewsFragment extends Fragment {
 
 
         LinearLayout writeStatus = (LinearLayout)view.findViewById(R.id.writeStatus);
-        if(LoginActivity.guest)
+        if(LoginActivity.isGuest)
             writeStatus.setVisibility(View.GONE);
 
 

@@ -18,7 +18,7 @@ public class MeuznachMenu extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meuznach_menu);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
-        if(!LoginActivity.guest)
+        if(!LoginActivity.isGuest)
         {
         if (MainActivity.user != null)
         {

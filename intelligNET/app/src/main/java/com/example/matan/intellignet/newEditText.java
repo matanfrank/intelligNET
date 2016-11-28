@@ -1,6 +1,7 @@
 package com.example.matan.intellignet;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,7 +26,6 @@ public class newEditText extends EditText
     public newEditText(Context context) {
         super(context);
     }
-
 
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK &&

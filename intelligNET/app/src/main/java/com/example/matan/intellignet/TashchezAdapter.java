@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -22,8 +21,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by matan on 16/12/2015.
@@ -153,15 +150,15 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                 editText = (newEditText) convertView.findViewById(R.id.tashchez_edit_text);
                 tashchezGrid.setLongClickable(true);
 
-            //in case that the user saved a solution from previous time
-            if(firstTime && savedSolution.length() > 0 && savedSolution.charAt(tashchezCell.index) != '*')
-            {
-                editText.setText(String.valueOf(savedSolution.charAt(tashchezCell.index)));
-                //to change the letter to '*' because i dont want the software to remember the letter
+                //in case that the user saved a solution from previous time
+                if(firstTime && savedSolution.length() > 0 && savedSolution.charAt(tashchezCell.index) != '*')
+                {
+                    editText.setText(String.valueOf(savedSolution.charAt(tashchezCell.index)));
+                    //to change the letter to '*' because i dont want the software to remember the letter
 //                String tempSavedSolution = savedSolution;
 //                savedSolution = tempSavedSolution.substring(0,tashchezCell.index) + '*' + tempSavedSolution.substring(tashchezCell.index+1);
 
-            }
+                }
 
 
                 tashchezCell.setEditText(editText);
@@ -183,6 +180,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         Log.d("solveClick", "focus" + whatClickSolve);
+//                        lastPaintCounter = findCursor();//TODO has to be here!!! need to know how to do it!
                         if (setFocusDefClick && !TashchezUI.clickOnErase)//every time call "requestFocus" and click on "erase all" dont get in
                         {
                             whatClickSolve = FIRST_CLICK_SOLVE;
@@ -230,8 +228,8 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     public void onClick(View v) {
                         Log.d("solveClick", "click" + whatClickSolve);
                         if (whatClickSolve == FIRST_CLICK_SOLVE) {
-                        whatClickSolve  = FIRST_CLICK_SOLVE;
-                        prevDef = solveModeOn(tashchezCell, SOLVE_CLICK);
+                            whatClickSolve  = FIRST_CLICK_SOLVE;
+                            prevDef = solveModeOn(tashchezCell, SOLVE_CLICK);
                             whatClickSolve = SECOND_CLICK_SOLVE;
                         } else if (whatClickSolve == SECOND_CLICK_SOLVE) {
                             prevDef = solveModeOn(tashchezCell, SOLVE_CLICK);
@@ -249,12 +247,23 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                         if (!clearFlag) {
                             EditTextListenerCallAfter = true;
                             EditTextListenerCallOn = true;
+
+//                            if(getItem(lastPaint[lastPaintCounter]).editText.getText().length() >= 1)
+//                            {
+//                                while ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT_LAST_PAINT &&
+//                                        getItem(lastPaint[lastPaintCounter]).editText.getText().length() != 0)//in case that the cell is fill already
+//                                    lastPaintCounter += 1;
+//
+//                                setFocusDefClick = false;
+//                                getItem(lastPaint[lastPaintCounter]).editText.requestFocus();
+//                                setFocusDefClick = true;
+//                            }
                         }
                     }
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count)//response on last letter correction
-                     {
+                    {
                         if (EditTextListenerCallOn)//in case of race condition because sometimes run 3 times
                         {
                             findCursor();
@@ -283,7 +292,7 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                                 lastPaintCounter = findCursor();
 
                                 if ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT_LAST_PAINT)//if "lastPaintCounter + 1" in the tashchez limits
-                                     {
+                                {
                                     lastPaintCounter += 1;
                                     while ((lastPaintCounter + 1) < lastPaint.length && lastPaint[lastPaintCounter + 1] != INIT_LAST_PAINT &&
                                             getItem(lastPaint[lastPaintCounter]).editText.getText().length() != 0)//in case that the cell is fill already
@@ -298,157 +307,57 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                     }
                 });
 
-tashchezGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()  {
-    @Override
-    public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int arg2, long arg3) {
-        new AlertDialog.Builder(getContext())
-                .setTitle("עוזר אינטליג-NET-י")
-                .setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + ", נשארו לך עוד "+ "helpForDay" +" עזרות להיום.\nהאם אתה בטוח שברצונך לחשוף את הפתרון עבור משבצת זו?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                tashchezGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()  {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int slvIndex, final long arg3) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("עוזר אינטליג-NET-י")
+                                .setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + ", נשארו לך עוד "+ "helpForDay" +" עזרות להיום.\nהאם אתה בטוח שברצונך לחשוף את הפתרון עבור משבצת זו?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
 
 
-                        int defIndex = tashchezCell.getIndex();
-                        int letterCounter = 0; // to know which letter of the answer to put
+                                        int slvIndexTemp=slvIndex, letterCounter = 0;
+                                        TypeTashchezCell defCell = null;
+                                        if(getItem(slvIndex) != null && getItem(slvIndex).cellType.contains("solve")) {
+                                            {
+                                                whatClickSolve = FIRST_CLICK_SOLVE;
+                                                defCell = getItem(findDef(getItem(slvIndex)));
+                                            }
 
-                        if ((defIndex + 1) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && getItem(defIndex + 1).getCellType().contains("definition") &&
-                                (defIndex - 1) >= 0 && getItem(defIndex - 1).getCellType().contains("definition")) {
-                            while (getItem(defIndex).getCellType().contains("solve") && defIndex >= TashchezUI.NUM_COL)//go up till def cell or till te first cell in the column
-                            {
-                                Log.d("lettecounter1", ""+letterCounter);
-                                defIndex -= TashchezUI.NUM_ROW;
-                                letterCounter++;
-                            }
-                            Log.d("lettecounter2", ""+letterCounter);
-                            //if we reached the first cell in the column and it is still "solve cell", the "def cell" can be: one left or one right
-                            if (getItem(defIndex).getCellType().contains("solve") && defIndex < TashchezUI.NUM_COL) {
-                                if (getItem(defIndex).getCellType().contains("solveRightDown"))
-                                    defIndex++;
-                                else if (getItem(defIndex).getCellType().contains("solveLeftDown"))
-                                    defIndex--;
-                            }
+                                            Log.d("sssssssssssss",defCell.getCellType().substring(defCell.getCellType().length()-4) + " " + slvIndex + arg3);
 
-                            //if we are in "def cell", the "def cell" can be:
-                            //a - the cell we just reached
-                            //b - one cell forward and one right
-                            //c - one cell forward and one left
-                            else if (getItem(defIndex).getCellType().contains("definition")) {
-                                {
-                                    letterCounter--;
-                                    //a - the cell we just reached
-                                    if (getItem(defIndex).getCellType().contains("definitionDown"))
-                                        defIndex = defIndex; //do nothing
 
-                                        //b - one cell forward and one up
-                                        //c - one cell forward and one down
-                                    else {
-                                        defIndex += TashchezUI.NUM_COL;
+                                            //go to the right till def cell or till te first cell in the line
+                                            while (defCell.getCellType().substring(defCell.getCellType().length()-4).contains("Left") && getItem(slvIndexTemp-1).getCellType().contains("solve") &&
+                                                    slvIndexTemp % TashchezUI.NUM_ROW != 0) {
+                                                slvIndexTemp--;
+                                                letterCounter++;
+                                            }
 
-                                        if (getItem(defIndex).getCellType().contains("solveRightDown"))
-                                            defIndex++;
-                                        else if (getItem(defIndex).getCellType().contains("solveLeftDown"))
-                                            defIndex--;
+
+                                                while (defCell.getCellType().substring(defCell.getCellType().length()-4).contains("Down") && slvIndexTemp >= TashchezUI.NUM_COL &&
+                                                        getItem(slvIndexTemp-TashchezUI.NUM_ROW).getCellType().contains("solve"))//go up till def cell or till te first cell in the column
+                                                {
+                                                    slvIndexTemp -= TashchezUI.NUM_ROW;
+                                                    letterCounter++;
+                                                }
+                                            getItem(slvIndex).editText.setText(String.valueOf(defCell.solution.charAt(letterCounter)));
+                                        }
+
                                     }
-                                }
-                            }
-                        } else {
-                            while (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW != 0)//go to the right till def cell or till the first cell in the line
-                            {
-                                defIndex--;
-                                letterCounter++;
-                            }
-
-                            Log.d("letterCounter", letterCounter + "");
-
-                            //if we reached the first cell in the line and it is still "solve cell", the "def cell" can be: one up or one down
-                            if (getItem(defIndex).getCellType().contains("solve") && defIndex % TashchezUI.NUM_ROW == 0) {
-                                {
-                                    if (getItem(defIndex).getCellType().contains("solveDownLeft"))
-                                        defIndex = defIndex - TashchezUI.NUM_COL;
-                                    else if (getItem(defIndex).getCellType().contains("solveUpLeft"))
-                                        defIndex = defIndex + TashchezUI.NUM_COL;
-                                }
-                            }
-
-                            //if we "def cell", the "def cell" can be:
-                            //a - the cell we just reached
-                            //b - one cell forward and one up
-                            //c - one cell forward and one down
-                            else if (getItem(defIndex).getCellType().contains("definition")) {
-                                {
-                                    letterCounter--;
-                                    //a - the cell we just reached
-                                    if (getItem(defIndex).getCellType().contains("definitionLeft"))
-                                        defIndex = defIndex; //do nothing
-
-                                        //b - one cell forward and one up
-                                        //c - one cell forward and one down
-                                    else {
-                                        defIndex++;
-
-                                        if (getItem(defIndex).getCellType().contains("solveDownLeft"))
-                                            defIndex = defIndex - TashchezUI.NUM_COL;
-                                        else if (getItem(defIndex).getCellType().contains("solveUpLeft"))
-                                            defIndex = defIndex + TashchezUI.NUM_COL;
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
                                     }
-                                }
-                            }
-                        }
-                        String solutionLetter= "";
-                        if(letterCounter < getItem(defIndex).solution.length())
-                            solutionLetter = getItem(defIndex).solution.charAt(letterCounter) + "";
-                        Log.d("04.07", "solutionLetter: " + solutionLetter + "  letterCounter: " + letterCounter);
-                        getItem(tashchezCell.getIndex()).editText.setText(solutionLetter);
-
-
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                        return false;
                     }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-        return false;
-    }
-});
-
-//                editText.setOnTouchListener(new View.OnTouchListener() {
-//                    int x;
-//                    @Override
-//                    public boolean onTouch(View v, MotionEvent event)//for long touch for help
-//                    {
-//                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                            T = new Timer();
-//                            TT = new TimerTask() {
-//                                @Override
-//                                public void run() {
-//                                    touchCounter++;
-//                                    if (touchCounter == 2)
-//                                        if (showAlertDialogInterface != null) {
-//                                            showAlertDialogInterface.showAlertDialog(tashchezCell);
-//                                            touchCounter = 0;
-//                                            T.cancel();
-//                                        }
-//                                }
-//                            };
-//                            T.schedule(TT, 0);
-//                        }
-//
-//                        if (event.getAction() == MotionEvent.ACTION_UP) {
-//                            touchCounter = 0;
-//                            T.cancel();
-//
-//                        }
-//                        return false;
-//                    }
-//                });
-//
-//
-//                break;
+                });
         }
-
         return convertView;
     }
 
@@ -475,7 +384,7 @@ tashchezGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(
         //make the definition show on the top of the board
 
 //        if(!(solveOrDef == SOLVE_CLICK && defCell == tashchezCell.getIndex()) && !TashchezUI.solveMode)
-{
+        {
             android.os.Handler hDef = new android.os.Handler();
             Runnable rDef = new Runnable() {
                 @Override
@@ -576,7 +485,7 @@ tashchezGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(
 
                     /* in case that second click and cant make vertical bcuz of one up/down def and one up/down is out of board */
                     ||  (whatClickSolve == SECOND_CLICK_SOLVE && (((defIndex+TashchezUI.NUM_COL) >= (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && (defIndex-TashchezUI.NUM_COL) >= 0) &&
-                            (getItem(defIndex - TashchezUI.NUM_COL).getCellType().contains("definition"))))   ||
+                    (getItem(defIndex - TashchezUI.NUM_COL).getCellType().contains("definition"))))   ||
                     (whatClickSolve == SECOND_CLICK_SOLVE && (((defIndex+TashchezUI.NUM_COL) < (TashchezUI.NUM_COL * TashchezUI.NUM_ROW) && (defIndex-TashchezUI.NUM_COL) < 0) &&
                             (getItem(defIndex + TashchezUI.NUM_COL).getCellType().contains("definition"))))
                     )

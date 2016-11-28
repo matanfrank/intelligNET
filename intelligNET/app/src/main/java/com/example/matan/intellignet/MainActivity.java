@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity
 {
-    public static TypeUser user = null;
+    public static TypeUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,19 +23,49 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
         TextView connectedName;
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
+        connectedName = (TextView) findViewById(R.id.connectedName);
 
-        if(!LoginActivity.guest)
+
+
+        if(LoginActivity.isGuest && user == null)
         {
-             Intent intent = getIntent();
-             if(intent!=null)
-                user = (TypeUser) intent.getExtras().getSerializable("user");
-             if (user != null) {
-                connectedName = (TextView) findViewById(R.id.connectedName);
-                connectedName.setText(user.getFirstName() + " " + user.getLastName());
-               }
+            disconnect.setVisibility(View.INVISIBLE);
+            connectedName.setVisibility(View.INVISIBLE);
         }
-        else
-        disconnect.setVisibility(View.INVISIBLE);
+        else if(LoginActivity.isGuest && user != null)
+        {
+            user=null; //TODO make possible to be connected and still go to guest mode. nowadays need to disconnect for guest.
+            disconnect.setVisibility(View.INVISIBLE);
+            connectedName.setVisibility(View.INVISIBLE);
+        }
+        else if(!LoginActivity.isGuest && user == null)
+        {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+        else if(!LoginActivity.isGuest && user != null)
+        {
+            connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
+            disconnect.setVisibility(View.VISIBLE);
+            connectedName.setVisibility(View.VISIBLE);
+        }
+
+
+//        //if not a guest write on the top of screen "disconnected" and user name
+//        if(!LoginActivity.isGuest)
+//        {
+////             Intent intent = getIntent();
+////             if(intent!=null)
+////                user = (TypeUser) intent.getExtras().getSerializable("user");
+//             if (MainActivity.user != null) {
+//                connectedName = (TextView) findViewById(R.id.connectedName);
+//                connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
+//             }
+//            else
+//                disconnect.setVisibility(View.INVISIBLE);
+//        }
+//        else
+//        disconnect.setVisibility(View.INVISIBLE);
 
 
 
@@ -46,6 +76,8 @@ public class MainActivity extends Activity
                 SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
                 sharedpreferences.edit().clear().commit();
 
+                MainActivity.user = null;
+
                 Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
                 disconnectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(disconnectIntent);
@@ -53,13 +85,6 @@ public class MainActivity extends Activity
             }
         });
 
-//        Log.d("123456789", user.getUsername() + " " + user.getPassword() + " " + user.getFirstName() + " " + user.getLastName() + " " + user.getBirthday()
-//                + " " + user.getGender() + " " + user.getCWP_finished() + " " + user.getHelpForDay());
-
-//        if (user != null)
-//        {
-//
-//        }
 
         ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
         addMenuItems(menuCellArr);

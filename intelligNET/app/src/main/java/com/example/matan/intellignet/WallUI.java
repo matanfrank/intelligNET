@@ -27,7 +27,7 @@ public class WallUI extends AppCompatActivity {
         setContentView(R.layout.activity_wall_ui);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
-        if(!LoginActivity.guest) {
+        if(!LoginActivity.isGuest) {
             if (MainActivity.user != null) {
                 TextView connectedName = (TextView) findViewById(R.id.connectedName);
                 connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());

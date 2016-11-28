@@ -1,6 +1,5 @@
 package com.example.matan.intellignet;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,28 +18,23 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
-import java.util.logging.Handler;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
     private android.os.Handler h;
     private Runnable r;
     private static String username;
     private static String password;
-    public static boolean guest;
-
-    private TypeUser user;
+    public static boolean isGuest;
 
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
     @InjectView(R.id.link_guest) TextView _guestLink;
-    @InjectView(R.id.progress_bar)ProgressBar _progressBar;
+    @InjectView(R.id.progress_bar_login)ProgressBar _progressBar;
 
 
     @Override
@@ -51,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         _usernameText.requestFocus();
         _signupLink.setText(Html.fromHtml(getString(R.string.signUpPageBtn)));//for color change in the text
         _guestLink.setText(Html.fromHtml(getString(R.string.guestBtn)));
+
+
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -76,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             // Start the Signup activity
-            guest=true;
+            isGuest =true;
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
@@ -109,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (TashchezDAL.jsonArray.getJSONObject(0).getString("username").contains(username) &&
                                 TashchezDAL.jsonArray.getJSONObject(0).getString("password").contains(password)) {
 
-                            user = new TypeUser(username, password,
+                            MainActivity.user = new TypeUser(username, password,
                                     TashchezDAL.jsonArray.getJSONObject(0).getString("firstname"),
                                     TashchezDAL.jsonArray.getJSONObject(0).getString("lastname"),
                                     TashchezDAL.jsonArray.getJSONObject(0).getString("birthday"),
@@ -151,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
+//        _loginButton.setEnabled(true);
 
         SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -159,14 +155,10 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("password", password);
         editor.commit();
 
-        guest = false;
+        isGuest = false;
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra("user", user);
         startActivity(intent);
-
-
-
     }
 
     public void onLoginFailed() {

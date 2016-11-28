@@ -18,7 +18,7 @@ public class KaveretMenu extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kaveret_menu);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
-        if(!LoginActivity.guest)
+        if(!LoginActivity.isGuest)
         {
         if (MainActivity.user != null)
         {

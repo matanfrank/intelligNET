@@ -1,9 +1,7 @@
 package com.example.matan.intellignet;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -56,7 +54,7 @@ public class TashchezUI extends AppCompatActivity
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
         //if there's is user logged in
-        if(!LoginActivity.guest)
+        if(!LoginActivity.isGuest)
         {
             if (MainActivity.user != null)
             {

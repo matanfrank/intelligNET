@@ -19,7 +19,7 @@ public class BeitHamishpatMenu extends Activity {
         setContentView(R.layout.activity_beit_hamishpat_menu);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
-        if(!LoginActivity.guest)
+        if(!LoginActivity.isGuest)
         {
         if (MainActivity.user != null)
         {

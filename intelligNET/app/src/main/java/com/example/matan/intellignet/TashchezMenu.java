@@ -21,7 +21,7 @@ public class TashchezMenu extends Activity {
         setContentView(R.layout.activity_tashchez_menu);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
-        if(!LoginActivity.guest)
+        if(!LoginActivity.isGuest)
         {
         if (MainActivity.user != null)
         {

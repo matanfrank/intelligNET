@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-
-import org.json.JSONException;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private TypeUser user;
     private android.os.Handler h;
     private Runnable r;
-    private static String username;
-    private static String password;
+    private String username = "";
+    private String password = "";
     private Intent mainIntent;
     private Intent loginIntent;
 
@@ -25,6 +21,8 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+
+        //get the user that connected to the system if exist
         username = sharedpreferences.getString("username", "");
         password = sharedpreferences.getString("password", "");
 
@@ -34,29 +32,29 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    //check if the details that stored in shredpreferns match
                     if (TashchezDAL.jsonArray.getJSONObject(0).getString("username").contains(username) &&
                             TashchezDAL.jsonArray.getJSONObject(0).getString("password").contains(password)) {
 
-                        user = new TypeUser(username, password,
-                                TashchezDAL.jsonArray.getJSONObject(0).getString("firstname"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getString("lastname"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getString("birthday"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getString("gender"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getInt("cwp_finished"),
-                                TashchezDAL.jsonArray.getJSONObject(0).getInt("helpforday"));
+                    MainActivity.user = new TypeUser(
+                            TashchezDAL.jsonArray.getJSONObject(0).getString("username"),
+                            TashchezDAL.jsonArray.getJSONObject(0).getString("password"),
+                            TashchezDAL.jsonArray.getJSONObject(0).getString("firstname"),
+                            TashchezDAL.jsonArray.getJSONObject(0).getString("lastname"),
+                            TashchezDAL.jsonArray.getJSONObject(0).getString("birthday"),
+                            TashchezDAL.jsonArray.getJSONObject(0).getString("gender"),
+                            TashchezDAL.jsonArray.getJSONObject(0).getInt("cwp_finished"),
+                            TashchezDAL.jsonArray.getJSONObject(0).getInt("helpforday"));
 
 
-                            mainIntent = new Intent(getBaseContext(), MainActivity.class);
-                            mainIntent.putExtra("user", user);
-                            startActivity(mainIntent);
+                    mainIntent = new Intent(getBaseContext(), MainActivity.class);
+                    LoginActivity.isGuest = false;
+                    startActivity(mainIntent);
 
-
-                        //Remove activity
-
-
+                    //Remove activity
                     }
                 } catch (Exception e) {
-                    //if there is no such a user
+                    //if there is no such a user.
                     loginIntent = new Intent(getBaseContext(), LoginActivity.class);
                     startActivity(loginIntent);
                 }
@@ -64,9 +62,15 @@ public class SplashActivity extends AppCompatActivity {
         };
 
 
-            TashchezDAL tashchezDAL = new TashchezDAL(this);
-            tashchezDAL.getDataFrom("userGet?username="+username+"&password="+password,h,r);
+        TashchezDAL tashchezDAL = new TashchezDAL(this);
 
+        if (username.length() != 0 && password.length() != 0)//if nothing stored in shared prfrces dont need to go to DB
+            tashchezDAL.getDataFrom("userGet?username=" + username + "&password=" + password, h, r);
+        else
+        {
+            loginIntent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(loginIntent);
+        }
 
 
 

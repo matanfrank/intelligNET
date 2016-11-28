@@ -47,7 +47,7 @@ protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_tashchez_higayon_ui);
     TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
-    if(!LoginActivity.guest)
+    if(!LoginActivity.isGuest)
     {
         if (MainActivity.user != null)
         {

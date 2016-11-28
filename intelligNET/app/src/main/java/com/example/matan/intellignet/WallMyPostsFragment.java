@@ -50,7 +50,7 @@ public class WallMyPostsFragment extends Fragment {
         list.setAdapter(new AdapterPosts(getActivity(), R.layout.row_post, typePostArr));
 
         LinearLayout writeStatus = (LinearLayout)view.findViewById(R.id.writeStatus);
-        if(LoginActivity.guest)
+        if(LoginActivity.isGuest)
             writeStatus.setVisibility(View.GONE);
 
 

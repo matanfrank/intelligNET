@@ -22,7 +22,7 @@ public class TashchezHigayonMenu extends Activity {
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
 
 
-        if(!LoginActivity.guest)
+        if(!LoginActivity.isGuest)
         {
         if (MainActivity.user != null)
         {
