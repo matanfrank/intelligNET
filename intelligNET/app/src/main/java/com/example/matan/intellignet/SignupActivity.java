@@ -75,6 +75,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -87,6 +88,7 @@ public class SignupActivity extends AppCompatActivity {
                 // Start the Signup activity
                 LoginActivity.isGuest =true;
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -96,7 +98,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d("123456789", "signUp");
         if (validate()) {
 
-
+            _progressBar.setVisibility(View.VISIBLE);
             //cast to UTF-8 for hebrew input
             try {
                 username = URLEncoder.encode(_usernameText.getText().toString(), "UTF-8");
@@ -159,7 +161,7 @@ public class SignupActivity extends AppCompatActivity {
         LoginActivity.isGuest = false;
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         //setResult(RESULT_OK, null); // TODO maybe connection to close and activities close order
     }
@@ -262,12 +264,12 @@ public class SignupActivity extends AppCompatActivity {
 //            valid = false;
 //        }
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
             df.parse(birthday);
             _dayText.setError(null);
         } catch (ParseException e) {
-            _dayText.setError(getResources().getString(R.string.errBirthdayInvalid));
+            _dayText.setError(getResources().getString(R.string.errBirthdayInvalid)+"1");
             valid = false;
         }
 

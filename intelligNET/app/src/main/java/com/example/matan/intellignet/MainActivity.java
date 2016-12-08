@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -16,17 +18,23 @@ import java.util.ArrayList;
 public class MainActivity extends Activity
 {
     public static TypeUser user;
+    public static ArrayList<ArrayList<?>> savedbBoardsData = new ArrayList<ArrayList<?>>();
+    public static ArrayList<String> savedbBoardsType = new ArrayList<String>();
+    public static ArrayList<Integer> savedbBoardsIndex = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView connectedName;
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
-        connectedName = (TextView) findViewById(R.id.connectedName);
+        TextView connectedName = (TextView) findViewById(R.id.connectedName);
 
 
-
+        /*Four possible options:
+        * 1- this is a guest and no user connected - GOOD
+        * 2- this is a guest and we have user that's connected - BAD
+        * 3- this is not a guest and no user connected - BAD
+        * 4- this is not a guest and we have user that's connected - GOOD*/
         if(LoginActivity.isGuest && user == null)
         {
             disconnect.setVisibility(View.INVISIBLE);
@@ -40,7 +48,8 @@ public class MainActivity extends Activity
         }
         else if(!LoginActivity.isGuest && user == null)
         {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
         else if(!LoginActivity.isGuest && user != null)
@@ -49,24 +58,6 @@ public class MainActivity extends Activity
             disconnect.setVisibility(View.VISIBLE);
             connectedName.setVisibility(View.VISIBLE);
         }
-
-
-//        //if not a guest write on the top of screen "disconnected" and user name
-//        if(!LoginActivity.isGuest)
-//        {
-////             Intent intent = getIntent();
-////             if(intent!=null)
-////                user = (TypeUser) intent.getExtras().getSerializable("user");
-//             if (MainActivity.user != null) {
-//                connectedName = (TextView) findViewById(R.id.connectedName);
-//                connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
-//             }
-//            else
-//                disconnect.setVisibility(View.INVISIBLE);
-//        }
-//        else
-//        disconnect.setVisibility(View.INVISIBLE);
-
 
 
 
@@ -167,4 +158,26 @@ public class MainActivity extends Activity
             menuCellArr.add(r);
         }
     }
+
+
+//if we are in the MainActivity but on a "guest mode" and press back.. want to open the LoginActivity
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event)
+    {
+
+
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if(LoginActivity.isGuest)
+            {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                this.finish();//have to close this activity to be sure that won't have several activities like that
+            }
+
+        }
+        return super.dispatchKeyEvent(event);
+    }
 }
+
+
+

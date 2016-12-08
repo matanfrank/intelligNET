@@ -50,7 +50,7 @@
     <string name="gender">מין: זכר או נקבה</string>
     <string name="errFirstNamelimits">שם פרטי חייב להיות בין 2 ל15 תווים</string>
     <string name="errLastNamelimits">שם משפחה חייב להיות בין 2 ל15 תווים</string>
-    <string name="errBirthdayInvalid">הכנס שנה תקנית לפי התבנית הבאה YYYY</string>
+    <string name="errBirthdayInvalid">אנא הזן תאריך תקני</string>
     <string name="errGenderInvalid">הכנס "זכר" או "נקבה"</string>
 
 </resources>

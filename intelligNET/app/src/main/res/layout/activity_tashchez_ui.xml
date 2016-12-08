@@ -81,6 +81,8 @@
 
 
 
+<!--     at the moment the app wont have a wall but in the continue it will
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/wallFB"
@@ -94,6 +96,8 @@
             app:layout_anchor="@id/menuGrid"
             app:layout_anchorGravity="bottom|center"
                  />
+-->
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/eraseFB"
@@ -107,7 +111,7 @@
             app:layout_anchor="@id/menuGrid"
             app:layout_anchorGravity="bottom|center|end"/>
 
-        <android.support.design.widget.FloatingActionButton
+<!--        <android.support.design.widget.FloatingActionButton
             android:id="@+id/saveFB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -118,7 +122,7 @@
             android:scaleType="centerCrop"
             app:layout_anchor="@id/menuGrid"
             app:layout_anchorGravity="bottom|center|start"/>
-
+-->
 
     </android.support.design.widget.CoordinatorLayout>
 

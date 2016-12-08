@@ -80,10 +80,22 @@ public class TashchezSaveDB extends SQLiteOpenHelper {
         Log.d("12121212", "dsd" + c.getColumnIndex(KEY_CONTENT));
         if (c != null && c.moveToFirst()){//c.getColumnIndex(KEY_CONTENT) >= 0 && c.getString(c.getColumnIndex(KEY_CONTENT)) != null) {
             c.moveToFirst();
+            db.close();
             return c.getString(c.getColumnIndex(KEY_CONTENT));
         }
         else
+        {
+            db.close();
             return "";
+        }
+    }
+
+    public String deleteTashchez(String user, String type, int index)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(TABLE_TASHCHEZS, KEY_USER + "='" + user + "' and " + KEY_TYPE + "='" + type + "' and " + KEY_INDEX + "=" + index, null);
+        db.close();
+        return "";
     }
 
 

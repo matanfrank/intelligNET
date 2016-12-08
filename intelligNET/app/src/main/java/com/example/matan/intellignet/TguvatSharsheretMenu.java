@@ -17,14 +17,41 @@ public class TguvatSharsheretMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tguvat_sharsheret_menu);
+        TextView disconnect = (TextView)findViewById(R.id.disconnect);
+        TextView connectedName = (TextView) findViewById(R.id.connectedName);
 
-        if (MainActivity.user != null)
+
+        /*Four possible options:
+        * 1- this is a guest and no user connected - GOOD
+        * 2- this is a guest and we have user that's connected - BAD
+        * 3- this is not a guest and no user connected - BAD
+        * 4- this is not a guest and we have user that's connected - GOOD*/
+        if(LoginActivity.isGuest && MainActivity.user == null)
         {
-            TextView connectedName = (TextView) findViewById(R.id.connectedName);
+            disconnect.setVisibility(View.INVISIBLE);
+            connectedName.setVisibility(View.INVISIBLE);
+        }
+        else if(LoginActivity.isGuest && MainActivity.user != null)
+        {
+            MainActivity.user=null; //TODO make possible to be connected and still go to guest mode. nowadays need to disconnect for guest.
+            disconnect.setVisibility(View.INVISIBLE);
+            connectedName.setVisibility(View.INVISIBLE);
+        }
+        else if(!LoginActivity.isGuest && MainActivity.user == null)
+        {
+            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else if(!LoginActivity.isGuest && MainActivity.user != null)
+        {
             connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
+            disconnect.setVisibility(View.VISIBLE);
+            connectedName.setVisibility(View.VISIBLE);
         }
 
-        TextView disconnect = (TextView)findViewById(R.id.disconnect);
+
+
         disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
