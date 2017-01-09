@@ -141,7 +141,7 @@ public class TashchezBL {
         };
 
 
-        tashchezDAL.getDataFrom("definitionGet?" + s, ha, ru);
+        tashchezDAL.getDataFrom("definitionGet?" + s, ha, ru, null);
 
 
 

@@ -15,7 +15,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="0px"
+        android:layout_height="0dp"
         android:layout_weight="5"
         android:layout_marginTop="30px"
         android:layout_marginBottom="30px"
@@ -24,9 +24,11 @@
         android:id="@+id/symbolImage" />
 
 
+
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="0px"
+    android:layout_height="0dp"
     android:layout_weight="28"
     android:fitsSystemWindows="true">
 
@@ -38,9 +40,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="40px"
-        android:paddingLeft="80px"
-        android:paddingRight="80px">
+        android:paddingTop="12dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
 
 
 
@@ -50,8 +52,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16px"
-            android:layout_marginBottom="16px">
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp">
             <EditText android:id="@+id/input_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,8 +65,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16px"
-            android:layout_marginBottom="16px">
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp">
             <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,16 +88,16 @@
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24px"
-            android:layout_marginBottom="24px"
-            android:padding="12px"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="5dp"
             android:text="@string/loginBtn"/>
 
 
         <TextView android:id="@+id/link_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24px"
+            android:layout_marginTop="3dp"
             android:text="@string/signUpPageBtn"
             android:gravity="center"
             android:textSize="16dip"/>
@@ -104,7 +106,6 @@
         <TextView android:id="@+id/link_guest"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24px"
             android:text="@string/guestBtn"
             android:gravity="center"
             android:textSize="16dip"/>
@@ -120,7 +121,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0px"
+        android:layout_height="0dp"
         android:layout_weight="3"
         android:text="@string/ad"
         android:gravity="center"

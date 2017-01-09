@@ -65,7 +65,7 @@ public class SplashActivity extends AppCompatActivity {
         TashchezDAL tashchezDAL = new TashchezDAL(this);
 
         if (username.length() != 0 && password.length() != 0)//if nothing stored in shared prfrces dont need to go to DB
-            tashchezDAL.getDataFrom("userGet?username=" + username + "&password=" + password, h, r);
+            tashchezDAL.getDataFrom("userGet?username=" + username + "&password=" + password, h, r, null);
         else
         {
             loginIntent = new Intent(getBaseContext(), LoginActivity.class);

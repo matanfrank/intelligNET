@@ -14,6 +14,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,9 @@ public class WallUI extends AppCompatActivity {
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
         TextView connectedName = (TextView) findViewById(R.id.connectedName);
 
+        PublisherAdView mPublisherAdView = (PublisherAdView) findViewById(R.id.publisherAdView);
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(adRequest);
 
         /*Four possible options:
         * 1- this is a guest and no user connected - GOOD

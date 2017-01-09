@@ -8,17 +8,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
+
+
+
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
+
 
 public class MainActivity extends Activity
 {
     public static TypeUser user;
-    public static ArrayList<ArrayList<?>> savedbBoardsData = new ArrayList<ArrayList<?>>();
+    public static String lastUseDate=""; //for the helpForDay to know if need to update the amount of helpForDay for the user
+    public static ArrayList<TypeGameGrid<?>> savedbBoardsData = new ArrayList<>();
     public static ArrayList<String> savedbBoardsType = new ArrayList<String>();
     public static ArrayList<Integer> savedbBoardsIndex = new ArrayList<Integer>();
 
@@ -29,6 +40,9 @@ public class MainActivity extends Activity
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
         TextView connectedName = (TextView) findViewById(R.id.connectedName);
 
+        PublisherAdView mPublisherAdView = (PublisherAdView) findViewById(R.id.publisherAdView);
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(adRequest);
 
         /*Four possible options:
         * 1- this is a guest and no user connected - GOOD
@@ -60,6 +74,13 @@ public class MainActivity extends Activity
         }
 
 
+        SharedPreferences sharedpreferences = getSharedPreferences("helpForDayDate", Context.MODE_PRIVATE);
+
+        //get the user that connected to the system if exist
+        lastUseDate = sharedpreferences.getString("lastUseDate", "");
+
+
+
 
         disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,8 +103,8 @@ public class MainActivity extends Activity
 
         GridView menuGrid = (GridView)findViewById(R.id.menuGrid);
        // menuGrid.setVerticalScrollBarEnabled(false);
-
-        menuGrid.setAdapter(new AdapterMenu(this, R.layout.cell_menu, menuCellArr));
+        menuGrid.setVerticalScrollBarEnabled(false);
+        menuGrid.setAdapter(new AdapterMenu(this, R.layout.cell_menu, menuCellArr, menuGrid));
 
         menuGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -139,6 +160,19 @@ public class MainActivity extends Activity
     }
 
 
+//
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//
+//        super.onWindowFocusChanged(hasFocus);
+//
+//        if(hasFocus)
+//        {
+//            scaleContents(findViewById(R.id.linearLay), findViewById(R.id.linearLay));
+//        }
+//    }
+
+
+
     private void addMenuItems(ArrayList<TypeMenuCell> menuCellArr)
     {
         String[] mainMenuName = new String[]{"תשחץ", "תשחץ" + "\n" + "אי-גיון", "סודוקו", "מדרג-אות", "מאוזנך", "בית" + "\n" + "המשפט", "שלד מספרים",
@@ -176,6 +210,73 @@ public class MainActivity extends Activity
 
         }
         return super.dispatchKeyEvent(event);
+    }
+
+
+
+
+    // Scales the contents of the given view so that it completely fills the given
+// container on one axis (that is, we're scaling isotropically).
+    private void scaleContents(View rootView, View container)
+    {
+        // Compute the scaling ratio
+        float xScale = (float)container.getWidth() / rootView.getWidth();
+        float yScale = (float)container.getHeight() / rootView.getHeight();
+        float scale = Math.min(xScale, yScale);
+
+        // Scale our contents
+        scaleViewAndChildren(rootView, scale);
+    }
+    // Scale the given view, its contents, and all of its children by the given factor.
+    public static void scaleViewAndChildren(View root, float scale)
+    {
+        // Retrieve the view's layout information
+        ViewGroup.LayoutParams layoutParams = root.getLayoutParams();
+        // Scale the view itself
+        if (layoutParams.width != ViewGroup.LayoutParams.FILL_PARENT &&
+                layoutParams.width != ViewGroup.LayoutParams.WRAP_CONTENT)
+        {
+            layoutParams.width *= scale;
+        }
+        if (layoutParams.height != ViewGroup.LayoutParams.FILL_PARENT &&
+                layoutParams.height != ViewGroup.LayoutParams.WRAP_CONTENT)
+        {
+            layoutParams.height *= scale;
+        }
+
+        // If this view has margins, scale those too
+        if (layoutParams instanceof ViewGroup.MarginLayoutParams)
+        {
+            ViewGroup.MarginLayoutParams marginParams =
+                    (ViewGroup.MarginLayoutParams)layoutParams;
+            marginParams.leftMargin *= scale;
+            marginParams.rightMargin *= scale;
+            marginParams.topMargin *= scale;
+            marginParams.bottomMargin *= scale;
+        }
+
+        // Set the layout information back into the view
+        // Scale the view's padding
+        root.setPadding(
+                (int)(root.getPaddingLeft() * scale),
+                (int)(root.getPaddingTop() * scale),
+                (int)(root.getPaddingRight() * scale),
+                (int)(root.getPaddingBottom() * scale));
+
+        // If the root view is a TextView, scale the size of its text
+        if (root instanceof TextView)
+        {
+            TextView textView = (TextView)root;
+            textView.setTextSize(textView.getTextSize() * scale);
+        }
+
+        // If the root view is a ViewGroup, scale all of its children recursively
+        if (root instanceof ViewGroup)
+        {
+            ViewGroup groupView = (ViewGroup)root;
+            for (int cnt = 0; cnt < groupView.getChildCount(); ++cnt)
+                scaleViewAndChildren(groupView.getChildAt(cnt), scale);
+        }
     }
 }
 

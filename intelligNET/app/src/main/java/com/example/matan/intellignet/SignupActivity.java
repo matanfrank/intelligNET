@@ -85,7 +85,7 @@ public class SignupActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // Start the Signup activity
+                // Start the MainActivity activity
                 LoginActivity.isGuest =true;
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -137,7 +137,7 @@ public class SignupActivity extends AppCompatActivity {
                     "&lastName=" + lastName + "&birthday=" + birthday + "&gender=" + gender;
 
             TashchezDAL tashchezDAL = new TashchezDAL(this);
-            tashchezDAL.getDataFrom(page, h, r);
+            tashchezDAL.getDataFrom(page, h, r, null);
         }
     }
 

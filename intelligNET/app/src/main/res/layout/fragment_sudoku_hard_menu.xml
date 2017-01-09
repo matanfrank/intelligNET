@@ -14,10 +14,10 @@
 
     <GridView
         android:layout_width="match_parent"
-        android:layout_height="0px"
+        android:layout_height="0dp"
         android:layout_weight="28"
-        android:paddingTop="50px"
-        android:paddingBottom="50px"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
 
         android:background="#ffffff"
         android:numColumns="3"

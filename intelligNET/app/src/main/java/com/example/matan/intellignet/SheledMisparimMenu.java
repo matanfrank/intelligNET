@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
+
 import java.util.ArrayList;
 
 public class SheledMisparimMenu extends Activity {
@@ -19,6 +22,10 @@ public class SheledMisparimMenu extends Activity {
         setContentView(R.layout.activity_sheled_misparim_menu);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
         TextView connectedName = (TextView) findViewById(R.id.connectedName);
+
+        PublisherAdView mPublisherAdView = (PublisherAdView) findViewById(R.id.publisherAdView);
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(adRequest);
 
 
         /*Four possible options:
@@ -71,7 +78,7 @@ public class SheledMisparimMenu extends Activity {
         GridView menuGrid = (GridView)findViewById(R.id.menuGrid);
         // menuGrid.setVerticalScrollBarEnabled(false);
 
-        menuGrid.setAdapter(new AdapterMenu(this, R.layout.cell_menu, menuCellArr));
+        menuGrid.setAdapter(new AdapterMenu(this, R.layout.cell_menu, menuCellArr, menuGrid));
 
 //        menuGrid.setOnItemClickListener(new AdapterView.OnItemClickListener()
 //        {

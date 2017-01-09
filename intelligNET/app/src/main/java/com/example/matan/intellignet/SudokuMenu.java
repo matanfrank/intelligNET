@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,10 @@ public class SudokuMenu extends AppCompatActivity {
         setContentView(R.layout.activity_sudoku_menu);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
         TextView connectedName = (TextView) findViewById(R.id.connectedName);
+
+        PublisherAdView mPublisherAdView = (PublisherAdView) findViewById(R.id.publisherAdView);
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(adRequest);
 
 
         /*Four possible options:

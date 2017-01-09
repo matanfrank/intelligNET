@@ -3,6 +3,8 @@ package com.example.matan.intellignet;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -20,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.InjectView;
+
 
 public class TashchezDAL {
     private Context mContext;
@@ -35,7 +39,10 @@ public class TashchezDAL {
     public static JsonArrayRequest jsonArrayRequest;
 
 
-    public void getDataFrom(String specPage, final android.os.Handler h, final Runnable r) {
+    public void getDataFrom(String specPage, final android.os.Handler h, final Runnable r, final ProgressBar progressBar) {
+        if(progressBar != null)
+            progressBar.setVisibility(View.VISIBLE);
+
         String page = url + specPage;
         requestQueue = Volley.newRequestQueue(mContext);
 
@@ -47,6 +54,10 @@ public class TashchezDAL {
                     Toast.makeText(mContext, "gooooooooooooooood", Toast.LENGTH_SHORT).show();
                     if (h != null && r != null)
                         h.post(r);
+
+                    if(progressBar != null)
+                        progressBar.setVisibility(View.GONE);
+
                 }
             }, new Response.ErrorListener() {
 

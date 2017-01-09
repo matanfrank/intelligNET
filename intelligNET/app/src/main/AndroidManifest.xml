@@ -55,12 +55,13 @@
             android:noHistory="false"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan"
-            android:screenOrientation="nosensor"
+
             >
         </activity>
         <activity
             android:name=".MainActivity"
-            android:noHistory="false">
+            android:noHistory="false"
+            android:screenOrientation="nosensor">
 
         </activity>
         <activity

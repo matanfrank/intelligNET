@@ -14,6 +14,9 @@ public class TypeUser implements Serializable
     private String birthday;
     private String gender;
     private int CWP_finished;
+
+
+
     private int helpForDay;
 
     //for signup login
@@ -78,5 +81,9 @@ public class TypeUser implements Serializable
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setHelpForDay(int helpForDay) {
+        this.helpForDay = helpForDay;
     }
 }

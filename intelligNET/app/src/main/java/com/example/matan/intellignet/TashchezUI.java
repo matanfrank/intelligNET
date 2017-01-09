@@ -11,25 +11,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 
-import java.util.zip.Inflater;
+
 
 public class TashchezUI extends AppCompatActivity
 {
     public static final int NUM_COL=7;
     public static final int NUM_ROW=7;
-    private  ImageView coverImage;
-    private TextView connectedName;
+
     private static TashchezAdapter adapter;
     //private static newEditText editText;
     private  GridView tashchezGrid;
@@ -48,6 +46,7 @@ public class TashchezUI extends AppCompatActivity
     public static boolean clickOnErase = false;
     public static TashchezSaveDB db;
     public static String savedSolution = "";
+    private ProgressBar progressBar;
 
     int helpForDay = 0;
     @Override
@@ -57,7 +56,7 @@ public class TashchezUI extends AppCompatActivity
         setContentView(R.layout.activity_tashchez_ui);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
         TextView connectedName = (TextView) findViewById(R.id.connectedName);
-
+        progressBar = (ProgressBar)findViewById(R.id.pb_tashchez_ui);
 
         /*Four possible options:
         * 1- this is a guest and no user connected - GOOD
@@ -114,7 +113,6 @@ public class TashchezUI extends AppCompatActivity
 
         definitionTextView = (TextView)activity.findViewById(R.id.definitionTextView);
         coverLayout = (RelativeLayout)findViewById(R.id.coverLayout);
-        coverImage = (ImageView) findViewById(R.id.symbolImage);
         tashchezGrid = (GridView)findViewById(R.id.menuGrid);
         tashchezGrid.setNumColumns(NUM_COL);
         tashchezGrid.setVerticalScrollBarEnabled(true);
@@ -147,10 +145,9 @@ public class TashchezUI extends AppCompatActivity
 
                 //save the tashchez for next use without needing to go to DB
                 //TODO add check if already exist
-                MainActivity.savedbBoardsData.add(tashchez.board);
+                MainActivity.savedbBoardsData.add(tashchez);
                 MainActivity.savedbBoardsType.add("תשחץ");
                 MainActivity.savedbBoardsIndex.add(getIntent().getExtras().getInt("statusIndex"));
-
 
                 adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, savedSolution, tashchez.board, tashchezGrid);//, new TashchezPassEditText() {
 
@@ -159,26 +156,28 @@ public class TashchezUI extends AppCompatActivity
         };
 
 
-        if(MainActivity.savedbBoardsIndex.size() != 0) {//check if this tashchez already saved in this session so dont need to go to DB
-            for (int i = 0; i < MainActivity.savedbBoardsIndex.size(); i++) {
-
+        if(MainActivity.savedbBoardsIndex.size() != 0)
+        {//check if this tashchez already saved in this session so dont need to go to DB
+            for (int i = 0; i < MainActivity.savedbBoardsIndex.size(); i++)
+            {
                 if (MainActivity.savedbBoardsIndex.get(i) == getIntent().getExtras().getInt("statusIndex") && MainActivity.savedbBoardsType.get(i).equals("תשחץ")) {
-                    adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, savedSolution, MainActivity.savedbBoardsData.get(i), tashchezGrid);//, new TashchezPassEditText() {
+
+                    tashchez = (TypeTashchezGrid)(MainActivity.savedbBoardsData.get(i));
+                    adapter = new TashchezAdapter(activity, R.layout.cell_definition_tashchez, R.layout.cell_solve_tashchez, savedSolution, tashchez.board, tashchezGrid);//, new TashchezPassEditText() {
                     tashchezGrid.setAdapter(adapter);
                     clickOnErase = false;
-                    Log.d("aaaaaaaa", "aaaaaaaaaaaa");
                     break;
 
                 } else if (i == MainActivity.savedbBoardsIndex.size()-1) {
                     Log.d("aaaaaaaa", "bbbbbbbbbbbb");
-                    tashchezDAL.getDataFrom("tashchezGet", h, r1);
+                    tashchezDAL.getDataFrom("tashchezGet", h, r1, progressBar);
                 }
             }
         }
         else
         {
             Log.d("aaaaaaaa", "cccccccccc");
-            tashchezDAL.getDataFrom("tashchezGet", h, r1);
+            tashchezDAL.getDataFrom("tashchezGet", h, r1, progressBar);
         }
 
         //startService(new Intent(this, ChatHeadService.class));
@@ -308,7 +307,9 @@ public class TashchezUI extends AppCompatActivity
                 definitionTextView.setVisibility(View.GONE);
 
 
+
                 for (int i = 0; i < NUM_ROW * NUM_COL; i++)
+
                     tashchez.board.get(i).onEdit = false;
 
 
@@ -324,6 +325,22 @@ public class TashchezUI extends AppCompatActivity
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //update helpForDay in db
+        tashchezDAL.getDataFrom("userUpdateHelpForDay?username="+MainActivity.user.getUsername()+"&helpforday="+MainActivity.user.getHelpForDay(), null, null, null);
+
+        SharedPreferences sharedpreferences = getSharedPreferences("helpForDayDate", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("lastUseDate", MainActivity.lastUseDate);
+        editor.commit();
     }
 
 

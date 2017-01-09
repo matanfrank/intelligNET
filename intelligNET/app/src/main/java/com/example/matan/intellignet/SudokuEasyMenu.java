@@ -31,7 +31,7 @@ public class SudokuEasyMenu extends Fragment{
         GridView menuGrid = (GridView)view.findViewById(R.id.menuGrid1);
         // menuGrid.setVerticalScrollBarEnabled(false);
 
-        menuGrid.setAdapter(new AdapterMenu(getActivity(), R.layout.cell_menu, menuCellArr));
+        menuGrid.setAdapter(new AdapterMenu(getActivity(), R.layout.cell_menu, menuCellArr , menuGrid));
         // Inflate the layout for this fragment
         return view;
 

@@ -141,7 +141,7 @@ public void run() {
         }
         };
 
-        tashchezDAL.getDataFrom("tashchezGet", h, r1);
+        tashchezDAL.getDataFrom("tashchezGet", h, r1, null);
 
 
 
@@ -153,17 +153,17 @@ public void run() {
 
         startService(new Intent(this, ChatHeadService.class));
 
-    chatHead = (FloatingActionButton) findViewById(R.id.wallFB);
+//    chatHead = (FloatingActionButton) findViewById(R.id.wallFB);
     eraseHead = (FloatingActionButton) findViewById(R.id.eraseFB);
-    helpHead = (FloatingActionButton) findViewById(R.id.saveFB);
+//    helpHead = (FloatingActionButton) findViewById(R.id.saveFB);
 
-    chatHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+//    chatHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
     eraseHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
-    helpHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
+//    helpHead.setBackgroundTintList(ColorStateList.valueOf((getResources().getColor(R.color.FB))));
 
-    chatHead.setRippleColor((getResources().getColor(R.color.FB)));//change color when click
+//    chatHead.setRippleColor((getResources().getColor(R.color.FB)));//change color when click
     eraseHead.setRippleColor((getResources().getColor(R.color.FB)));
-    helpHead.setRippleColor((getResources().getColor(R.color.FB)));
+//    helpHead.setRippleColor((getResources().getColor(R.color.FB)));
 
 
 

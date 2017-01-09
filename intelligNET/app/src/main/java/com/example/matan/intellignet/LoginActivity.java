@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                                     TashchezDAL.jsonArray.getJSONObject(0).getInt("helpforday"));
 
 //                            progressDialog.dismiss();
-                            _progressBar.setVisibility(View.GONE);
+                            //_progressBar.setVisibility(View.GONE);
                             onLoginSuccess();
                         }
                     } catch (JSONException e) {
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (TashchezDAL.jsonArray.getString(0).contains("ERR1")) {
                                 Log.d("123456789", "no details");
 //                                progressDialog.dismiss();
-                                _progressBar.setVisibility(View.GONE);
+                                //_progressBar.setVisibility(View.GONE);
                                 onLoginFailed();
                             }
                         } catch (JSONException e1) {
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
             };
 
             TashchezDAL tashchezDAL = new TashchezDAL(this);
-            tashchezDAL.getDataFrom("userGet?username=" + username + "&password=" + password, h, r);
+            tashchezDAL.getDataFrom("userGet?username=" + username + "&password=" + password, h, r, _progressBar);
         }
     }
 

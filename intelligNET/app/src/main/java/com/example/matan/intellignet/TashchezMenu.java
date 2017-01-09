@@ -11,6 +11,9 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
+
 import java.util.ArrayList;
 
 public class TashchezMenu extends Activity {
@@ -21,6 +24,10 @@ public class TashchezMenu extends Activity {
         setContentView(R.layout.activity_tashchez_menu);
         TextView disconnect = (TextView)findViewById(R.id.disconnect);
         TextView connectedName = (TextView) findViewById(R.id.connectedName);
+
+        PublisherAdView mPublisherAdView = (PublisherAdView) findViewById(R.id.publisherAdView);
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mPublisherAdView.loadAd(adRequest);
 
 
         /*Four possible options:
@@ -71,7 +78,7 @@ public class TashchezMenu extends Activity {
         GridView menuGrid = (GridView)findViewById(R.id.menuGrid);
         // menuGrid.setVerticalScrollBarEnabled(false);
 
-        menuGrid.setAdapter(new AdapterMenu(this, R.layout.cell_menu, menuCellArr));
+        menuGrid.setAdapter(new AdapterMenu(this, R.layout.cell_menu, menuCellArr, menuGrid));
 
         menuGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
