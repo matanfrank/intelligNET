@@ -26,7 +26,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,7 +48,6 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     private static final int FIRST_CLICK_SOLVE = 6;
     private static final int SECOND_CLICK_SOLVE = 7;
     private int whatClickSolve = FIRST_CLICK_SOLVE;
-    private final int INIT_HELP_FOR_DAY = 5;
     private int slvLayout;
     private int defLayout;
     private LayoutInflater inflater;
@@ -65,15 +66,13 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
     //public static Semaphore mutex = new Semaphore(100, true);
     private static boolean EditTextListenerCallAfter;
     private static boolean EditTextListenerCallOn;
-    private static boolean onKeyListenerCall = true;
     public static android.os.Handler hKeyboard = new android.os.Handler();
     public static Runnable rKeyboard = null;
     private boolean clearFlag = false;
     public final EditText txtUrl = new EditText(getContext());
-
+    private final int INIT_HELP_FOR_DAY = 5;
     private ShowAlertDialogInterface showAlertDialogInterface;
-    private Timer T;
-    private TimerTask TT;
+
     private String savedSolution;
     int touchCounter = 0;
     private GridView tashchezGrid;
@@ -338,99 +337,100 @@ public class TashchezAdapter extends ArrayAdapter<TypeTashchezCell> {
                 tashchezGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()  {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int slvIndex, final long arg3) {
-                        Log.d("helppp", ""+ MainActivity.user.getHelpForDay());
-                        SimpleDateFormat timeFormat;
 
-                        //if first time that ask for help need to have something in lastUseDate
-                        if (MainActivity.lastUseDate.compareTo("") == 0) {
-                            timeFormat = new SimpleDateFormat("dd/MM/yyyy");
-                            timeFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jerusalem"));
-                            MainActivity.lastUseDate = timeFormat.format(new Date());
-                        }
+                        if (MainActivity.user != null) {
 
-                        //check if this is a new day and reload helpForDay with 5
-                        if(MainActivity.user.getHelpForDay() < INIT_HELP_FOR_DAY) {
-                            String curTime = "";
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                            alertDialog.setTitle("עוזר אינטליג-NET-י");
 
-                            //check if has something in lastUseDate
-                            if (MainActivity.lastUseDate.compareTo("") != 0) {
-                                timeFormat = new SimpleDateFormat("dd/MM/yyyy");
-                                timeFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jerusalem"));
-                                curTime = timeFormat.format(new Date());
-
-                                //check if this is a new day already and needs to renew the helpForDay
-                                if (MainActivity.lastUseDate.compareTo(curTime) != 0)
-                                {
-                                    MainActivity.user.setHelpForDay(INIT_HELP_FOR_DAY);
-
-                                    MainActivity.lastUseDate = curTime;
-
-                                    SharedPreferences sharedpreferences = getContext().getSharedPreferences("login", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                                    editor.putString("helpForDayDate", curTime);
-                                    editor.commit();
-                                }
-
-                            }
-                            Log.d("timee", "CT: " + curTime + " LAST: " + MainActivity.lastUseDate);
-                            Toast.makeText(getContext(), "CT: " + curTime + " LAST: " + MainActivity.lastUseDate, Toast.LENGTH_LONG).show();
-                        }
-
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-                        alertDialog.setTitle("עוזר אינטליג-NET-י");
-
-                        alertDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        if(MainActivity.user.getHelpForDay() > 0) {
-                                            int slvIndexTemp=slvIndex, letterCounter = 0;
-                                            TypeTashchezCell defCell = null;
+                            alertDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
 
-                                            MainActivity.user.setHelpForDay(MainActivity.user.getHelpForDay() - 1);
-                                            if (getItem(slvIndex) != null && getItem(slvIndex).cellType.contains("solve")) {
-                                                {
-                                                    whatClickSolve = FIRST_CLICK_SOLVE;
-                                                    defCell = getItem(findDef(getItem(slvIndex)));
-                                                }
+                                    ///////////////////put the right letter in the right place///////////////////
+                                    if (MainActivity.user.getHelpForDay() > 0) {
+                                        int slvIndexTemp = slvIndex, letterCounter = 0;
+                                        TypeTashchezCell defCell = null;
 
-                                                //go to the right till def cell or till te first cell in the line
-                                                while (defCell.getCellType().substring(defCell.getCellType().length() - 4).contains("Left") && getItem(slvIndexTemp - 1).getCellType().contains("solve") &&
-                                                        slvIndexTemp % TashchezUI.NUM_ROW != 0) {
-                                                    slvIndexTemp--;
-                                                    letterCounter++;
-                                                }
 
-                                                while (defCell.getCellType().substring(defCell.getCellType().length() - 4).contains("Down") && slvIndexTemp >= TashchezUI.NUM_COL &&
-                                                        getItem(slvIndexTemp - TashchezUI.NUM_ROW).getCellType().contains("solve"))//go up till def cell or till te first cell in the column
-                                                {
-                                                    slvIndexTemp -= TashchezUI.NUM_ROW;
-                                                    letterCounter++;
-                                                }
-                                                getItem(slvIndex).editText.setText(String.valueOf(defCell.solution.charAt(letterCounter)));
+                                        MainActivity.user.setHelpForDay(MainActivity.user.getHelpForDay() - 1);
+                                        if (getItem(slvIndex) != null && getItem(slvIndex).cellType.contains("solve")) {
+                                            {
+                                                whatClickSolve = FIRST_CLICK_SOLVE;
+                                                defCell = getItem(findDef(getItem(slvIndex)));
                                             }
+
+                                            //go to the right till def cell or till te first cell in the line
+                                            while (defCell.getCellType().substring(defCell.getCellType().length() - 4).contains("Left") && getItem(slvIndexTemp - 1).getCellType().contains("solve") &&
+                                                    slvIndexTemp % TashchezUI.NUM_ROW != 0) {
+                                                slvIndexTemp--;
+                                                letterCounter++;
+                                            }
+
+                                            while (defCell.getCellType().substring(defCell.getCellType().length() - 4).contains("Down") && slvIndexTemp >= TashchezUI.NUM_COL &&
+                                                    getItem(slvIndexTemp - TashchezUI.NUM_ROW).getCellType().contains("solve"))//go up till def cell or till te first cell in the column
+                                            {
+                                                slvIndexTemp -= TashchezUI.NUM_ROW;
+                                                letterCounter++;
+                                            }
+                                            getItem(slvIndex).editText.setText(String.valueOf(defCell.solution.charAt(letterCounter)));
                                         }
                                     }
-                                });
-                        if(MainActivity.user.getHelpForDay() > 0)
-                        alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    /////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////thats the only thing need in client for helpForDay 2/3/17
+                                    //update the db for using in helpForDay
+                                    TashchezDAL tashchezDAL = new TashchezDAL(activity);
+
+                                    Map<String, String> params = new HashMap<String, String>();
+                                    params.put("username", MainActivity.user.getUsername());
+                                    params.put("helpforday", MainActivity.user.getHelpForDay() + "");
+                                    //which means that first time use the hekpForDay and need to count 24 hours again
+                                    if(MainActivity.user.getHelpForDay() == INIT_HELP_FOR_DAY-1)
+                                    {
+                                        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        timeFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jerusalem"));
+                                        String curTime = timeFormat.format(new Date());
+                                        Log.d("curTime", curTime);
+                                        params.put("last_use_date", curTime);
+                                        tashchezDAL.getDataFrom("updateLastUseDateAndHelpForDay", params, null, null, null, "post");
+                                    }
+                                    else
+                                    tashchezDAL.getDataFrom("userUpdateHelpForDay", params, null, null, null, "post");
+                                }
+                            });
+                            if (MainActivity.user.getHelpForDay() > 0)
+                                alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // do nothing
                                     }
                                 });
-                        alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
 
-                        if(MainActivity.user.getHelpForDay() > 0)
-                        alertDialog.setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + ", נשארו לך עוד "+ MainActivity.user.getHelpForDay() +" עזרות להיום.\nהאם אתה בטוח שברצונך לחשוף את הפתרון עבור משבצת זו?");
-                        else
-                            alertDialog.setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + " לא נשארו לך עוד עזרות להיום");
-                        alertDialog.show();
+                            if (MainActivity.user.getHelpForDay() > 0)
+                                alertDialog.setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + ", נשארו לך עוד " + MainActivity.user.getHelpForDay() + " עזרות להיום.\nהאם אתה בטוח שברצונך לחשוף את הפתרון עבור משבצת זו?");
+                            else
+                                alertDialog.setMessage(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName() + " לא נשארו לך עוד עזרות להיום");
+                            alertDialog.show();
 
 
-                        Log.d("helppp", ""+ MainActivity.user.getHelpForDay());
+                            Log.d("helppp", "" + MainActivity.user.getHelpForDay());
+                        }
+                        else{
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext()).
+                            setTitle("עוזר אינטליג-NET-י").
+                                    setIcon(android.R.drawable.ic_dialog_alert).
+                                    setMessage("בשביל לקבל עזרה עליך להכנס עם משתמש קיים").setNeutralButton("הבנתי", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                }
+                            });
+                            alertDialog.show();
 
-                        return false;
-                    }
+                        }
+                            return false;
+                        }
                 });
         }
         return convertView;

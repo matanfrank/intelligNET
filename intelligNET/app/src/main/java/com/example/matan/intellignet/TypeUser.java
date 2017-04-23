@@ -14,9 +14,7 @@ public class TypeUser implements Serializable
     private String birthday;
     private String gender;
     private int CWP_finished;
-
-
-
+    private String lastUseDate;
     private int helpForDay;
 
     //for signup login
@@ -29,6 +27,7 @@ public class TypeUser implements Serializable
         this.gender = gender;
         this.CWP_finished = 0;
         this.helpForDay = 5;
+        this.lastUseDate = "";
     }
 
     //for login
@@ -41,6 +40,7 @@ public class TypeUser implements Serializable
         this.gender = gender;
         this.CWP_finished = CWP_finished;
         this.helpForDay = helpForDay;
+        this.lastUseDate = "";
     }
 
     public String getUsername() {
@@ -73,6 +73,16 @@ public class TypeUser implements Serializable
 
     public int getHelpForDay() {
         return helpForDay;
+    }
+
+    public String getLastUseDate()
+    {
+        return lastUseDate;
+    }
+
+    public void setLastUseDate(String lastUseDate)
+    {
+        this.lastUseDate = lastUseDate;
     }
 
     public void setFirstName(String firstName) {

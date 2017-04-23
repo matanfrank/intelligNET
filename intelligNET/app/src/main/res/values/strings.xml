@@ -58,4 +58,17 @@
     <!--ads-->
     <string name="banner_ad_unit_id">/6499/example/banner</string>
 
+
+    <!--dialogs-->
+    <string name="twoDevicesLoginDialog">"משתמש יקר, אינך יכול להכנס לחשבון זה מכיוון מכיוון שהוא כבר מחובר במכשיר אחר./nתוכל להתנתק מהחשבון במכשיר השני או להשתמש ב"כניסת אורח"."</string>
+    
+    <!--odot activity-->
+    <string name="odotLine1">זאב פרנק</string>
+    <string name="odotLine2">חידונאי ותשבצאי</string>
+    <string name="odotLine3">עורך ומגיש תכניות חידונים ושעשועונים</string>
+    <string name="odotLine4">מחבר חוברות תשבצים ושעשועונים</string>
+    <string name="odotContact">ליצירת קשר:</string>
+    <string name="odotWebsite">www.zeevfrank.co.il</string>
+    <string name="odotMail">zeevfrank1@gmail.co.il</string>
+    <string name="odotMobile">0522504115</string>
 </resources>

@@ -23,6 +23,8 @@ import java.net.URLEncoder;
     import java.text.ParseException;
     import java.text.SimpleDateFormat;
     import java.util.Calendar;
+    import java.util.HashMap;
+    import java.util.Map;
 
     import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -39,6 +41,7 @@ public class SignupActivity extends AppCompatActivity {
     private static String month;
     private static String day;
     private static String gender;
+    public TashchezDAL tashchezDAL = new TashchezDAL(this);
 
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
@@ -99,20 +102,15 @@ public class SignupActivity extends AppCompatActivity {
         if (validate()) {
 
             _progressBar.setVisibility(View.VISIBLE);
-            //cast to UTF-8 for hebrew input
-            try {
-                username = URLEncoder.encode(_usernameText.getText().toString(), "UTF-8");
-                password = URLEncoder.encode(_passwordText.getText().toString(), "UTF-8");
-                firstName = URLEncoder.encode(_firstNameText.getText().toString(), "UTF-8");
-                lastName = URLEncoder.encode(_lastNameText.getText().toString(), "UTF-8");
-                year = URLEncoder.encode(_yearText.getText().toString(), "UTF-8");
-                month = URLEncoder.encode(_monthText.getText().toString(), "UTF-8");
-                day = URLEncoder.encode(_dayText.getText().toString(), "UTF-8");
-                gender = URLEncoder.encode(_genderText.getText().toString(), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
 
+            username = _usernameText.getText().toString();
+            password = _passwordText.getText().toString();
+            firstName = _firstNameText.getText().toString();
+            lastName = _lastNameText.getText().toString();
+            year = _yearText.getText().toString();
+            month = _monthText.getText().toString();
+            day = _dayText.getText().toString();
+            gender = _genderText.getText().toString();
             birthday = year + "-" + month + "-" + day;
 
             h = new android.os.Handler();
@@ -133,11 +131,16 @@ public class SignupActivity extends AppCompatActivity {
                 }
             };
 
-            String page = "userAdd?username=" + username + "&password=" + password + "&firstName=" + firstName +
-                    "&lastName=" + lastName + "&birthday=" + birthday + "&gender=" + gender;
 
             TashchezDAL tashchezDAL = new TashchezDAL(this);
-            tashchezDAL.getDataFrom(page, h, r, null);
+            Map<String,String> params = new HashMap<String, String>();
+            params.put("username", username);
+            params.put("password", password);
+            params.put("firstName", firstName);
+            params.put("lastName", lastName);
+            params.put("birthday", birthday);
+            params.put("gender", gender);
+            tashchezDAL.getDataFrom("userAdd", params, h, r, null, "post");
         }
     }
 
@@ -158,11 +161,22 @@ public class SignupActivity extends AppCompatActivity {
         editor.putString("password", password);
         editor.commit();
 
+
         LoginActivity.isGuest = false;
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+
+
+//        //do not able two device connected to same account. sign that the user is connected
+//        Map<String,String> params = new HashMap<String, String>();
+//        params.put("username", MainActivity.user.getUsername());
+//        params.put("is_connected", "true");
+//        tashchezDAL.getDataFrom("changeConnectedStatus", params, null, null, null, "post");
+//        MainActivity.user.setIsConnected(true);//need to cheack if secceded first!!!!!!!!!!!!!!!!
+
+
         //setResult(RESULT_OK, null); // TODO maybe connection to close and activities close order
     }
 
@@ -278,16 +292,18 @@ public class SignupActivity extends AppCompatActivity {
 
 
         //check if the current date is after the birthday date
-        if(calendar.getTime().before(Date.valueOf(birthday)))
+        try {
+            if (calendar.getTime().before(Date.valueOf(birthday))) {
+                _yearText.setError(getResources().getString(R.string.errBirthdayInvalid));
+                valid = false;
+            } else {
+                _yearText.setError(null);
+            }
+        }catch(IllegalArgumentException ex)
         {
             _yearText.setError(getResources().getString(R.string.errBirthdayInvalid));
             valid = false;
         }
-        else
-        {
-            _yearText.setError(null);
-        }
-
 
         //month
 //        if(month.length() == 2) {

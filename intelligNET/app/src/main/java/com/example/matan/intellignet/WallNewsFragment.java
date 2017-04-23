@@ -151,7 +151,7 @@ public class WallNewsFragment extends Fragment {
             }
         };
 
-        tashchezDAL.getDataFrom("statusGet", h, r, null);
+        tashchezDAL.getDataFrom("statusGet", null, h, r, null, "post");
     }
 
 

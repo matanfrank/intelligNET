@@ -46,7 +46,7 @@
         </activity>
         <activity android:name=".HagdarotMenu" >
         </activity>
-        <activity android:name=".OdotMenu" >
+        <activity android:name=".OdotActivity" >
         </activity>
         <activity android:name=".SudokuMenu" >
         </activity>

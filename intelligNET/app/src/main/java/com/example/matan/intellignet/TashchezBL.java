@@ -6,6 +6,8 @@ import android.util.Log;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by matan on 01/05/2016.
@@ -30,6 +32,7 @@ public class TashchezBL {
         this.data = data;
         this.context = context;
         stringToArrays(h, r);
+        Log.d("datadata","data:  "+data);
 
     }
 
@@ -94,14 +97,9 @@ public class TashchezBL {
 
         TashchezDAL tashchezDAL = new TashchezDAL(context);
 
-        String s = "";
-
+        Map<String,String> params = new HashMap<String, String>();
         for(int i=0 ; i < defIndex.size() ; i++)
-        {
-            s += "defIndex" + i + "=" + defIndex.get(i);
-            if(i<defIndex.size()-1)//last one dont need '&'
-            s += "&";
-        }
+            params.put(i+"", defIndex.get(i) +"");
 
         ha = new android.os.Handler();
         ru = new Runnable() {
@@ -141,7 +139,7 @@ public class TashchezBL {
         };
 
 
-        tashchezDAL.getDataFrom("definitionGet?" + s, ha, ru, null);
+        tashchezDAL.getDataFrom("definitionGet", params, ha, ru, null, "post");
 
 
 

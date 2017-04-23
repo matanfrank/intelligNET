@@ -1,9 +1,7 @@
 package com.example.matan.intellignet;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -45,52 +43,9 @@ private TextView definitionTextView;
 protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tashchez_higayon_ui);
-    TextView disconnect = (TextView)findViewById(R.id.disconnect);
-    TextView connectedName = (TextView) findViewById(R.id.connectedName);
 
 
-        /*Four possible options:
-        * 1- this is a guest and no user connected - GOOD
-        * 2- this is a guest and we have user that's connected - BAD
-        * 3- this is not a guest and no user connected - BAD
-        * 4- this is not a guest and we have user that's connected - GOOD*/
-    if(LoginActivity.isGuest && MainActivity.user == null)
-    {
-        disconnect.setVisibility(View.INVISIBLE);
-        connectedName.setVisibility(View.INVISIBLE);
-    }
-    else if(LoginActivity.isGuest && MainActivity.user != null)
-    {
-        MainActivity.user=null; //TODO make possible to be connected and still go to guest mode. nowadays need to disconnect for guest.
-        disconnect.setVisibility(View.INVISIBLE);
-        connectedName.setVisibility(View.INVISIBLE);
-    }
-    else if(!LoginActivity.isGuest && MainActivity.user == null)
-    {
-        Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-    else if(!LoginActivity.isGuest && MainActivity.user != null)
-    {
-        connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
-        disconnect.setVisibility(View.VISIBLE);
-        connectedName.setVisibility(View.VISIBLE);
-    }
-
-    disconnect.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
-            sharedpreferences.edit().clear().commit();
-
-            Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
-            disconnectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(disconnectIntent);
-            finish();
-        }
-    });
-
+    GeneralBL.setNameAndDisconnect(this);
 
         definitionTextView = (TextView)activity.findViewById(R.id.definitionTextView);
         coverLayout = (RelativeLayout)findViewById(R.id.coverLayout);
@@ -141,7 +96,7 @@ public void run() {
         }
         };
 
-        tashchezDAL.getDataFrom("tashchezGet", h, r1, null);
+        tashchezDAL.getDataFrom("tashchezGet", null, h, r1, null, "post");
 
 
 

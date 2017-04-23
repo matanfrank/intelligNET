@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,9 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
-
 
 
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
@@ -28,74 +28,23 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
 public class MainActivity extends Activity
 {
     public static TypeUser user;
-    public static String lastUseDate=""; //for the helpForDay to know if need to update the amount of helpForDay for the user
     public static ArrayList<TypeGameGrid<?>> savedbBoardsData = new ArrayList<>();
     public static ArrayList<String> savedbBoardsType = new ArrayList<String>();
     public static ArrayList<Integer> savedbBoardsIndex = new ArrayList<Integer>();
+
+    private Activity activity = this;
+    private TashchezDAL tashchezDAL = new TashchezDAL(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView disconnect = (TextView)findViewById(R.id.disconnect);
-        TextView connectedName = (TextView) findViewById(R.id.connectedName);
-
-        PublisherAdView mPublisherAdView = (PublisherAdView) findViewById(R.id.publisherAdView);
-        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-        mPublisherAdView.loadAd(adRequest);
-
-        /*Four possible options:
-        * 1- this is a guest and no user connected - GOOD
-        * 2- this is a guest and we have user that's connected - BAD
-        * 3- this is not a guest and no user connected - BAD
-        * 4- this is not a guest and we have user that's connected - GOOD*/
-        if(LoginActivity.isGuest && user == null)
-        {
-            disconnect.setVisibility(View.INVISIBLE);
-            connectedName.setVisibility(View.INVISIBLE);
-        }
-        else if(LoginActivity.isGuest && user != null)
-        {
-            user=null; //TODO make possible to be connected and still go to guest mode. nowadays need to disconnect for guest.
-            disconnect.setVisibility(View.INVISIBLE);
-            connectedName.setVisibility(View.INVISIBLE);
-        }
-        else if(!LoginActivity.isGuest && user == null)
-        {
-            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-        else if(!LoginActivity.isGuest && user != null)
-        {
-            connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
-            disconnect.setVisibility(View.VISIBLE);
-            connectedName.setVisibility(View.VISIBLE);
-        }
 
 
-        SharedPreferences sharedpreferences = getSharedPreferences("helpForDayDate", Context.MODE_PRIVATE);
-
-        //get the user that connected to the system if exist
-        lastUseDate = sharedpreferences.getString("lastUseDate", "");
+        GeneralBL.setNameAndDisconnect(this);
+        GeneralBL.loadAd(activity);
 
 
-
-
-        disconnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
-                sharedpreferences.edit().clear().commit();
-
-                MainActivity.user = null;
-
-                Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                disconnectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(disconnectIntent);
-                finish();
-            }
-        });
 
 
         ArrayList<TypeMenuCell> menuCellArr = new ArrayList<>();
@@ -149,7 +98,7 @@ public class MainActivity extends Activity
                         intent = new Intent(MainActivity.this, HagdarotMenu.class);
                         break;
                     case 11:
-                        intent = new Intent(MainActivity.this, OdotMenu.class);
+                        intent = new Intent(MainActivity.this, OdotActivity.class);
                         break;
 
                 }

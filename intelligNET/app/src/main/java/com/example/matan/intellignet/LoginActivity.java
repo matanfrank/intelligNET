@@ -1,6 +1,9 @@
 package com.example.matan.intellignet;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +21,13 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -28,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     private static String username;
     private static String password;
     public static boolean isGuest;
+    public TashchezDAL tashchezDAL = new TashchezDAL(this);
+    private Activity activity =  this;
 
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
@@ -98,16 +110,24 @@ public class LoginActivity extends AppCompatActivity {
             password = _passwordText.getText().toString();
 
 
+
             h = new android.os.Handler();
             r = new Runnable() {
                 @Override
                 public void run() {
-                    _loginButton.setEnabled(false);
+                    //_loginButton.setEnabled(false);
                     try {
                         if (TashchezDAL.jsonArray.getJSONObject(0).getString("username").contains(username) &&
                                 TashchezDAL.jsonArray.getJSONObject(0).getString("password").contains(password)) {
 
-                            MainActivity.user = new TypeUser(username, password,
+
+//                            if(TashchezDAL.jsonArray.getJSONObject(0).getString("is_connected").compareTo("false") == 0) {
+
+
+
+                            MainActivity.user = new TypeUser(
+                                    TashchezDAL.jsonArray.getJSONObject(0).getString("username"),
+                                    TashchezDAL.jsonArray.getJSONObject(0).getString("password"),
                                     TashchezDAL.jsonArray.getJSONObject(0).getString("firstname"),
                                     TashchezDAL.jsonArray.getJSONObject(0).getString("lastname"),
                                     TashchezDAL.jsonArray.getJSONObject(0).getString("birthday"),
@@ -116,8 +136,35 @@ public class LoginActivity extends AppCompatActivity {
                                     TashchezDAL.jsonArray.getJSONObject(0).getInt("helpforday"));
 
 //                            progressDialog.dismiss();
-                            //_progressBar.setVisibility(View.GONE);
-                            onLoginSuccess();
+                                //_progressBar.setVisibility(View.GONE);
+                                onLoginSuccess();
+//                            }
+
+
+
+//                            else//the user is alreay connected in other device.
+//                            {
+//                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity).
+//                                        setTitle("התראה!").
+//                                        setIcon(android.R.drawable.ic_dialog_alert).
+//                                        setMessage(R.string.twoDevicesLoginDialog).
+//                                        setPositiveButton("התנתק מהחשבון במכשיר השני", new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                //set is_connected
+//                                            }
+//                                        }).
+//                                        setPositiveButton("הכנס כאורח", new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//
+//                                            }
+//                                        })
+//                                alertDialog.show();
+//
+//                            }
+
+
                         }
                     } catch (JSONException e) {
                         try {
@@ -134,8 +181,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             };
 
-            TashchezDAL tashchezDAL = new TashchezDAL(this);
-            tashchezDAL.getDataFrom("userGet?username=" + username + "&password=" + password, h, r, _progressBar);
+            Map<String,String> params = new HashMap<String, String>();
+            params.put("username", username);
+            params.put("password", password);
+            tashchezDAL.getDataFrom("userGet", params, h, r, _progressBar, "post");
         }
     }
 
@@ -162,6 +211,14 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+
+
+//        //do not able two device connected to same account. sign that the user is connected
+//        Map<String,String> params = new HashMap<String, String>();
+//        params.put("username", MainActivity.user.getUsername());
+//        params.put("is_connected", "true");
+//        tashchezDAL.getDataFrom("changeConnectedStatus", params, null, null, null, "post");
+//        MainActivity.user.setIsConnected(true);//need to cheack if secceded first!!!!!!!!!!!!!!!!
     }
 
     public void onLoginFailed() {
@@ -194,4 +251,9 @@ public class LoginActivity extends AppCompatActivity {
 
         return valid;
     }
+
+
+    DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.CANADA);
+    TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+    Calendar rightNow = Calendar.getInstance();
 }

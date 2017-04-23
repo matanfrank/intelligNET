@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TashchezUI extends AppCompatActivity
@@ -48,57 +50,14 @@ public class TashchezUI extends AppCompatActivity
     public static String savedSolution = "";
     private ProgressBar progressBar;
 
-    int helpForDay = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tashchez_ui);
-        TextView disconnect = (TextView)findViewById(R.id.disconnect);
-        TextView connectedName = (TextView) findViewById(R.id.connectedName);
         progressBar = (ProgressBar)findViewById(R.id.pb_tashchez_ui);
 
-        /*Four possible options:
-        * 1- this is a guest and no user connected - GOOD
-        * 2- this is a guest and we have user that's connected - BAD
-        * 3- this is not a guest and no user connected - BAD
-        * 4- this is not a guest and we have user that's connected - GOOD*/
-        if(LoginActivity.isGuest && MainActivity.user == null)
-        {
-            disconnect.setVisibility(View.INVISIBLE);
-            connectedName.setVisibility(View.INVISIBLE);
-        }
-        else if(LoginActivity.isGuest && MainActivity.user != null)
-        {
-            MainActivity.user=null; //TODO make possible to be connected and still go to guest mode. nowadays need to disconnect for guest.
-            disconnect.setVisibility(View.INVISIBLE);
-            connectedName.setVisibility(View.INVISIBLE);
-        }
-        else if(!LoginActivity.isGuest && MainActivity.user == null)
-        {
-            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-        else if(!LoginActivity.isGuest && MainActivity.user != null)
-        {
-            connectedName.setText(MainActivity.user.getFirstName() + " " + MainActivity.user.getLastName());
-            disconnect.setVisibility(View.VISIBLE);
-            connectedName.setVisibility(View.VISIBLE);
-        }
-
-        disconnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedpreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
-                sharedpreferences.edit().clear().commit();
-
-                Intent disconnectIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                disconnectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(disconnectIntent);
-                finish();
-            }
-        });
+        GeneralBL.setNameAndDisconnect(this);
 
 
         //check if there's is "save" for this user
@@ -169,15 +128,21 @@ public class TashchezUI extends AppCompatActivity
                     break;
 
                 } else if (i == MainActivity.savedbBoardsIndex.size()-1) {
-                    Log.d("aaaaaaaa", "bbbbbbbbbbbb");
-                    tashchezDAL.getDataFrom("tashchezGet", h, r1, progressBar);
+                    Map<String,String> params = new HashMap<String, String>();
+                    //params.put("1", getIntent().getExtras().getInt("statusIndex") + "");
+                    params.put("idTashchez", "105");
+                    params.put("username", MainActivity.user.getUsername());
+                    tashchezDAL.getDataFrom("tashchezGet", params, h, r1, progressBar, "post");
                 }
             }
         }
         else
         {
-            Log.d("aaaaaaaa", "cccccccccc");
-            tashchezDAL.getDataFrom("tashchezGet", h, r1, progressBar);
+            Map<String,String> params = new HashMap<String, String>();
+//            params.put("1", getIntent().getExtras().getInt("statusIndex") + "");
+            params.put("idTashchez", "105");
+            params.put("username", MainActivity.user.getUsername());
+            tashchezDAL.getDataFrom("tashchezGet", params, h, r1, progressBar, "post");
         }
 
         //startService(new Intent(this, ChatHeadService.class));
@@ -317,7 +282,7 @@ public class TashchezUI extends AppCompatActivity
             else
             {
                 //save the solve of this user
-                if (MainActivity.user != null) {
+                if (db != null && MainActivity.user != null && getIntent().getExtras() != null && adapter != null) {
                     db.add(MainActivity.user.getUsername(), TashchezSaveDB.TYPE, getIntent().getExtras().getInt("statusIndex"), adapter.createContentToSave());
                     Toast.makeText(getApplicationContext(), "תשחץ נשמר", Toast.LENGTH_SHORT).show();
                 }
@@ -326,24 +291,6 @@ public class TashchezUI extends AppCompatActivity
         }
         return super.dispatchKeyEvent(event);
     }
-
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        //update helpForDay in db
-        tashchezDAL.getDataFrom("userUpdateHelpForDay?username="+MainActivity.user.getUsername()+"&helpforday="+MainActivity.user.getHelpForDay(), null, null, null);
-
-        SharedPreferences sharedpreferences = getSharedPreferences("helpForDayDate", Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("lastUseDate", MainActivity.lastUseDate);
-        editor.commit();
-    }
-
-
 }
 
 
